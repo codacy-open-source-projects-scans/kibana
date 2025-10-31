@@ -1,0 +1,294 @@
+{
+  "id": "@kbn/esql-editor",
+  "client": {
+    "classes": [],
+    "functions": [
+      {
+        "parentPluginId": "@kbn/esql-editor",
+        "id": "def-public.ESQLEditor",
+        "type": "Function",
+        "tags": [],
+        "label": "ESQLEditor",
+        "description": [],
+        "signature": [
+          "React.ForwardRefExoticComponent<",
+          {
+            "pluginId": "@kbn/esql-editor",
+            "scope": "public",
+            "docId": "kibKbnEsqlEditorPluginApi",
+            "section": "def-public.ESQLEditorProps",
+            "text": "ESQLEditorProps"
+          },
+          " & Pick<",
+          {
+            "pluginId": "@kbn/restorable-state",
+            "scope": "public",
+            "docId": "kibKbnRestorableStatePluginApi",
+            "section": "def-public.RestorableStateProviderProps",
+            "text": "RestorableStateProviderProps"
+          },
+          "<",
+          {
+            "pluginId": "@kbn/esql-editor",
+            "scope": "public",
+            "docId": "kibKbnEsqlEditorPluginApi",
+            "section": "def-public.ESQLEditorRestorableState",
+            "text": "ESQLEditorRestorableState"
+          },
+          ">, \"initialState\" | \"onInitialStateChange\"> & React.RefAttributes<never>>"
+        ],
+        "path": "src/platform/packages/private/kbn-esql-editor/src/esql_editor.tsx",
+        "deprecated": false,
+        "trackAdoption": false,
+        "returnComment": [],
+        "children": [
+          {
+            "parentPluginId": "@kbn/esql-editor",
+            "id": "def-public.ESQLEditor.$1",
+            "type": "Uncategorized",
+            "tags": [],
+            "label": "props",
+            "description": [],
+            "signature": [
+              "P"
+            ],
+            "path": "node_modules/@types/react/ts5.0/index.d.ts",
+            "deprecated": false,
+            "trackAdoption": false
+          }
+        ],
+        "initialIsOpen": false
+      },
+      {
+        "parentPluginId": "@kbn/esql-editor",
+        "id": "def-public.registerESQLEditorAnalyticsEvents",
+        "type": "Function",
+        "tags": [],
+        "label": "registerESQLEditorAnalyticsEvents",
+        "description": [
+          "\nRegisters the esql editor analytics events.\nThis function is wrapped in `once` to ensure that the events are registered only once."
+        ],
+        "signature": [
+          "(analytics: ",
+          "AnalyticsServiceSetup",
+          ") => void"
+        ],
+        "path": "src/platform/packages/private/kbn-esql-editor/src/telemetry/events_registration.ts",
+        "deprecated": false,
+        "trackAdoption": false,
+        "returnComment": [],
+        "children": [
+          {
+            "parentPluginId": "@kbn/esql-editor",
+            "id": "def-public.registerESQLEditorAnalyticsEvents.$1",
+            "type": "Object",
+            "tags": [],
+            "label": "analytics",
+            "description": [],
+            "signature": [
+              "{ optIn: (optInConfig: ",
+              "OptInConfig",
+              ") => void; reportEvent: <EventTypeData extends object>(eventType: string, eventData: EventTypeData) => void; readonly telemetryCounter$: ",
+              "Observable",
+              "<",
+              "TelemetryCounter",
+              ">; registerEventType: <EventTypeData>(eventTypeOps: ",
+              "EventTypeOpts",
+              "<EventTypeData>) => void; registerShipper: <Shipper extends ",
+              "IShipper",
+              ", ShipperConfig>(Shipper: ",
+              "ShipperClassConstructor",
+              "<Shipper, ShipperConfig>, shipperConfig: ShipperConfig, opts?: ",
+              "RegisterShipperOpts",
+              " | undefined) => void; registerContextProvider: <Context>(contextProviderOpts: ",
+              "ContextProviderOpts",
+              "<Context>) => void; removeContextProvider: (contextProviderName: string) => void; }"
+            ],
+            "path": "src/platform/packages/private/kbn-esql-editor/src/telemetry/events_registration.ts",
+            "deprecated": false,
+            "trackAdoption": false
+          }
+        ],
+        "initialIsOpen": false
+      }
+    ],
+    "interfaces": [
+      {
+        "parentPluginId": "@kbn/esql-editor",
+        "id": "def-public.DataErrorsControl",
+        "type": "Interface",
+        "tags": [],
+        "label": "DataErrorsControl",
+        "description": [],
+        "path": "src/platform/packages/private/kbn-esql-editor/src/types.ts",
+        "deprecated": false,
+        "trackAdoption": false,
+        "children": [
+          {
+            "parentPluginId": "@kbn/esql-editor",
+            "id": "def-public.DataErrorsControl.enabled",
+            "type": "boolean",
+            "tags": [],
+            "label": "enabled",
+            "description": [],
+            "path": "src/platform/packages/private/kbn-esql-editor/src/types.ts",
+            "deprecated": false,
+            "trackAdoption": false
+          },
+          {
+            "parentPluginId": "@kbn/esql-editor",
+            "id": "def-public.DataErrorsControl.onChange",
+            "type": "Function",
+            "tags": [],
+            "label": "onChange",
+            "description": [],
+            "signature": [
+              "(value: boolean) => void"
+            ],
+            "path": "src/platform/packages/private/kbn-esql-editor/src/types.ts",
+            "deprecated": false,
+            "trackAdoption": false,
+            "children": [
+              {
+                "parentPluginId": "@kbn/esql-editor",
+                "id": "def-public.DataErrorsControl.onChange.$1",
+                "type": "boolean",
+                "tags": [],
+                "label": "value",
+                "description": [],
+                "signature": [
+                  "boolean"
+                ],
+                "path": "src/platform/packages/private/kbn-esql-editor/src/types.ts",
+                "deprecated": false,
+                "trackAdoption": false,
+                "isRequired": true
+              }
+            ],
+            "returnComment": []
+          }
+        ],
+        "initialIsOpen": false
+      },
+      {
+        "parentPluginId": "@kbn/esql-editor",
+        "id": "def-public.ESQLEditorRestorableState",
+        "type": "Interface",
+        "tags": [],
+        "label": "ESQLEditorRestorableState",
+        "description": [],
+        "path": "src/platform/packages/private/kbn-esql-editor/src/restorable_state.ts",
+        "deprecated": false,
+        "trackAdoption": false,
+        "children": [
+          {
+            "parentPluginId": "@kbn/esql-editor",
+            "id": "def-public.ESQLEditorRestorableState.editorHeight",
+            "type": "number",
+            "tags": [],
+            "label": "editorHeight",
+            "description": [],
+            "path": "src/platform/packages/private/kbn-esql-editor/src/restorable_state.ts",
+            "deprecated": false,
+            "trackAdoption": false
+          },
+          {
+            "parentPluginId": "@kbn/esql-editor",
+            "id": "def-public.ESQLEditorRestorableState.resizableContainerHeight",
+            "type": "number",
+            "tags": [],
+            "label": "resizableContainerHeight",
+            "description": [],
+            "path": "src/platform/packages/private/kbn-esql-editor/src/restorable_state.ts",
+            "deprecated": false,
+            "trackAdoption": false
+          },
+          {
+            "parentPluginId": "@kbn/esql-editor",
+            "id": "def-public.ESQLEditorRestorableState.isHistoryOpen",
+            "type": "boolean",
+            "tags": [],
+            "label": "isHistoryOpen",
+            "description": [],
+            "path": "src/platform/packages/private/kbn-esql-editor/src/restorable_state.ts",
+            "deprecated": false,
+            "trackAdoption": false
+          },
+          {
+            "parentPluginId": "@kbn/esql-editor",
+            "id": "def-public.ESQLEditorRestorableState.historySelectedTabId",
+            "type": "Enum",
+            "tags": [],
+            "label": "historySelectedTabId",
+            "description": [],
+            "signature": [
+              "HistoryTabId"
+            ],
+            "path": "src/platform/packages/private/kbn-esql-editor/src/restorable_state.ts",
+            "deprecated": false,
+            "trackAdoption": false
+          }
+        ],
+        "initialIsOpen": false
+      }
+    ],
+    "enums": [],
+    "misc": [
+      {
+        "parentPluginId": "@kbn/esql-editor",
+        "id": "def-public.ESQLEditorProps",
+        "type": "Type",
+        "tags": [],
+        "label": "ESQLEditorProps",
+        "description": [],
+        "signature": [
+          {
+            "pluginId": "@kbn/esql-editor",
+            "scope": "public",
+            "docId": "kibKbnEsqlEditorPluginApi",
+            "section": "def-public.ESQLEditorProps",
+            "text": "ESQLEditorProps"
+          },
+          " & Pick<",
+          {
+            "pluginId": "@kbn/restorable-state",
+            "scope": "public",
+            "docId": "kibKbnRestorableStatePluginApi",
+            "section": "def-public.RestorableStateProviderProps",
+            "text": "RestorableStateProviderProps"
+          },
+          "<",
+          {
+            "pluginId": "@kbn/esql-editor",
+            "scope": "public",
+            "docId": "kibKbnEsqlEditorPluginApi",
+            "section": "def-public.ESQLEditorRestorableState",
+            "text": "ESQLEditorRestorableState"
+          },
+          ">, \"initialState\" | \"onInitialStateChange\"> & React.RefAttributes<never>"
+        ],
+        "path": "src/platform/packages/private/kbn-esql-editor/src/esql_editor.tsx",
+        "deprecated": false,
+        "trackAdoption": false,
+        "initialIsOpen": false
+      }
+    ],
+    "objects": []
+  },
+  "server": {
+    "classes": [],
+    "functions": [],
+    "interfaces": [],
+    "enums": [],
+    "misc": [],
+    "objects": []
+  },
+  "common": {
+    "classes": [],
+    "functions": [],
+    "interfaces": [],
+    "enums": [],
+    "misc": [],
+    "objects": []
+  }
+}

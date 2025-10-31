@@ -1,0 +1,18 @@
+{
+  "extends": "../../../../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "target/types",
+  },
+  "include": [
+    "server/**/*"
+  ],
+  "kbn_references": [
+    "@kbn/licensing-plugin",
+    "@kbn/core",
+    "@kbn/i18n",
+    "@kbn/licensing-types",
+  ],
+  "exclude": [
+    "target/**/*",
+  ]
+}

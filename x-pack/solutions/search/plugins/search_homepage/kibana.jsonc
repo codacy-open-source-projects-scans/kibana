@@ -1,0 +1,30 @@
+{
+  "type": "plugin",
+  "id": "@kbn/search-homepage",
+  "owner": "@elastic/search-kibana",
+  "group": "search",
+  "visibility": "private",
+  "plugin": {
+    "id": "searchHomepage",
+    "server": true,
+    "browser": true,
+    "configPath": [
+      "xpack",
+      "searchHomepage"
+    ],
+    "requiredPlugins": [
+      "share",
+      "licensing",
+    ],
+    "optionalPlugins": [
+      "cloud",
+      "console",
+      "searchNavigation",
+      "usageCollection",
+      "sampleDataIngest",
+    ],
+    "requiredBundles": [
+      "kibanaReact"
+    ]
+  }
+}

@@ -506,7 +506,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        Handles the OAuth 2.0 authorization code callback from external providers. Exchanges the authorization code for access and refresh tokens.
+        Handles the OAuth 2.0 authorization code callback from external providers. Exchanges the authorization code for access and refresh tokens.<br/><br/>[Required authorization] Route required privileges: actions:oauth.
       operationId: get-actions-connector-oauth-callback
       parameters:
         - description: The authorization code returned by the OAuth provider.
@@ -699,6 +699,8 @@ paths:
           name: id
           required: true
           schema:
+            maxLength: 36
+            minLength: 1
             type: string
       requestBody:
         content:
@@ -26982,6 +26984,8 @@ paths:
                               - count
                           maxItems: 1000
                           type: array
+                        created_at:
+                          type: string
                         data_output_id:
                           nullable: true
                           type: string
@@ -27032,6 +27036,9 @@ paths:
                           type: boolean
                         is_protected:
                           description: Indicates whether the agent policy has tamper protection enabled. Default false.
+                          type: boolean
+                        is_verifier:
+                          description: Indicates this is a short-lived verifier policy used for OTel permission verification.
                           type: boolean
                         keep_monitoring_alive:
                           default: false
@@ -27882,6 +27889,9 @@ paths:
                   type: boolean
                 is_protected:
                   type: boolean
+                is_verifier:
+                  description: Indicates this is a short-lived verifier policy used for OTel permission verification.
+                  type: boolean
                 keep_monitoring_alive:
                   default: false
                   description: When set to true, monitoring will be enabled but logs/metrics collection will be disabled
@@ -28089,6 +28099,8 @@ paths:
                             - count
                         maxItems: 1000
                         type: array
+                      created_at:
+                        type: string
                       data_output_id:
                         nullable: true
                         type: string
@@ -28139,6 +28151,9 @@ paths:
                         type: boolean
                       is_protected:
                         description: Indicates whether the agent policy has tamper protection enabled. Default false.
+                        type: boolean
+                      is_verifier:
+                        description: Indicates this is a short-lived verifier policy used for OTel permission verification.
                         type: boolean
                       keep_monitoring_alive:
                         default: false
@@ -28976,6 +28991,8 @@ paths:
                               - count
                           maxItems: 1000
                           type: array
+                        created_at:
+                          type: string
                         data_output_id:
                           nullable: true
                           type: string
@@ -29026,6 +29043,9 @@ paths:
                           type: boolean
                         is_protected:
                           description: Indicates whether the agent policy has tamper protection enabled. Default false.
+                          type: boolean
+                        is_verifier:
+                          description: Indicates this is a short-lived verifier policy used for OTel permission verification.
                           type: boolean
                         keep_monitoring_alive:
                           default: false
@@ -29842,6 +29862,8 @@ paths:
                             - count
                         maxItems: 1000
                         type: array
+                      created_at:
+                        type: string
                       data_output_id:
                         nullable: true
                         type: string
@@ -29892,6 +29914,9 @@ paths:
                         type: boolean
                       is_protected:
                         description: Indicates whether the agent policy has tamper protection enabled. Default false.
+                        type: boolean
+                      is_verifier:
+                        description: Indicates this is a short-lived verifier policy used for OTel permission verification.
                         type: boolean
                       keep_monitoring_alive:
                         default: false
@@ -30741,6 +30766,9 @@ paths:
                   type: boolean
                 is_protected:
                   type: boolean
+                is_verifier:
+                  description: Indicates this is a short-lived verifier policy used for OTel permission verification.
+                  type: boolean
                 keep_monitoring_alive:
                   default: false
                   description: When set to true, monitoring will be enabled but logs/metrics collection will be disabled
@@ -30948,6 +30976,8 @@ paths:
                             - count
                         maxItems: 1000
                         type: array
+                      created_at:
+                        type: string
                       data_output_id:
                         nullable: true
                         type: string
@@ -30998,6 +31028,9 @@ paths:
                         type: boolean
                       is_protected:
                         description: Indicates whether the agent policy has tamper protection enabled. Default false.
+                        type: boolean
+                      is_verifier:
+                        description: Indicates this is a short-lived verifier policy used for OTel permission verification.
                         type: boolean
                       keep_monitoring_alive:
                         default: false
@@ -31927,6 +31960,8 @@ paths:
                             - count
                         maxItems: 1000
                         type: array
+                      created_at:
+                        type: string
                       data_output_id:
                         nullable: true
                         type: string
@@ -31977,6 +32012,9 @@ paths:
                         type: boolean
                       is_protected:
                         description: Indicates whether the agent policy has tamper protection enabled. Default false.
+                        type: boolean
+                      is_verifier:
+                        description: Indicates this is a short-lived verifier policy used for OTel permission verification.
                         type: boolean
                       keep_monitoring_alive:
                         default: false
@@ -38945,6 +38983,12 @@ paths:
                         vars:
                           additionalProperties: {}
                           type: object
+                        verification_failed_at:
+                          type: string
+                        verification_started_at:
+                          type: string
+                        verification_status:
+                          type: string
                       required:
                         - id
                         - name
@@ -39098,6 +39142,12 @@ paths:
                       vars:
                         additionalProperties: {}
                         type: object
+                      verification_failed_at:
+                        type: string
+                      verification_started_at:
+                        type: string
+                      verification_status:
+                        type: string
                     required:
                       - id
                       - name
@@ -39257,6 +39307,12 @@ paths:
                       vars:
                         additionalProperties: {}
                         type: object
+                      verification_failed_at:
+                        type: string
+                      verification_started_at:
+                        type: string
+                      verification_status:
+                        type: string
                     required:
                       - id
                       - name
@@ -39403,6 +39459,12 @@ paths:
                       vars:
                         additionalProperties: {}
                         type: object
+                      verification_failed_at:
+                        type: string
+                      verification_started_at:
+                        type: string
+                      verification_status:
+                        type: string
                     required:
                       - id
                       - name
@@ -78585,6 +78647,19 @@ components:
       description: A word or phrase that categorizes the case.
       maxLength: 50
       type: string
+    Cases_case_close_sync_reason:
+      description: |
+        The close reason to sync to attached alerts when closing the case. Can be one of following predefined reasons: [false_positive, duplicate, true_positive, benign_positive, automated_closure, other] or a custom reason provided by the user.
+      oneOf:
+        - enum:
+            - false_positive
+            - duplicate
+            - true_positive
+            - benign_positive
+            - automated_closure
+            - other
+          type: string
+        - type: string
     Cases_case_description:
       description: The description for the case.
       maxLength: 30000
@@ -80126,6 +80201,8 @@ components:
                 $ref: '#/components/schemas/Cases_assignees'
               category:
                 $ref: '#/components/schemas/Cases_case_category'
+              closeReason:
+                $ref: '#/components/schemas/Cases_case_close_sync_reason'
               connector:
                 oneOf:
                   - $ref: '#/components/schemas/Cases_connector_properties_none'
@@ -87311,6 +87388,7 @@ components:
         - THRESHOLD_RULE_TYPE_IN_SUPPRESSION
         - UNSUPPORTED_RULE_IN_SUPPRESSION_FOR_THRESHOLD
         - RULE_FILL_GAPS_DISABLED_RULE
+        - USER_INSUFFICIENT_RULE_PRIVILEGES
       type: string
     Security_Detections_API_BulkActionSkipResult:
       type: object
@@ -97082,6 +97160,9 @@ components:
         description:
           description: Description of the watchlist
           type: string
+        entityCount:
+          description: Number of entities in the watchlist
+          type: number
         entitySourceIds:
           description: List of entity source IDs associated with the watchlist
           items:

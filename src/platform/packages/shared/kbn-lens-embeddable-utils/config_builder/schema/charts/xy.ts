@@ -18,7 +18,7 @@ import {
   legendTruncateAfterLinesSchema,
   sharedPanelInfoSchema,
 } from '../shared';
-import { datasetEsqlTableSchema, datasetSchema } from '../dataset';
+import { dataSourceEsqlTableSchema, dataSourceSchema } from '../data_source';
 import {
   legendSizeSchema,
   legendVisibilitySchemaWithAuto,
@@ -178,7 +178,7 @@ const yAxisSchema = schema.object(
 /**
  * Chart types available for data layers in XY visualizations
  */
-const xyDataLayerSharedSchema = {
+export const xyDataLayerSharedSchema = {
   type: schema.oneOf(
     [
       schema.literal('area'),
@@ -212,22 +212,41 @@ const sharedLegendSchema = {
 /**
  * Layout Schemas
  */
-const legendTruncateMaxPixelsSchema = schema.number({
-  defaultValue: 250,
-  min: 10,
-  max: 1000,
-  meta: {
-    description: 'Maximum pixels before truncating legend items in list layout',
-    id: 'legendTruncateMaxPixels',
-  },
-});
+const legendTruncateMaxPixelsSchema = schema.maybe(
+  schema.number({
+    defaultValue: 250,
+    min: 10,
+    max: 1000,
+    meta: {
+      description: 'Maximum pixels before truncating legend items in list layout',
+      id: 'legendTruncateMaxPixels',
+    },
+  })
+);
+const legendTruncateEnabledSchema = schema.maybe(
+  schema.boolean({
+    meta: {
+      description: 'Enable truncation of legend items',
+    },
+  })
+);
 const gridLayout = schema.object({
   type: schema.literal('grid'),
-  truncate: schema.maybe(schema.object({ max_lines: legendTruncateAfterLinesSchema })),
+  truncate: schema.maybe(
+    schema.object({
+      max_lines: legendTruncateAfterLinesSchema,
+      enabled: legendTruncateEnabledSchema,
+    })
+  ),
 });
 const listLayout = schema.object({
   type: schema.literal('list'),
-  truncate: schema.maybe(schema.object({ max_pixels: legendTruncateMaxPixelsSchema })),
+  truncate: schema.maybe(
+    schema.object({
+      max_pixels: legendTruncateMaxPixelsSchema,
+      enabled: legendTruncateEnabledSchema,
+    })
+  ),
 });
 
 const XY_API_LINE_INTERPOLATION = {
@@ -542,7 +561,7 @@ const xySharedSettings = {
 const xyDataLayerSchemaNoESQL = schema.object(
   {
     ...layerSettingsSchema,
-    ...datasetSchema,
+    ...dataSourceSchema,
     ...xyDataLayerSharedSchema,
     breakdown_by: schema.maybe(
       mergeAllBucketsWithChartDimensionSchema({
@@ -579,7 +598,7 @@ const xyDataLayerSchemaNoESQL = schema.object(
 const xyDataLayerSchemaESQL = schema.object(
   {
     ...layerSettingsSchema,
-    ...datasetEsqlTableSchema,
+    ...dataSourceEsqlTableSchema,
     ...xyDataLayerSharedSchema,
     breakdown_by: schema.maybe(
       esqlColumnWithFormatSchema.extends(
@@ -686,7 +705,7 @@ const referenceLineLayerShared = {
 const referenceLineLayerSchemaNoESQL = schema.object(
   {
     ...layerSettingsSchema,
-    ...datasetSchema,
+    ...dataSourceSchema,
     type: schema.literal('referenceLines'),
     thresholds: schema.arrayOf(
       mergeAllMetricsWithChartDimensionSchemaWithStaticOps(referenceLineLayerShared),
@@ -708,7 +727,7 @@ const referenceLineLayerSchemaNoESQL = schema.object(
 const referenceLineLayerSchemaESQL = schema.object(
   {
     ...layerSettingsSchema,
-    ...datasetEsqlTableSchema,
+    ...dataSourceEsqlTableSchema,
     type: schema.literal('referenceLines'),
     thresholds: schema.arrayOf(esqlColumnWithFormatSchema.extends(referenceLineLayerShared), {
       meta: { description: 'Array of ES|QL-based reference line thresholds' },
@@ -865,7 +884,7 @@ const annotationManualRange = schema.object(
 const annotationLayerByValueSchema = schema.object(
   {
     ...ignoringGlobalFiltersSchemaRaw,
-    ...datasetSchema,
+    ...dataSourceSchema,
     type: schema.literal('annotations'),
     events: schema.arrayOf(
       schema.oneOf([annotationQuery, annotationManualEvent, annotationManualRange]),
@@ -909,58 +928,84 @@ const annotationLayerSchema = schema.oneOf(
   }
 );
 
+const xyLayerUnionNoESQL = schema.oneOf(
+  [xyDataLayerSchemaNoESQL, referenceLineLayerSchemaNoESQL, annotationLayerSchema],
+  {
+    meta: {
+      id: 'xyLayersNoESQL',
+      description: 'XY chart layer types for DSL queries',
+    },
+  }
+);
+
+const xyLayerUnionESQL = schema.oneOf([xyDataLayerSchemaESQL, referenceLineLayerSchemaESQL], {
+  meta: {
+    id: 'xyLayersESQL',
+    description: 'XY chart layer types for ES|QL queries',
+  },
+});
+
 /**
- * Complete XY chart state configuration with layers and visualization settings
+ * XY chart state for DSL layers
  */
-export const xyStateSchema = schema.object(
+export const xyStateSchemaNoESQL = schema.object(
   {
     type: schema.literal('xy'),
     ...sharedPanelInfoSchema,
     ...xySharedSettings,
     ...dslOnlyPanelInfoSchema,
-    layers: schema.arrayOf(
-      /**
-       * Any valid XY chart layer type (data, reference line, or annotation)
-       */
-      schema.oneOf([
-        xyDataLayerSchemaNoESQL,
-        xyDataLayerSchemaESQL,
-        referenceLineLayerSchemaNoESQL,
-        referenceLineLayerSchemaESQL,
-        annotationLayerSchema,
-      ]),
-      {
-        minSize: 1,
-        maxSize: 100,
-        meta: { description: 'Chart layers (minimum 1 required)' },
-      }
-    ),
+    layers: schema.arrayOf(xyLayerUnionNoESQL, {
+      minSize: 1,
+      maxSize: 100,
+      meta: { description: 'Chart layers' },
+    }),
   },
-  { meta: { id: 'xyChart', title: 'XY Chart', description: 'Complete XY chart configuration' } }
+  {
+    meta: {
+      id: 'xyChartNoESQL',
+      title: 'XY Chart (DSL)',
+      description: 'XY chart configuration for DSL queries',
+    },
+  }
 );
 
-// TODO: temporary ESQL schema for XY chart to not feed agent with heavy schema for DSL that is not used in agent
+/**
+ * XY chart state for ES|QL layers only (data and reference lines)
+ */
 export const xyStateSchemaESQL = schema.object(
   {
     type: schema.literal('xy'),
     ...sharedPanelInfoSchema,
     ...xySharedSettings,
-    layers: schema.arrayOf(xyDataLayerSchemaESQL, {
+    layers: schema.arrayOf(xyLayerUnionESQL, {
       minSize: 1,
-      maxSize: 1,
-      meta: { description: 'Only single layer ESQL charts are supported ' },
+      maxSize: 100,
+      meta: { description: 'ES|QL chart layers' },
     }),
   },
   {
     meta: {
       id: 'xyChartESQL',
       title: 'XY Chart (ES|QL)',
+      description: 'XY chart configuration for ES|QL queries',
     },
   }
 );
 
-export type XYState = TypeOf<typeof xyStateSchema>;
+/**
+ * XY chart state
+ */
+export const xyStateSchema = schema.oneOf([xyStateSchemaNoESQL, xyStateSchemaESQL], {
+  meta: {
+    id: 'xyChart',
+    title: 'XY Chart',
+    description: 'XY chart configuration',
+  },
+});
+
+export type XYStateNoESQL = TypeOf<typeof xyStateSchemaNoESQL>;
 export type XYStateESQL = TypeOf<typeof xyStateSchemaESQL>;
+export type XYState = TypeOf<typeof xyStateSchema>;
 export type DataLayerTypeESQL = TypeOf<typeof xyDataLayerSchemaESQL>;
 export type DataLayerTypeNoESQL = TypeOf<typeof xyDataLayerSchemaNoESQL>;
 export type DataLayerType = DataLayerTypeNoESQL | DataLayerTypeESQL;
@@ -975,5 +1020,6 @@ export type LayerTypeNoESQL =
   | DataLayerTypeNoESQL
   | ReferenceLineLayerTypeNoESQL
   | AnnotationLayerType;
+export type XYLayer = LayerTypeNoESQL | LayerTypeESQL;
 
 export type XYStyling = TypeOf<typeof xyStylingSchema>;

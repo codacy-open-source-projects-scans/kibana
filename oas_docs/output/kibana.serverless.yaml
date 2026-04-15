@@ -24854,6 +24854,8 @@ paths:
                                               type: boolean
                                             migrate_from:
                                               type: string
+                                            name:
+                                              type: string
                                             policy_template:
                                               type: string
                                             streams:
@@ -25969,6 +25971,8 @@ paths:
                                             type: boolean
                                           migrate_from:
                                             type: string
+                                          name:
+                                            type: string
                                           policy_template:
                                             type: string
                                           streams:
@@ -26861,6 +26865,8 @@ paths:
                                               type: boolean
                                             migrate_from:
                                               type: string
+                                            name:
+                                              type: string
                                             policy_template:
                                               type: string
                                             streams:
@@ -27731,6 +27737,8 @@ paths:
                                           keep_enabled:
                                             type: boolean
                                           migrate_from:
+                                            type: string
+                                          name:
                                             type: string
                                           policy_template:
                                             type: string
@@ -28846,6 +28854,8 @@ paths:
                                             type: boolean
                                           migrate_from:
                                             type: string
+                                          name:
+                                            type: string
                                           policy_template:
                                             type: string
                                           streams:
@@ -29829,6 +29839,8 @@ paths:
                                           keep_enabled:
                                             type: boolean
                                           migrate_from:
+                                            type: string
+                                          name:
                                             type: string
                                           policy_template:
                                             type: string
@@ -32161,6 +32173,8 @@ paths:
                                 keep_enabled:
                                   type: boolean
                                 migrate_from:
+                                  type: string
+                                name:
                                   type: string
                                 policy_template:
                                   type: string
@@ -43753,9 +43767,8 @@ paths:
                         - type: string
                         - type: number
                         - type: boolean
-                        - enum:
-                            - null
                         - {}
+                      nullable: true
                     maxItems: 2
                     type: array
                   total:
@@ -45329,7 +45342,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-agents-all AND fleet-agent-policies-all AND fleet-settings-all.
+        Rotate the key pair used by Fleet to sign messages sent to Elastic Agents. This operation is irreversible and requires all agents in the Fleet to be re-enrolled after rotation. You must explicitly acknowledge the risk by passing `acknowledge=true` as a query parameter.<br/><br/>[Required authorization] Route required privileges: fleet-agents-all AND fleet-agent-policies-all AND fleet-settings-all.
       operationId: post-fleet-message-signing-service-rotate-key-pair
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -45349,6 +45362,11 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                rotateKeyPairSuccessExample:
+                  description: The key pair was rotated. All agents must be re-enrolled to receive the new signing key.
+                  value:
+                    message: Key pair rotated successfully.
               schema:
                 additionalProperties: false
                 type: object
@@ -45357,10 +45375,17 @@ paths:
                     type: string
                 required:
                   - message
-          description: 'OK: A successful request.'
+          description: Key pair rotated successfully
         '400':
           content:
             application/json:
+              examples:
+                acknowledgeRequiredExample:
+                  description: Request was rejected because the acknowledge query parameter was not set to true
+                  value:
+                    error: Bad Request
+                    message: 'Warning: this API will cause a key pair to rotate and should not be necessary in normal operation.  If you proceed, you may need to reinstall Agents in your network. You must acknowledge the risks of rotating the key pair with acknowledge=true in the request parameters.  For more information, reach out to your administrator.'
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -45378,10 +45403,17 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
         '500':
           content:
             application/json:
+              examples:
+                serviceUnavailableExample:
+                  description: The message signing service is not available
+                  value:
+                    error: Internal Server Error
+                    message: Failed to rotate key pair. Message signing service is unavailable!
+                    statusCode: 500
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -45399,7 +45431,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: An internal server error.
+          description: Internal Server Error
       summary: Rotate a Fleet message signing key pair
       tags:
         - Message Signing Service
@@ -45982,6 +46014,8 @@ paths:
                                     type: boolean
                                   migrate_from:
                                     type: string
+                                  name:
+                                    type: string
                                   policy_template:
                                     type: string
                                   streams:
@@ -46531,6 +46565,8 @@ paths:
                           keep_enabled:
                             type: boolean
                           migrate_from:
+                            type: string
+                          name:
                             type: string
                           policy_template:
                             type: string
@@ -47103,6 +47139,8 @@ paths:
                                 keep_enabled:
                                   type: boolean
                                 migrate_from:
+                                  type: string
+                                name:
                                   type: string
                                 policy_template:
                                   type: string
@@ -47704,6 +47742,8 @@ paths:
                                   keep_enabled:
                                     type: boolean
                                   migrate_from:
+                                    type: string
+                                  name:
                                     type: string
                                   policy_template:
                                     type: string
@@ -48355,6 +48395,8 @@ paths:
                                   type: boolean
                                 migrate_from:
                                   type: string
+                                name:
+                                  type: string
                                 policy_template:
                                   type: string
                                 streams:
@@ -48908,6 +48950,8 @@ paths:
                           keep_enabled:
                             type: boolean
                           migrate_from:
+                            type: string
+                          name:
                             type: string
                           policy_template:
                             type: string
@@ -49476,6 +49520,8 @@ paths:
                                 keep_enabled:
                                   type: boolean
                                 migrate_from:
+                                  type: string
+                                name:
                                   type: string
                                 policy_template:
                                   type: string
@@ -50422,6 +50468,8 @@ paths:
                                           type: boolean
                                         migrate_from:
                                           type: string
+                                        name:
+                                          type: string
                                         policy_template:
                                           type: string
                                         streams:
@@ -50929,6 +50977,8 @@ paths:
                                     keep_enabled:
                                       type: boolean
                                     migrate_from:
+                                      type: string
+                                    name:
                                       type: string
                                     policy_template:
                                       type: string
@@ -52346,6 +52396,26 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                getUninstallTokensExample:
+                  description: List of uninstall token metadata for agent policies
+                  value:
+                    items:
+                      - created_at: '2024-01-01T00:00:00.000Z'
+                        id: token-id-1
+                        namespaces:
+                          - default
+                        policy_id: policy-id-1
+                        policy_name: Default policy
+                      - created_at: '2024-01-02T00:00:00.000Z'
+                        id: token-id-2
+                        namespaces:
+                          - production
+                        policy_id: policy-id-2
+                        policy_name: Production policy
+                    page: 1
+                    perPage: 20
+                    total: 2
               schema:
                 additionalProperties: false
                 type: object
@@ -52386,10 +52456,17 @@ paths:
                   - total
                   - page
                   - perPage
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                conflictingQueryParamsExample:
+                  description: Both policyId and search query parameters were provided
+                  value:
+                    error: Bad Request
+                    message: Query parameters `policyId` and `search` cannot be used at the same time.
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -52407,7 +52484,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Get metadata for latest uninstall tokens
       tags:
         - Fleet uninstall tokens
@@ -52435,6 +52512,18 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                getUninstallTokenExample:
+                  description: Decrypted uninstall token for an agent policy
+                  value:
+                    item:
+                      created_at: '2024-01-01T00:00:00.000Z'
+                      id: token-id-1
+                      namespaces:
+                        - default
+                      policy_id: policy-id-1
+                      policy_name: Default policy
+                      token: CKHJsJcBqNwIRcRBNDaE
               schema:
                 additionalProperties: false
                 type: object
@@ -52466,10 +52555,17 @@ paths:
                       - token
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -52487,7 +52583,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No uninstall token was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Uninstall Token not found with ID token-id-1
+                    statusCode: 404
+          description: Not Found
       summary: Get a decrypted uninstall token
       tags:
         - Fleet uninstall tokens
@@ -56428,27 +56535,32 @@ paths:
         Get a list of all live queries.
       operationId: OsqueryFindLiveQueries
       parameters:
-        - in: query
+        - description: A KQL search string to filter live queries.
+          in: query
           name: kuery
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_KueryOrUndefined'
-        - in: query
+        - description: The page number to return.
+          in: query
           name: page
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_PageOrUndefined'
-        - in: query
+        - description: The number of results to return per page.
+          in: query
           name: pageSize
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_PageSizeOrUndefined'
-        - in: query
+        - description: The field to sort results by.
+          in: query
           name: sort
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_SortOrUndefined'
-        - in: query
+        - description: The sort order.
+          in: query
           name: sortOrder
           required: false
           schema:
@@ -56459,7 +56571,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_FindLiveQueryResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Get live queries
       tags:
         - Security Osquery API
@@ -56488,7 +56600,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_CreateLiveQueryResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Create a live query
       tags:
         - Security Osquery API
@@ -56507,7 +56619,8 @@ paths:
         Get the details of a live query using the query ID.
       operationId: OsqueryGetLiveQueryDetails
       parameters:
-        - in: path
+        - description: The ID of the live query.
+          in: path
           name: id
           required: true
           schema:
@@ -56520,7 +56633,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_FindLiveQueryDetailsResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Get live query details
       tags:
         - Security Osquery API
@@ -56539,41 +56652,48 @@ paths:
         Get the results of a live query using the query action ID.
       operationId: OsqueryGetLiveQueryResults
       parameters:
-        - in: path
+        - description: The ID of the live query.
+          in: path
           name: id
           required: true
           schema:
             description: The ID of the live query result you want to retrieve.
             example: 3c42c847-eb30-4452-80e0-728584042334
             type: string
-        - in: path
+        - description: The ID of the query action.
+          in: path
           name: actionId
           required: true
           schema:
             description: The ID of the query action that generated the live query results.
             example: 609c4c66-ba3d-43fa-afdd-53e244577aa0
             type: string
-        - in: query
+        - description: A KQL search string to filter results.
+          in: query
           name: kuery
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_KueryOrUndefined'
-        - in: query
+        - description: The page number to return.
+          in: query
           name: page
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_PageOrUndefined'
-        - in: query
+        - description: The number of results to return per page.
+          in: query
           name: pageSize
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_PageSizeOrUndefined'
-        - in: query
+        - description: The field to sort results by.
+          in: query
           name: sort
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_SortOrUndefined'
-        - in: query
+        - description: The sort order.
+          in: query
           name: sortOrder
           required: false
           schema:
@@ -56584,7 +56704,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_GetLiveQueryResultsResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Get live query results
       tags:
         - Security Osquery API
@@ -56603,22 +56723,26 @@ paths:
         Get a list of all query packs.
       operationId: OsqueryFindPacks
       parameters:
-        - in: query
+        - description: The page number to return.
+          in: query
           name: page
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_PageOrUndefined'
-        - in: query
+        - description: The number of results to return per page.
+          in: query
           name: pageSize
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_PageSizeOrUndefined'
-        - in: query
+        - description: The field to sort results by.
+          in: query
           name: sort
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_SortOrUndefined'
-        - in: query
+        - description: The sort order.
+          in: query
           name: sortOrder
           required: false
           schema:
@@ -56629,7 +56753,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_FindPacksResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Get packs
       tags:
         - Security Osquery API
@@ -56658,7 +56782,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_CreatePacksResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Create a pack
       tags:
         - Security Osquery API
@@ -56677,7 +56801,8 @@ paths:
         Delete a query pack using the pack ID.
       operationId: OsqueryDeletePacks
       parameters:
-        - in: path
+        - description: The pack ID.
+          in: path
           name: id
           required: true
           schema:
@@ -56690,7 +56815,7 @@ paths:
                 example: {}
                 type: object
                 properties: {}
-          description: OK
+          description: Indicates a successful call.
       summary: Delete a pack
       tags:
         - Security Osquery API
@@ -56708,7 +56833,8 @@ paths:
         Get the details of a query pack using the pack ID.
       operationId: OsqueryGetPacksDetails
       parameters:
-        - in: path
+        - description: The pack ID.
+          in: path
           name: id
           required: true
           schema:
@@ -56719,7 +56845,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_FindPackResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Get pack details
       tags:
         - Security Osquery API
@@ -56739,7 +56865,8 @@ paths:
         > You cannot update a prebuilt pack.
       operationId: OsqueryUpdatePacks
       parameters:
-        - in: path
+        - description: The pack ID.
+          in: path
           name: id
           required: true
           schema:
@@ -56756,7 +56883,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_UpdatePacksResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Update a pack
       tags:
         - Security Osquery API
@@ -56775,22 +56902,26 @@ paths:
         Get a list of all saved queries.
       operationId: OsqueryFindSavedQueries
       parameters:
-        - in: query
+        - description: The page number to return.
+          in: query
           name: page
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_PageOrUndefined'
-        - in: query
+        - description: The number of results to return per page.
+          in: query
           name: pageSize
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_PageSizeOrUndefined'
-        - in: query
+        - description: The field to sort results by.
+          in: query
           name: sort
           required: false
           schema:
             $ref: '#/components/schemas/Security_Osquery_API_SortOrUndefined'
-        - in: query
+        - description: The sort order.
+          in: query
           name: sortOrder
           required: false
           schema:
@@ -56801,7 +56932,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_FindSavedQueryResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Get saved queries
       tags:
         - Security Osquery API
@@ -56816,7 +56947,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        Create and run a saved query.
+        Create and save a query for later use.
       operationId: OsqueryCreateSavedQuery
       requestBody:
         content:
@@ -56830,7 +56961,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_CreateSavedQueryResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Create a saved query
       tags:
         - Security Osquery API
@@ -56849,7 +56980,8 @@ paths:
         Delete a saved query using the query ID.
       operationId: OsqueryDeleteSavedQuery
       parameters:
-        - in: path
+        - description: The saved query ID.
+          in: path
           name: id
           required: true
           schema:
@@ -56860,7 +56992,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_DefaultSuccessResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Delete a saved query
       tags:
         - Security Osquery API
@@ -56878,7 +57010,8 @@ paths:
         Get the details of a saved query using the query ID.
       operationId: OsqueryGetSavedQueryDetails
       parameters:
-        - in: path
+        - description: The saved query ID.
+          in: path
           name: id
           required: true
           schema:
@@ -56889,7 +57022,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_FindSavedQueryDetailResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Get saved query details
       tags:
         - Security Osquery API
@@ -56909,7 +57042,8 @@ paths:
         > You cannot update a prebuilt saved query.
       operationId: OsqueryUpdateSavedQuery
       parameters:
-        - in: path
+        - description: The saved query ID.
+          in: path
           name: id
           required: true
           schema:
@@ -56926,7 +57060,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Security_Osquery_API_UpdateSavedQueryResponse'
-          description: OK
+          description: Indicates a successful call.
       summary: Update a saved query
       tags:
         - Security Osquery API
@@ -59772,26 +59906,12 @@ paths:
               - copySavedObjectsIntoSpace
               - shareSavedObjectsIntoSpace
             type: string
-        - description: When enabled, the API returns any spaces that the user is authorized to access in any capacity and each space will contain the purposes for which the user is authorized. This can be useful to determine which spaces a user can read but not take a specific action in. If the security plugin is not enabled, this parameter has no effect, since no authorization checks take place. This parameter cannot be used in with the `purpose` parameter.
+        - description: When enabled, the API returns any spaces the user is authorized to access in any capacity, each including the purposes for which the user is authorized. This is useful for identifying spaces the user can read but is not authorized for a given purpose. Without the security plugin, this parameter has no effect, because no authorization checks are performed. This parameter cannot be used together with the `purpose` parameter.
           in: query
           name: include_authorized_purposes
-          required: true
+          required: false
           schema:
-            anyOf:
-              - items: {}
-                type: array
-              - type: boolean
-              - type: number
-              - type: object
-              - type: string
-            nullable: true
-            oneOf:
-              - enum:
-                  - false
-                type: boolean
-                x-oas-optional: true
-              - type: boolean
-                x-oas-optional: true
+            type: boolean
       responses:
         '200':
           description: Indicates a successful call.
@@ -61129,6 +61249,7 @@ paths:
                             type: object
                             properties:
                               description:
+                                default: ''
                                 type: string
                               esql:
                                 type: object
@@ -61152,10 +61273,9 @@ paths:
                                 minLength: 1
                                 type: string
                             required:
-                              - id
                               - title
-                              - description
                               - esql
+                              - id
                         required:
                           - index
                       - type: object
@@ -70842,6 +70962,12 @@ components:
                 description: A non-empty string.
                 minLength: 1
                 type: string
+              type:
+                default: match
+                enum:
+                  - match
+                  - stats
+                type: string
             required:
               - id
               - title
@@ -77788,72 +77914,13 @@ components:
                         - id
                     - type: string
         shipper:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         type:
           enum:
             - elasticsearch
@@ -77900,35 +77967,15 @@ components:
             - none
           type: string
         compression_level:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
-          nullable: true
-          oneOf:
-            - type: number
-            - not: {}
+          type: number
         config_yaml:
           nullable: true
           type: string
         connection_type:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
-          nullable: true
-          oneOf:
-            - enum:
-                - plaintext
-                - encryption
-              type: string
-            - not: {}
+          enum:
+            - plaintext
+            - encryption
+          type: string
         hash:
           additionalProperties: false
           type: object
@@ -77983,27 +78030,8 @@ components:
             - hash
           type: string
         password:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
           nullable: true
-          oneOf:
-            - not: {}
-            - anyOf:
-                - items: {}
-                  type: array
-                - type: boolean
-                - type: number
-                - type: object
-                - type: string
-              nullable: true
-              oneOf:
-                - type: string
-                - not: {}
+          type: string
         proxy_id:
           nullable: true
           type: string
@@ -78071,72 +78099,13 @@ components:
               required:
                 - key
         shipper:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         timeout:
           type: number
         topic:
@@ -78146,28 +78115,15 @@ components:
             - kafka
           type: string
         username:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
           nullable: true
-          oneOf:
-            - type: string
-            - not: {}
+          type: string
         version:
           type: string
       required:
         - name
         - type
         - hosts
-        - compression_level
         - auth_type
-        - connection_type
-        - username
-        - password
       title: new_output_kafka
       type: object
     Kibana_HTTP_APIs_new_output_logstash:
@@ -78234,72 +78190,13 @@ components:
                         - id
                     - type: string
         shipper:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         type:
           enum:
             - logstash
@@ -78404,72 +78301,13 @@ components:
           nullable: true
           type: string
         shipper:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         sync_integrations:
           type: boolean
         sync_uninstalled_integrations:
@@ -79253,72 +79091,13 @@ components:
                         - id
                     - type: string
         shipper:
-          additionalProperties: true
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: true
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         type:
           enum:
             - elasticsearch
@@ -79365,35 +79144,15 @@ components:
             - none
           type: string
         compression_level:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
-          nullable: true
-          oneOf:
-            - type: number
-            - not: {}
+          type: number
         config_yaml:
           nullable: true
           type: string
         connection_type:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
-          nullable: true
-          oneOf:
-            - enum:
-                - plaintext
-                - encryption
-              type: string
-            - not: {}
+          enum:
+            - plaintext
+            - encryption
+          type: string
         hash:
           additionalProperties: true
           type: object
@@ -79448,27 +79207,8 @@ components:
             - hash
           type: string
         password:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
           nullable: true
-          oneOf:
-            - not: {}
-            - anyOf:
-                - items: {}
-                  type: array
-                - type: boolean
-                - type: number
-                - type: object
-                - type: string
-              nullable: true
-              oneOf:
-                - type: string
-                - not: {}
+          type: string
         proxy_id:
           nullable: true
           type: string
@@ -79536,72 +79276,13 @@ components:
               required:
                 - key
         shipper:
-          additionalProperties: true
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: true
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         timeout:
           type: number
         topic:
@@ -79611,28 +79292,15 @@ components:
             - kafka
           type: string
         username:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
           nullable: true
-          oneOf:
-            - type: string
-            - not: {}
+          type: string
         version:
           type: string
       required:
         - name
         - type
         - hosts
-        - compression_level
         - auth_type
-        - connection_type
-        - username
-        - password
       title: output_kafka
       type: object
     Kibana_HTTP_APIs_output_logstash:
@@ -79699,72 +79367,13 @@ components:
                         - id
                     - type: string
         shipper:
-          additionalProperties: true
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: true
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         type:
           enum:
             - logstash
@@ -79869,72 +79478,13 @@ components:
           nullable: true
           type: string
         shipper:
-          additionalProperties: true
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: true
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         sync_integrations:
           type: boolean
         sync_uninstalled_integrations:
@@ -79951,6 +79501,73 @@ components:
         - type
         - hosts
       title: output_remote_elasticsearch
+      type: object
+    Kibana_HTTP_APIs_output_shipper:
+      additionalProperties: true
+      properties:
+        compression_level:
+          nullable: true
+          type: number
+        disk_queue_compression_enabled:
+          nullable: true
+          type: boolean
+        disk_queue_enabled:
+          default: false
+          nullable: true
+          type: boolean
+        disk_queue_encryption_enabled:
+          nullable: true
+          type: boolean
+        disk_queue_max_size:
+          nullable: true
+          type: number
+        disk_queue_path:
+          nullable: true
+          type: string
+        loadbalance:
+          nullable: true
+          type: boolean
+        max_batch_bytes:
+          nullable: true
+          type: number
+        mem_queue_events:
+          nullable: true
+          type: number
+        queue_flush_timeout:
+          nullable: true
+          type: number
+      required:
+        - disk_queue_path
+        - disk_queue_max_size
+        - disk_queue_encryption_enabled
+        - disk_queue_compression_enabled
+        - compression_level
+        - loadbalance
+        - mem_queue_events
+        - queue_flush_timeout
+        - max_batch_bytes
+      title: output_shipper
+      type: object
+    Kibana_HTTP_APIs_output_ssl:
+      additionalProperties: true
+      properties:
+        certificate:
+          type: string
+        certificate_authorities:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        key:
+          type: string
+        verification_mode:
+          enum:
+            - full
+            - none
+            - certificate
+            - strict
+          type: string
+      title: output_ssl
       type: object
     Kibana_HTTP_APIs_QueryStreamUpsertRequest:
       additionalProperties: false
@@ -79986,6 +79603,12 @@ components:
               title:
                 description: A non-empty string.
                 minLength: 1
+                type: string
+              type:
+                default: match
+                enum:
+                  - match
+                  - stats
                 type: string
             required:
               - id
@@ -81711,72 +81334,13 @@ components:
                         - id
                     - type: string
         shipper:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         type:
           enum:
             - elasticsearch
@@ -81819,35 +81383,15 @@ components:
             - none
           type: string
         compression_level:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
-          nullable: true
-          oneOf:
-            - type: number
-            - not: {}
+          type: number
         config_yaml:
           nullable: true
           type: string
         connection_type:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
-          nullable: true
-          oneOf:
-            - enum:
-                - plaintext
-                - encryption
-              type: string
-            - not: {}
+          enum:
+            - plaintext
+            - encryption
+          type: string
         hash:
           additionalProperties: false
           type: object
@@ -81902,27 +81446,8 @@ components:
             - hash
           type: string
         password:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
           nullable: true
-          oneOf:
-            - not: {}
-            - anyOf:
-                - items: {}
-                  type: array
-                - type: boolean
-                - type: number
-                - type: object
-                - type: string
-              nullable: true
-              oneOf:
-                - type: string
-                - not: {}
+          type: string
         proxy_id:
           nullable: true
           type: string
@@ -81990,72 +81515,13 @@ components:
               required:
                 - key
         shipper:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         timeout:
           type: number
         topic:
@@ -82065,25 +81531,12 @@ components:
             - kafka
           type: string
         username:
-          anyOf:
-            - items: {}
-              type: array
-            - type: boolean
-            - type: number
-            - type: object
-            - type: string
           nullable: true
-          oneOf:
-            - type: string
-            - not: {}
+          type: string
         version:
           type: string
       required:
         - name
-        - compression_level
-        - connection_type
-        - username
-        - password
       title: update_output_kafka
       type: object
     Kibana_HTTP_APIs_update_output_logstash:
@@ -82148,72 +81601,13 @@ components:
                         - id
                     - type: string
         shipper:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         type:
           enum:
             - logstash
@@ -82312,72 +81706,13 @@ components:
           nullable: true
           type: string
         shipper:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_shipper'
           nullable: true
-          type: object
-          properties:
-            compression_level:
-              nullable: true
-              type: number
-            disk_queue_compression_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_enabled:
-              default: false
-              nullable: true
-              type: boolean
-            disk_queue_encryption_enabled:
-              nullable: true
-              type: boolean
-            disk_queue_max_size:
-              nullable: true
-              type: number
-            disk_queue_path:
-              nullable: true
-              type: string
-            loadbalance:
-              nullable: true
-              type: boolean
-            max_batch_bytes:
-              nullable: true
-              type: number
-            mem_queue_events:
-              nullable: true
-              type: number
-            queue_flush_timeout:
-              nullable: true
-              type: number
-          required:
-            - disk_queue_path
-            - disk_queue_max_size
-            - disk_queue_encryption_enabled
-            - disk_queue_compression_enabled
-            - compression_level
-            - loadbalance
-            - mem_queue_events
-            - queue_flush_timeout
-            - max_batch_bytes
         ssl:
-          additionalProperties: false
+          allOf:
+            - $ref: '#/components/schemas/Kibana_HTTP_APIs_output_ssl'
           nullable: true
-          type: object
-          properties:
-            certificate:
-              type: string
-            certificate_authorities:
-              items:
-                type: string
-              maxItems: 10
-              type: array
-            key:
-              type: string
-            verification_mode:
-              enum:
-                - full
-                - none
-                - certificate
-                - strict
-              type: string
         sync_integrations:
           type: boolean
         sync_uninstalled_integrations:
@@ -82425,6 +81760,12 @@ components:
               title:
                 description: A non-empty string.
                 minLength: 1
+                type: string
+              type:
+                default: match
+                enum:
+                  - match
+                  - stats
                 type: string
             required:
               - id
@@ -99226,6 +98567,7 @@ components:
         saved_query_id:
           $ref: '#/components/schemas/Security_Osquery_API_SavedQueryId'
     Security_Osquery_API_CreateLiveQueryResponse:
+      description: The response for creating a live query.
       example:
         data:
           '@timestamp': '2022-07-26T09:59:32.220Z'
@@ -99255,7 +98597,36 @@ components:
           type: INPUT_ACTION
           user_id: elastic
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The live query action data.
+          type: object
+          properties:
+            action_id:
+              description: The ID of the live query action.
+              type: string
+            agents:
+              description: A list of agent IDs targeted by the live query.
+              items:
+                type: string
+              type: array
+            expiration:
+              description: The expiration date and time of the live query.
+              type: string
+            input_type:
+              description: The input type for the action.
+              type: string
+            queries:
+              description: The list of queries in the live query action.
+              items:
+                type: object
+              type: array
+            type:
+              description: The action type.
+              type: string
+            user_id:
+              description: The ID of the user who created the live query.
+              type: string
     Security_Osquery_API_CreatePacksRequestBody:
       example:
         description: My pack
@@ -99294,6 +98665,7 @@ components:
         shards:
           $ref: '#/components/schemas/Security_Osquery_API_Shards'
     Security_Osquery_API_CreatePacksResponse:
+      description: The response for creating a pack.
       example:
         data:
           created_at: '2025-02-26T13:37:30.452Z'
@@ -99301,6 +98673,8 @@ components:
           description: My pack
           enabled: true
           name: my_pack
+          policy_ids:
+            - my_policy_id
           queries:
             ports:
               ecs_mapping:
@@ -99313,14 +98687,55 @@ components:
               timeout: 120
           saved_object_id: 1c266590-381f-428c-878f-c80c1334f856
           shards:
-            - key: 47638692-7c4c-4053-aa3e-7186f28df349
-              value: 35
-            - key: 5e267651-fe50-443e-8d3f-3bbc9171b618
-              value: 58
+            47638692-7c4c-4053-aa3e-7186f28df349: 35
+            5e267651-fe50-443e-8d3f-3bbc9171b618: 58
           updated_at: '2025-02-26T13:37:30.452Z'
           updated_by: elastic
+          version: 1
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The created pack.
+          type: object
+          properties:
+            created_at:
+              description: The creation timestamp.
+              type: string
+            created_by:
+              description: The user who created the pack.
+              type: string
+            description:
+              description: The pack description.
+              type: string
+            enabled:
+              description: Whether the pack is enabled.
+              type: boolean
+            name:
+              description: The pack name.
+              type: string
+            policy_ids:
+              description: A list of agent policy IDs associated with the pack.
+              items:
+                type: string
+              type: array
+            queries:
+              description: The queries in the pack.
+              type: object
+            saved_object_id:
+              description: The saved object ID of the pack.
+              type: string
+            shards:
+              description: Shard configuration for the pack.
+              type: object
+            updated_at:
+              description: The last update timestamp.
+              type: string
+            updated_by:
+              description: The user who last updated the pack.
+              type: string
+            version:
+              description: The pack version.
+              type: integer
     Security_Osquery_API_CreateSavedQueryRequestBody:
       example:
         description: Saved query description
@@ -99354,11 +98769,79 @@ components:
         version:
           $ref: '#/components/schemas/Security_Osquery_API_Version'
     Security_Osquery_API_CreateSavedQueryResponse:
+      description: The response for creating a saved query.
       example:
-        data: {}
+        data:
+          created_at: '2022-07-26T09:28:08.597Z'
+          created_by: elastic
+          description: Saved query description
+          ecs_mapping:
+            host.uptime:
+              field: total_seconds
+          id: saved_query_id
+          interval: '60'
+          platform: linux,darwin
+          query: select * from uptime;
+          removed: false
+          saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
+          snapshot: true
+          timeout: 120
+          updated_at: '2022-07-26T09:28:08.597Z'
+          updated_by: elastic
+          version: 2.8.0
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The created saved query.
+          type: object
+          properties:
+            created_at:
+              description: The creation timestamp.
+              type: string
+            created_by:
+              description: The user who created the saved query.
+              type: string
+            description:
+              description: The saved query description.
+              type: string
+            ecs_mapping:
+              description: The ECS mapping configuration.
+              type: object
+            id:
+              description: The saved query ID.
+              type: string
+            interval:
+              description: The query interval in seconds.
+              type: string
+            platform:
+              description: The target platform(s).
+              type: string
+            query:
+              description: The SQL query.
+              type: string
+            removed:
+              description: Whether to include results for removed processes.
+              type: boolean
+            saved_object_id:
+              description: The saved object ID of the saved query.
+              type: string
+            snapshot:
+              description: Whether the query is a snapshot query.
+              type: boolean
+            timeout:
+              description: The query timeout in seconds.
+              type: integer
+            updated_at:
+              description: The last update timestamp.
+              type: string
+            updated_by:
+              description: The user who last updated the saved query.
+              type: string
+            version:
+              description: The minimum osquery version.
+              type: string
     Security_Osquery_API_DefaultSuccessResponse:
+      example: {}
       type: object
       properties: {}
     Security_Osquery_API_ECSMapping:
@@ -99395,6 +98878,7 @@ components:
       $ref: '#/components/schemas/Security_Osquery_API_Enabled'
       nullable: true
     Security_Osquery_API_FindLiveQueryDetailsResponse:
+      description: The details of a live query.
       example:
         data:
           '@timestamp': '2022-07-26T09:59:32.220Z'
@@ -99421,8 +98905,50 @@ components:
           status: completed
           user_id: elastic
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The live query details.
+          type: object
+          properties:
+            '@timestamp':
+              description: The timestamp when the live query was created.
+              type: string
+            action_id:
+              description: The ID of the live query action.
+              type: string
+            agent_selection:
+              description: The original agent selection criteria.
+              type: object
+            agents:
+              description: A list of agent IDs targeted by the live query.
+              items:
+                type: string
+              type: array
+            expiration:
+              description: The expiration date and time of the live query.
+              type: string
+            pack_id:
+              description: The pack ID, if the live query was run from a pack.
+              type: string
+            pack_name:
+              description: The pack name, if the live query was run from a pack.
+              type: string
+            queries:
+              description: The list of queries in the live query action, each with aggregated result counts.
+              items:
+                type: object
+              type: array
+            status:
+              description: The overall status of the live query.
+              enum:
+                - completed
+                - running
+              type: string
+            user_id:
+              description: The ID of the user who ran the live query.
+              type: string
     Security_Osquery_API_FindLiveQueryResponse:
+      description: A list of live queries.
       example:
         data:
           items:
@@ -99449,18 +98975,25 @@ components:
                   total_rows: 42
                 user_id: elastic
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The response data wrapper.
+          type: object
+          properties:
+            items:
+              description: The list of live queries.
+              items:
+                type: object
+              type: array
     Security_Osquery_API_FindPackResponse:
+      description: The details of a single query pack.
       example:
         data:
           created_at: '2022-07-25T19:41:10.263Z'
           created_by: elastic
           description: ''
           enabled: true
-          id: 3c42c847-eb30-4452-80e0-728584042334
           name: test_pack
-          namespaces:
-            - default
           policy_ids: []
           queries:
             uptime:
@@ -99470,46 +99003,181 @@ components:
               interval: 3600
               query: select * from uptime
           read_only: false
-          type: osquery-pack
+          saved_object_id: 3c42c847-eb30-4452-80e0-728584042334
+          shards: {}
           updated_at: '2022-07-25T20:12:01.455Z'
           updated_by: elastic
+          version: 1
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The pack details.
+          type: object
+          properties:
+            created_at:
+              description: The creation timestamp.
+              type: string
+            created_by:
+              description: The user who created the pack.
+              type: string
+            description:
+              description: The pack description.
+              type: string
+            enabled:
+              description: Whether the pack is enabled.
+              type: boolean
+            name:
+              description: The pack name.
+              type: string
+            policy_ids:
+              description: A list of agent policy IDs associated with the pack.
+              items:
+                type: string
+              type: array
+            queries:
+              description: The queries in the pack, keyed by query name.
+              type: object
+            read_only:
+              description: Whether the pack is read-only (true for prebuilt packs).
+              type: boolean
+            saved_object_id:
+              description: The saved object ID of the pack.
+              type: string
+            shards:
+              description: Shard configuration for policies, as a map of policy ID to percentage.
+              type: object
+            updated_at:
+              description: The last update timestamp.
+              type: string
+            updated_by:
+              description: The user who last updated the pack.
+              type: string
+            version:
+              description: The pack version.
+              type: integer
     Security_Osquery_API_FindPacksResponse:
+      description: A paginated list of query packs.
       example:
         data:
-          - attributes:
-              created_at: '2023-10-31T00:00:00Z'
-              created_by: elastic
-              created_by_profile_uid: u_mGBROF_q5bmFCATbLXAcCwKa0k8JvONAwSruelyKA5E_0
-              description: My pack description
-              enabled: true
-              name: My Pack
-              queries:
-                - ecs_mapping:
-                    - host.uptime:
-                        field: total_seconds
-                  id: uptime
-                  interval: '3600'
-                  query: select * from uptime;
-              updated_at: '2023-10-31T00:00:00Z'
-              updated_by: elastic
-              updated_by_profile_uid: u_mGBROF_q5bmFCATbLXAcCwKa0k8JvONAwSruelyKA5E_0
-            id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
-            namespaces:
-              - default
-            type: osquery-pack
+          - created_at: '2023-10-31T00:00:00Z'
+            created_by: elastic
+            description: My pack description
+            enabled: true
+            name: My Pack
+            policy_ids:
+              - policy-id-1
+            queries:
+              - ecs_mapping:
+                  host.uptime:
+                    field: total_seconds
+                id: uptime
+                interval: 3600
+                query: select * from uptime;
+            read_only: false
+            saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
+            updated_at: '2023-10-31T00:00:00Z'
+            updated_by: elastic
+            version: 1
         page: 1
-        pageSize: 10
-        policy_ids: []
+        per_page: 10
         total: 1
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The list of packs.
+          items:
+            type: object
+          type: array
+        page:
+          description: The current page number.
+          type: integer
+        per_page:
+          description: The number of results per page.
+          type: integer
+        total:
+          description: The total number of packs.
+          type: integer
     Security_Osquery_API_FindSavedQueryDetailResponse:
+      description: The details of a single saved query.
       example:
         data:
-          attributes:
-            created_at: '2022-07-26T09:28:08.597Z'
+          created_at: '2022-07-26T09:28:08.597Z'
+          created_by: elastic
+          description: Saved query description
+          ecs_mapping:
+            host.uptime:
+              field: total_seconds
+          id: saved_query_id
+          interval: '60'
+          platform: linux,darwin
+          prebuilt: false
+          query: select * from uptime;
+          removed: false
+          saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
+          snapshot: true
+          timeout: 120
+          updated_at: '2022-07-26T09:28:08.597Z'
+          updated_by: elastic
+          version: 2.8.0
+      type: object
+      properties:
+        data:
+          description: The saved query details.
+          type: object
+          properties:
+            created_at:
+              description: The creation timestamp.
+              type: string
+            created_by:
+              description: The user who created the saved query.
+              type: string
+            description:
+              description: The saved query description.
+              type: string
+            ecs_mapping:
+              description: The ECS mapping configuration.
+              type: object
+            id:
+              description: The saved query ID.
+              type: string
+            interval:
+              description: The query interval in seconds.
+              type: string
+            platform:
+              description: The target platform(s).
+              type: string
+            prebuilt:
+              description: Whether this is a prebuilt saved query.
+              type: boolean
+            query:
+              description: The SQL query.
+              type: string
+            removed:
+              description: Whether to include results for removed processes.
+              type: boolean
+            saved_object_id:
+              description: The saved object ID.
+              type: string
+            snapshot:
+              description: Whether the query is a snapshot query.
+              type: boolean
+            timeout:
+              description: The query timeout in seconds.
+              type: integer
+            updated_at:
+              description: The last update timestamp.
+              type: string
+            updated_by:
+              description: The user who last updated the saved query.
+              type: string
+            version:
+              description: The minimum osquery version.
+              type: string
+    Security_Osquery_API_FindSavedQueryResponse:
+      description: A paginated list of saved queries.
+      example:
+        data:
+          - created_at: '2022-07-26T09:28:08.597Z'
             created_by: elastic
             description: Saved query description
             ecs_mapping:
@@ -99520,58 +99188,60 @@ components:
             platform: linux,darwin
             prebuilt: false
             query: select * from uptime;
+            removed: false
+            saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
+            snapshot: true
+            timeout: 120
             updated_at: '2022-07-26T09:28:08.597Z'
             updated_by: elastic
             version: 2.8.0
-          coreMigrationVersion: 8.4.0
-          id: 3c42c847-eb30-4452-80e0-728584042334
-          namespaces:
-            - default
-          references: []
-          type: osquery-saved-query
-          updated_at: '2022-07-26T09:28:08.600Z'
-          version: WzQzMTcsMV0=
-      type: object
-      properties: {}
-    Security_Osquery_API_FindSavedQueryResponse:
-      example:
-        data:
-          - attributes:
-              created_at: '2022-07-26T09:28:08.597Z'
-              created_by: elastic
-              created_by_profile_uid: u_mGBROF_q5bmFCATbLXAcCwKa0k8JvONAwSruelyKA5E_0
-              description: Saved query description
-              ecs_mapping:
-                host.uptime:
-                  field: total_seconds
-              id: saved_query_id
-              interval: '60'
-              platform: linux,darwin
-              prebuilt: false
-              query: select * from uptime;
-              updated_at: '2022-07-26T09:28:08.597Z'
-              updated_by: elastic
-              updated_by_profile_uid: u_mGBROF_q5bmFCATbLXAcCwKa0k8JvONAwSruelyKA5E_0
-              version: 2.8.0
-            id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
-            namespaces:
-              - default
-            type: osquery-saved-query
         page: 1
         per_page: 100
         total: 11
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The list of saved queries.
+          items:
+            type: object
+          type: array
+        page:
+          description: The current page number.
+          type: integer
+        per_page:
+          description: The number of results per page.
+          type: integer
+        total:
+          description: The total number of saved queries.
+          type: integer
     Security_Osquery_API_GetLiveQueryResultsResponse:
       description: The response for getting live query results.
       example:
         data:
           edges:
-            - {}
-            - {}
+            - _id: result-1
+              fields:
+                host.uptime:
+                  - '12345'
+            - _id: result-2
+              fields:
+                host.uptime:
+                  - '67890'
           total: 2
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The query results data wrapper.
+          type: object
+          properties:
+            edges:
+              description: The paginated list of query result rows.
+              items:
+                type: object
+              type: array
+            total:
+              description: The total number of result rows.
+              type: integer
     Security_Osquery_API_Interval:
       description: An interval, in seconds, on which to run the query.
       example: '60'
@@ -99624,6 +99294,7 @@ components:
       nullable: true
     Security_Osquery_API_PackName:
       description: The pack name.
+      example: my_pack
       type: string
     Security_Osquery_API_PageOrUndefined:
       description: The page number to return. The default is 1.
@@ -99730,6 +99401,7 @@ components:
         shards:
           $ref: '#/components/schemas/Security_Osquery_API_Shards'
     Security_Osquery_API_UpdatePacksResponse:
+      description: The response for updating a pack.
       example:
         data:
           created_at: '2025-02-26T13:37:30.452Z'
@@ -99737,6 +99409,8 @@ components:
           description: My pack
           enabled: true
           name: updated_my_pack_name
+          policy_ids:
+            - my_policy_id
           queries:
             ports:
               ecs_mapping:
@@ -99749,14 +99423,55 @@ components:
               timeout: 120
           saved_object_id: 1c266590-381f-428c-878f-c80c1334f856
           shards:
-            - key: 47638692-7c4c-4053-aa3e-7186f28df349
-              value: 35
-            - key: 5e267651-fe50-443e-8d3f-3bbc9171b618
-              value: 58
+            47638692-7c4c-4053-aa3e-7186f28df349: 35
+            5e267651-fe50-443e-8d3f-3bbc9171b618: 58
           updated_at: '2025-02-26T13:40:16.297Z'
           updated_by: elastic
+          version: 1
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The updated pack.
+          type: object
+          properties:
+            created_at:
+              description: The creation timestamp.
+              type: string
+            created_by:
+              description: The user who created the pack.
+              type: string
+            description:
+              description: The pack description.
+              type: string
+            enabled:
+              description: Whether the pack is enabled.
+              type: boolean
+            name:
+              description: The pack name.
+              type: string
+            policy_ids:
+              description: A list of agent policy IDs associated with the pack.
+              items:
+                type: string
+              type: array
+            queries:
+              description: The queries in the pack.
+              type: object
+            saved_object_id:
+              description: The saved object ID of the pack.
+              type: string
+            shards:
+              description: Shard configuration for the pack.
+              type: object
+            updated_at:
+              description: The last update timestamp.
+              type: string
+            updated_by:
+              description: The user who last updated the pack.
+              type: string
+            version:
+              description: The pack version.
+              type: integer
     Security_Osquery_API_UpdateSavedQueryRequestBody:
       example:
         id: updated_my_saved_query_name
@@ -99781,10 +99496,69 @@ components:
         version:
           $ref: '#/components/schemas/Security_Osquery_API_Version'
     Security_Osquery_API_UpdateSavedQueryResponse:
+      description: The response for updating a saved query.
       example:
-        data: {}
+        data:
+          description: Saved query description
+          ecs_mapping:
+            host.uptime:
+              field: total_seconds
+          id: updated_my_saved_query_name
+          interval: '60'
+          platform: linux,darwin
+          query: select * from uptime;
+          removed: false
+          saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
+          snapshot: true
+          timeout: 120
+          updated_at: '2022-07-26T10:15:00.000Z'
+          updated_by: elastic
+          version: 2.8.0
       type: object
-      properties: {}
+      properties:
+        data:
+          description: The updated saved query.
+          type: object
+          properties:
+            description:
+              description: The saved query description.
+              type: string
+            ecs_mapping:
+              description: The ECS mapping configuration.
+              type: object
+            id:
+              description: The saved query ID.
+              type: string
+            interval:
+              description: The query interval in seconds.
+              type: string
+            platform:
+              description: The target platform(s).
+              type: string
+            query:
+              description: The SQL query.
+              type: string
+            removed:
+              description: Whether to include results for removed processes.
+              type: boolean
+            saved_object_id:
+              description: The saved object ID of the saved query.
+              type: string
+            snapshot:
+              description: Whether the query is a snapshot query.
+              type: boolean
+            timeout:
+              description: The query timeout in seconds.
+              type: integer
+            updated_at:
+              description: The last update timestamp.
+              type: string
+            updated_by:
+              description: The user who last updated the saved query.
+              type: string
+            version:
+              description: The minimum osquery version.
+              type: string
     Security_Osquery_API_Version:
       description: Uses the Osquery versions greater than or equal to the specified version string.
       example: 1.0.0

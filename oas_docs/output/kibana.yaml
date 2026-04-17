@@ -26478,13 +26478,25 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-agent-policies-read OR fleet-settings-read.
+        List all agent binary download sources.<br/><br/>[Required authorization] Route required privileges: fleet-agent-policies-read OR fleet-settings-read.
       operationId: get-fleet-agent-download-sources
       parameters: []
       responses:
         '200':
           content:
             application/json:
+              examples:
+                getDownloadSourcesExample:
+                  description: List of agent binary download sources
+                  value:
+                    items:
+                      - host: https://artifacts.elastic.co/downloads/
+                        id: download-source-id-1
+                        is_default: true
+                        name: Elastic Artifacts
+                    page: 1
+                    perPage: 20
+                    total: 1
               schema:
                 additionalProperties: false
                 type: object
@@ -26605,10 +26617,17 @@ paths:
                   - total
                   - page
                   - perPage
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -26626,7 +26645,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Get agent binary download sources
       tags:
         - Elastic Agent binary download sources
@@ -26641,7 +26660,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-settings-all.
+        Create a new agent binary download source.<br/><br/>[Required authorization] Route required privileges: fleet-settings-all.
       operationId: post-fleet-agent-download-sources
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -26654,6 +26673,13 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              postDownloadSourceRequestExample:
+                description: Create a new agent binary download source
+                value:
+                  host: https://my-custom-host.example.com/downloads/
+                  is_default: false
+                  name: My custom download source
             schema:
               additionalProperties: false
               type: object
@@ -26759,6 +26785,15 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                postDownloadSourceExample:
+                  description: The created agent binary download source
+                  value:
+                    item:
+                      host: https://my-custom-host.example.com/downloads/
+                      id: download-source-id-2
+                      is_default: false
+                      name: My custom download source
               schema:
                 additionalProperties: false
                 type: object
@@ -26867,10 +26902,17 @@ paths:
                       - host
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -26888,7 +26930,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Create an agent binary download source
       tags:
         - Elastic Agent binary download sources
@@ -26923,6 +26965,11 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                deleteDownloadSourceExample:
+                  description: The download source was successfully deleted
+                  value:
+                    id: download-source-id-1
               schema:
                 additionalProperties: false
                 type: object
@@ -26931,10 +26978,17 @@ paths:
                     type: string
                 required:
                   - id
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -26952,7 +27006,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No download source was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Agent binary source download-source-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Delete an agent binary download source
       tags:
         - Elastic Agent binary download sources
@@ -26979,6 +27044,15 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                getDownloadSourceExample:
+                  description: An agent binary download source
+                  value:
+                    item:
+                      host: https://artifacts.elastic.co/downloads/
+                      id: download-source-id-1
+                      is_default: true
+                      name: Elastic Artifacts
               schema:
                 additionalProperties: false
                 type: object
@@ -27087,10 +27161,17 @@ paths:
                       - host
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -27108,7 +27189,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No download source was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Agent binary source download-source-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Get an agent binary download source
       tags:
         - Elastic Agent binary download sources
@@ -27141,6 +27233,13 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              putDownloadSourceRequestExample:
+                description: Update an agent binary download source
+                value:
+                  host: https://updated-host.example.com/downloads/
+                  is_default: false
+                  name: Updated download source
             schema:
               additionalProperties: false
               type: object
@@ -27246,6 +27345,15 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                putDownloadSourceExample:
+                  description: The updated agent binary download source
+                  value:
+                    item:
+                      host: https://updated-host.example.com/downloads/
+                      id: download-source-id-1
+                      is_default: false
+                      name: Updated download source
               schema:
                 additionalProperties: false
                 type: object
@@ -27354,10 +27462,17 @@ paths:
                       - host
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -27375,7 +27490,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No download source was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Download source download-source-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Update an agent binary download source
       tags:
         - Elastic Agent binary download sources
@@ -35947,6 +36073,7 @@ paths:
                             - degraded
                             - updating
                             - starting
+                            - disconnected
                           type: string
                         last_known_status:
                           enum:
@@ -36513,6 +36640,7 @@ paths:
                           - degraded
                           - updating
                           - starting
+                          - disconnected
                         type: string
                       last_known_status:
                         enum:
@@ -36935,6 +37063,7 @@ paths:
                           - degraded
                           - updating
                           - starting
+                          - disconnected
                         type: string
                       last_known_status:
                         enum:
@@ -39557,6 +39686,14 @@ paths:
           name: product_name
   /api/fleet/check-permissions:
     get:
+      description: |-
+        **Spaces method and path for this operation:**
+
+        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/fleet/check-permissions</span></div>
+
+        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
+
+        Check whether the current user has the required permissions to use Fleet. Optionally verifies Fleet Server setup privileges.
       operationId: get-fleet-check-permissions
       parameters:
         - in: query
@@ -39568,6 +39705,16 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                checkPermissionsMissingPrivilegesExample:
+                  description: The current user is missing Fleet privileges
+                  value:
+                    error: MISSING_PRIVILEGES
+                    success: false
+                checkPermissionsSuccessExample:
+                  description: The current user has all required Fleet permissions
+                  value:
+                    success: true
               schema:
                 additionalProperties: false
                 type: object
@@ -39582,10 +39729,17 @@ paths:
                     type: boolean
                 required:
                   - success
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -39603,19 +39757,13 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Check permissions
       tags:
         - Fleet internals
       x-metaTags:
         - content: Kibana
           name: product_name
-      description: |-
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/fleet/check-permissions</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
   /api/fleet/cloud_connectors:
     get:
       description: |-
@@ -40505,7 +40653,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-agents-all OR fleet-setup.
+        List all enrollment API keys.<br/><br/>[Required authorization] Route required privileges: fleet-agents-all OR fleet-setup.
       operationId: get-fleet-enrollment-api-keys
       parameters:
         - in: query
@@ -40529,6 +40677,29 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                getEnrollmentApiKeysExample:
+                  description: List of enrollment API keys
+                  value:
+                    items:
+                      - active: true
+                        api_key: api-key-value-1
+                        api_key_id: api-key-id-1
+                        created_at: '2024-01-01T00:00:00.000Z'
+                        id: key-id-1
+                        name: Default policy enrollment key
+                        policy_id: policy-id-1
+                    list:
+                      - active: true
+                        api_key: api-key-value-1
+                        api_key_id: api-key-id-1
+                        created_at: '2024-01-01T00:00:00.000Z'
+                        id: key-id-1
+                        name: Default policy enrollment key
+                        policy_id: policy-id-1
+                    page: 1
+                    perPage: 20
+                    total: 1
               schema:
                 additionalProperties: false
                 type: object
@@ -40614,10 +40785,17 @@ paths:
                   - page
                   - perPage
                   - list
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -40635,7 +40813,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Get enrollment API keys
       tags:
         - Fleet enrollment API keys
@@ -40650,7 +40828,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-agents-all.
+        Create an enrollment API key for a given agent policy.<br/><br/>[Required authorization] Route required privileges: fleet-agents-all.
       operationId: post-fleet-enrollment-api-keys
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -40663,6 +40841,13 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              postEnrollmentApiKeyRequestExample:
+                description: Create an enrollment API key for an agent policy
+                value:
+                  expiration: '2025-01-01T00:00:00.000Z'
+                  name: My enrollment key
+                  policy_id: policy-id-1
             schema:
               additionalProperties: false
               type: object
@@ -40679,6 +40864,19 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                postEnrollmentApiKeyExample:
+                  description: The created enrollment API key
+                  value:
+                    action: created
+                    item:
+                      active: true
+                      api_key: api-key-value-1
+                      api_key_id: api-key-id-1
+                      created_at: '2024-01-01T00:00:00.000Z'
+                      id: key-id-1
+                      name: My enrollment key
+                      policy_id: policy-id-1
               schema:
                 additionalProperties: false
                 type: object
@@ -40721,10 +40919,17 @@ paths:
                 required:
                   - item
                   - action
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -40742,7 +40947,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Create an enrollment API key
       tags:
         - Fleet enrollment API keys
@@ -40777,6 +40982,11 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                deleteEnrollmentApiKeyExample:
+                  description: The enrollment API key was successfully revoked
+                  value:
+                    action: deleted
               schema:
                 additionalProperties: false
                 type: object
@@ -40787,10 +40997,17 @@ paths:
                     type: string
                 required:
                   - action
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -40808,7 +41025,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No enrollment API key was found with the given ID
+                  value:
+                    error: Not Found
+                    message: EnrollmentAPIKey key-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Revoke an enrollment API key
       tags:
         - Fleet enrollment API keys
@@ -40835,6 +41063,18 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                getEnrollmentApiKeyExample:
+                  description: An enrollment API key
+                  value:
+                    item:
+                      active: true
+                      api_key: api-key-value-1
+                      api_key_id: api-key-id-1
+                      created_at: '2024-01-01T00:00:00.000Z'
+                      id: key-id-1
+                      name: Default policy enrollment key
+                      policy_id: policy-id-1
               schema:
                 additionalProperties: false
                 type: object
@@ -40872,10 +41112,17 @@ paths:
                       - created_at
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -40893,7 +41140,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No enrollment API key was found with the given ID
+                  value:
+                    error: Not Found
+                    message: EnrollmentAPIKey key-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Get an enrollment API key
       tags:
         - Fleet enrollment API keys
@@ -47113,13 +47371,27 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-agents-all OR fleet-settings-read.
+        List all Fleet Server hosts.<br/><br/>[Required authorization] Route required privileges: fleet-agents-all OR fleet-settings-read.
       operationId: get-fleet-fleet-server-hosts
       parameters: []
       responses:
         '200':
           content:
             application/json:
+              examples:
+                getFleetServerHostsExample:
+                  description: List of Fleet Server hosts
+                  value:
+                    items:
+                      - host_urls:
+                          - https://fleet-server.example.com:8220
+                        id: fleet-server-host-id-1
+                        is_default: true
+                        is_preconfigured: false
+                        name: Default Fleet Server
+                    page: 1
+                    perPage: 20
+                    total: 1
               schema:
                 additionalProperties: false
                 type: object
@@ -47243,10 +47515,17 @@ paths:
                   - total
                   - page
                   - perPage
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -47264,7 +47543,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Get Fleet Server hosts
       tags:
         - Fleet Server hosts
@@ -47279,7 +47558,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-settings-all.
+        Create a new Fleet Server host.<br/><br/>[Required authorization] Route required privileges: fleet-settings-all.
       operationId: post-fleet-fleet-server-hosts
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -47292,6 +47571,14 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              postFleetServerHostRequestExample:
+                description: Create a new Fleet Server host
+                value:
+                  host_urls:
+                    - https://fleet-server.example.com:8220
+                  is_default: false
+                  name: My Fleet Server
             schema:
               additionalProperties: false
               type: object
@@ -47400,6 +47687,17 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                postFleetServerHostExample:
+                  description: The created Fleet Server host
+                  value:
+                    item:
+                      host_urls:
+                        - https://fleet-server.example.com:8220
+                      id: fleet-server-host-id-2
+                      is_default: false
+                      is_preconfigured: false
+                      name: My Fleet Server
               schema:
                 additionalProperties: false
                 type: object
@@ -47511,10 +47809,17 @@ paths:
                       - id
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -47532,7 +47837,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Create a Fleet Server host
       tags:
         - Fleet Server hosts
@@ -47567,6 +47872,11 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                deleteFleetServerHostExample:
+                  description: The Fleet Server host was successfully deleted
+                  value:
+                    id: fleet-server-host-id-1
               schema:
                 additionalProperties: false
                 type: object
@@ -47575,10 +47885,17 @@ paths:
                     type: string
                 required:
                   - id
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -47596,7 +47913,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No Fleet Server host was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Fleet server fleet-server-host-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Delete a Fleet Server host
       tags:
         - Fleet Server hosts
@@ -47623,6 +47951,17 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                getFleetServerHostExample:
+                  description: A Fleet Server host
+                  value:
+                    item:
+                      host_urls:
+                        - https://fleet-server.example.com:8220
+                      id: fleet-server-host-id-1
+                      is_default: true
+                      is_preconfigured: false
+                      name: Default Fleet Server
               schema:
                 additionalProperties: false
                 type: object
@@ -47734,10 +48073,17 @@ paths:
                       - id
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -47755,7 +48101,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No Fleet Server host was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Fleet server fleet-server-host-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Get a Fleet Server host
       tags:
         - Fleet Server hosts
@@ -47788,6 +48145,14 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              putFleetServerHostRequestExample:
+                description: Update a Fleet Server host
+                value:
+                  host_urls:
+                    - https://updated-fleet-server.example.com:8220
+                  is_default: false
+                  name: Updated Fleet Server
             schema:
               additionalProperties: false
               type: object
@@ -47889,6 +48254,17 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                putFleetServerHostExample:
+                  description: The updated Fleet Server host
+                  value:
+                    item:
+                      host_urls:
+                        - https://updated-fleet-server.example.com:8220
+                      id: fleet-server-host-id-1
+                      is_default: false
+                      is_preconfigured: false
+                      name: Updated Fleet Server
               schema:
                 additionalProperties: false
                 type: object
@@ -48000,10 +48376,17 @@ paths:
                       - id
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -48021,7 +48404,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No Fleet Server host was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Fleet server fleet-server-host-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Update a Fleet Server host
       tags:
         - Fleet Server hosts
@@ -54321,13 +54715,25 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-settings-read.
+        List all Fleet proxies.<br/><br/>[Required authorization] Route required privileges: fleet-settings-read.
       operationId: get-fleet-proxies
       parameters: []
       responses:
         '200':
           content:
             application/json:
+              examples:
+                getFleetProxiesExample:
+                  description: List of Fleet proxies
+                  value:
+                    items:
+                      - id: proxy-id-1
+                        is_preconfigured: false
+                        name: My proxy
+                        url: http://proxy.example.com:3128
+                    page: 1
+                    perPage: 20
+                    total: 1
               schema:
                 additionalProperties: false
                 type: object
@@ -54380,10 +54786,17 @@ paths:
                   - total
                   - page
                   - perPage
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -54401,7 +54814,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Get proxies
       tags:
         - Fleet proxies
@@ -54416,7 +54829,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-settings-all.
+        Create a new Fleet proxy.<br/><br/>[Required authorization] Route required privileges: fleet-settings-all.
       operationId: post-fleet-proxies
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -54429,6 +54842,12 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              postFleetProxyRequestExample:
+                description: Create a new Fleet proxy
+                value:
+                  name: My proxy
+                  url: http://proxy.example.com:3128
             schema:
               additionalProperties: false
               type: object
@@ -54466,6 +54885,15 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                postFleetProxyExample:
+                  description: The created Fleet proxy
+                  value:
+                    item:
+                      id: proxy-id-2
+                      is_preconfigured: false
+                      name: My proxy
+                      url: http://proxy.example.com:3128
               schema:
                 additionalProperties: false
                 type: object
@@ -54506,10 +54934,17 @@ paths:
                       - name
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -54527,7 +54962,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Create a proxy
       tags:
         - Fleet proxies
@@ -54562,6 +54997,11 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                deleteFleetProxyExample:
+                  description: The Fleet proxy was successfully deleted
+                  value:
+                    id: proxy-id-1
               schema:
                 additionalProperties: false
                 type: object
@@ -54570,10 +55010,17 @@ paths:
                     type: string
                 required:
                   - id
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -54591,7 +55038,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No proxy was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Fleet proxy proxy-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Delete a proxy
       tags:
         - Fleet proxies
@@ -54618,6 +55076,15 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                getFleetProxyExample:
+                  description: A Fleet proxy
+                  value:
+                    item:
+                      id: proxy-id-1
+                      is_preconfigured: false
+                      name: My proxy
+                      url: http://proxy.example.com:3128
               schema:
                 additionalProperties: false
                 type: object
@@ -54658,10 +55125,17 @@ paths:
                       - name
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -54679,7 +55153,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No proxy was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Fleet proxy proxy-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Get a proxy
       tags:
         - Fleet proxies
@@ -54712,6 +55197,12 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              putFleetProxyRequestExample:
+                description: Update a Fleet proxy
+                value:
+                  name: Updated proxy
+                  url: http://updated-proxy.example.com:3128
             schema:
               additionalProperties: false
               type: object
@@ -54745,6 +55236,15 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                putFleetProxyExample:
+                  description: The updated Fleet proxy
+                  value:
+                    item:
+                      id: proxy-id-1
+                      is_preconfigured: false
+                      name: Updated proxy
+                      url: http://updated-proxy.example.com:3128
               schema:
                 additionalProperties: false
                 type: object
@@ -54785,10 +55285,17 @@ paths:
                       - name
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -54806,7 +55313,18 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              examples:
+                notFoundExample:
+                  description: No proxy was found with the given ID
+                  value:
+                    error: Not Found
+                    message: Proxy proxy-id-1 not found
+                    statusCode: 404
+          description: Not Found
       summary: Update a proxy
       tags:
         - Fleet proxies
@@ -55178,7 +55696,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-agents-all.
+        Create a Fleet Server service token. The token is used to enroll Fleet Server instances with Kibana.<br/><br/>[Required authorization] Route required privileges: fleet-agents-all.
       operationId: post-fleet-service-tokens
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -55191,6 +55709,11 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              postGenerateServiceTokenRequestExample:
+                description: Generate a service token for a remote Fleet Server
+                value:
+                  remote: true
             schema:
               additionalProperties: false
               nullable: true
@@ -55203,6 +55726,12 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                postGenerateServiceTokenExample:
+                  description: The generated Fleet Server service token
+                  value:
+                    name: elastic/fleet-server/token-1234567890
+                    value: AAEAAWVsYXN0aWMvZmxlZXQtc2VydmVyL3Rva2VuLTEyMzQ1Njc4OTA6QUJDREVGR0hJSktMTU5P
               schema:
                 additionalProperties: false
                 type: object
@@ -55214,10 +55743,17 @@ paths:
                 required:
                   - name
                   - value
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -55235,7 +55771,7 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
       summary: Create a service token
       tags:
         - Fleet service tokens
@@ -55251,13 +55787,27 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-settings-read.
+        Get the global Fleet settings.<br/><br/>[Required authorization] Route required privileges: fleet-settings-read.
       operationId: get-fleet-settings
       parameters: []
       responses:
         '200':
           content:
             application/json:
+              examples:
+                getSettingsExample:
+                  description: The current Fleet settings
+                  value:
+                    item:
+                      delete_unenrolled_agents:
+                        enabled: false
+                        is_preconfigured: false
+                      has_seen_add_data_notice: true
+                      id: fleet-default-settings
+                      output_secret_storage_requirements_met: true
+                      prerelease_integrations_enabled: false
+                      secret_storage_requirements_met: true
+                      version: WzEsMV0=
               schema:
                 additionalProperties: false
                 type: object
@@ -55334,10 +55884,17 @@ paths:
                         type: string
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -55355,10 +55912,17 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
         '404':
           content:
             application/json:
+              examples:
+                notFoundExample:
+                  description: Fleet settings have not been initialized
+                  value:
+                    error: Not Found
+                    message: Settings not found
+                    statusCode: 404
               schema:
                 additionalProperties: false
                 type: object
@@ -55367,7 +55931,7 @@ paths:
                     type: string
                 required:
                   - message
-          description: Not found.
+          description: Not Found
       summary: Get settings
       tags:
         - Fleet internals
@@ -55382,7 +55946,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-settings-all.
+        Update the global Fleet settings.<br/><br/>[Required authorization] Route required privileges: fleet-settings-all.
       operationId: put-fleet-settings
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -55395,6 +55959,11 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              putSettingsRequestExample:
+                description: Update Fleet settings to enable pre-release integrations
+                value:
+                  prerelease_integrations_enabled: true
             schema:
               additionalProperties: false
               type: object
@@ -55434,6 +56003,20 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                putSettingsExample:
+                  description: The updated Fleet settings
+                  value:
+                    item:
+                      delete_unenrolled_agents:
+                        enabled: false
+                        is_preconfigured: false
+                      has_seen_add_data_notice: true
+                      id: fleet-default-settings
+                      output_secret_storage_requirements_met: true
+                      prerelease_integrations_enabled: true
+                      secret_storage_requirements_met: true
+                      version: WzIsMV0=
               schema:
                 additionalProperties: false
                 type: object
@@ -55510,10 +56093,17 @@ paths:
                         type: string
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
         '400':
           content:
             application/json:
+              examples:
+                genericErrorResponseExample:
+                  description: Example of a generic error response
+                  value:
+                    error: Bad Request
+                    message: An error message describing what went wrong
+                    statusCode: 400
               schema:
                 additionalProperties: false
                 description: Generic Error
@@ -55531,10 +56121,17 @@ paths:
                 required:
                   - message
                   - attributes
-          description: A bad request.
+          description: Bad Request
         '404':
           content:
             application/json:
+              examples:
+                notFoundExample:
+                  description: Fleet settings have not been initialized
+                  value:
+                    error: Not Found
+                    message: Settings not found
+                    statusCode: 404
               schema:
                 additionalProperties: false
                 type: object
@@ -55543,7 +56140,7 @@ paths:
                     type: string
                 required:
                   - message
-          description: Not found.
+          description: Not Found
       summary: Update settings
       tags:
         - Fleet internals
@@ -55667,12 +56264,28 @@ paths:
           name: product_name
   /api/fleet/space_settings:
     get:
+      description: |-
+        **Spaces method and path for this operation:**
+
+        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/fleet/space_settings</span></div>
+
+        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
+
+        Get the Fleet settings for the current Kibana space.
       operationId: get-fleet-space-settings
       parameters: []
       responses:
         '200':
           content:
             application/json:
+              examples:
+                getSpaceSettingsExample:
+                  description: The Fleet settings for the current Kibana space
+                  value:
+                    item:
+                      allowed_namespace_prefixes:
+                        - team-a
+                        - team-b
               schema:
                 additionalProperties: false
                 type: object
@@ -55692,19 +56305,13 @@ paths:
                       - allowed_namespace_prefixes
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
       summary: Get space settings
       tags: []
       x-state: Generally available; added in 9.1.0
       x-metaTags:
         - content: Kibana
           name: product_name
-      description: |-
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/fleet/space_settings</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
     put:
       description: |-
         **Spaces method and path for this operation:**
@@ -55713,7 +56320,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        [Required authorization] Route required privileges: fleet-settings-all.
+        Create or update Fleet settings for the current Kibana space.<br/><br/>[Required authorization] Route required privileges: fleet-settings-all.
       operationId: put-fleet-space-settings
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -55726,6 +56333,13 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              putSpaceSettingsRequestExample:
+                description: Update allowed namespace prefixes for the current Kibana space
+                value:
+                  allowed_namespace_prefixes:
+                    - team-a
+                    - team-b
             schema:
               additionalProperties: false
               type: object
@@ -55739,6 +56353,14 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                putSpaceSettingsExample:
+                  description: The updated Fleet settings for the current Kibana space
+                  value:
+                    item:
+                      allowed_namespace_prefixes:
+                        - team-a
+                        - team-b
               schema:
                 additionalProperties: false
                 type: object
@@ -55758,7 +56380,7 @@ paths:
                       - allowed_namespace_prefixes
                 required:
                   - item
-          description: 'OK: A successful request.'
+          description: Successful response
       summary: Create space settings
       tags: []
       x-state: Generally available; added in 9.1.0
@@ -58509,6 +59131,29 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              createMaintenanceWindowRequest:
+                description: |
+                  Create a maintenance window that recurs every week on Monday and Wednesday for two hours, with a scope that filters specific alerts using a KQL query.
+                summary: Create a maintenance window
+                value:
+                  enabled: true
+                  schedule:
+                    custom:
+                      duration: 2h
+                      recurring:
+                        every: 1w
+                        occurrences: 10
+                        onWeekDay:
+                          - MO
+                          - WE
+                      start: '2025-03-01T08:00:00.000Z'
+                      timezone: Europe/Amsterdam
+                  scope:
+                    alerting:
+                      query:
+                        kql: 'kibana.alert.tags: "infra"'
+                  title: Weekly Maintenance Window
             schema:
               additionalProperties: false
               type: object
@@ -58605,6 +59250,35 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                createMaintenanceWindowResponse:
+                  description: |
+                    The response returned when a maintenance window is successfully created.
+                  summary: Create a maintenance window response
+                  value:
+                    created_at: '2025-02-25T10:00:00.000Z'
+                    created_by: elastic
+                    enabled: true
+                    id: f0cb1780-537a-4e34-8adf-3b4336862858
+                    schedule:
+                      custom:
+                        duration: 2h
+                        recurring:
+                          every: 1w
+                          occurrences: 10
+                          onWeekDay:
+                            - MO
+                            - WE
+                        start: '2025-03-01T08:00:00.000Z'
+                        timezone: Europe/Amsterdam
+                    scope:
+                      alerting:
+                        query:
+                          kql: 'kibana.alert.tags: "infra"'
+                    status: upcoming
+                    title: Weekly Maintenance Window
+                    updated_at: '2025-02-25T10:00:00.000Z'
+                    updated_by: elastic
               schema:
                 additionalProperties: false
                 type: object
@@ -58794,11 +59468,67 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                findMaintenanceWindowsResponse:
+                  description: |
+                    The response returned when maintenance windows are successfully found.
+                  summary: Find maintenance windows response
+                  value:
+                    maintenanceWindows:
+                      - created_at: '2025-02-25T10:00:00.000Z'
+                        created_by: elastic
+                        enabled: true
+                        id: f0cb1780-537a-4e34-8adf-3b4336862858
+                        schedule:
+                          custom:
+                            duration: 2h
+                            recurring:
+                              every: 1w
+                              occurrences: 10
+                              onWeekDay:
+                                - MO
+                                - WE
+                            start: '2025-03-01T08:00:00.000Z'
+                            timezone: Europe/Amsterdam
+                        scope:
+                          alerting:
+                            query:
+                              kql: 'kibana.alert.tags: "infra"'
+                        status: upcoming
+                        title: Weekly Maintenance Window
+                        updated_at: '2025-02-25T10:00:00.000Z'
+                        updated_by: elastic
+                      - created_at: '2025-03-10T09:00:00.000Z'
+                        created_by: elastic
+                        enabled: true
+                        id: a1c94560-6e3b-4ea1-9065-8e3f1b8c5f29
+                        schedule:
+                          custom:
+                            duration: 1h
+                            recurring:
+                              end: '2025-12-31T00:00:00.000Z'
+                              every: 2w
+                              onWeekDay:
+                                - FR
+                            start: '2025-04-01T10:00:00.000Z'
+                            timezone: US/Eastern
+                        scope:
+                          alerting:
+                            query:
+                              kql: 'kibana.alert.tags: "database"'
+                        status: upcoming
+                        title: Database Upgrade Window
+                        updated_at: '2025-03-15T14:30:00.000Z'
+                        updated_by: elastic
+                    page: 1
+                    per_page: 10
+                    total: 2
               schema:
                 additionalProperties: false
                 type: object
                 properties:
                   maintenanceWindows:
+                    description: The list of maintenance windows.
                     items:
                       additionalProperties: false
                       type: object
@@ -58918,10 +59648,13 @@ paths:
                         - schedule
                     type: array
                   page:
+                    description: The current page number.
                     type: number
                   per_page:
+                    description: The number of maintenance windows returned per page.
                     type: number
                   total:
+                    description: The total number of maintenance windows that match the query.
                     type: number
                 required:
                   - page
@@ -59002,6 +59735,35 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                getMaintenanceWindowResponse:
+                  description: |
+                    The response returned when a maintenance window is successfully retrieved.
+                  summary: Get a maintenance window response
+                  value:
+                    created_at: '2025-02-25T10:00:00.000Z'
+                    created_by: elastic
+                    enabled: true
+                    id: f0cb1780-537a-4e34-8adf-3b4336862858
+                    schedule:
+                      custom:
+                        duration: 2h
+                        recurring:
+                          every: 1w
+                          occurrences: 10
+                          onWeekDay:
+                            - MO
+                            - WE
+                        start: '2025-03-01T08:00:00.000Z'
+                        timezone: Europe/Amsterdam
+                    scope:
+                      alerting:
+                        query:
+                          kql: 'kibana.alert.tags: "infra"'
+                    status: upcoming
+                    title: Weekly Maintenance Window
+                    updated_at: '2025-02-25T10:00:00.000Z'
+                    updated_by: elastic
               schema:
                 additionalProperties: false
                 type: object
@@ -59151,7 +59913,8 @@ paths:
           schema:
             example: 'true'
             type: string
-        - in: path
+        - description: The identifier for the maintenance window.
+          in: path
           name: id
           required: true
           schema:
@@ -59159,6 +59922,28 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              updateMaintenanceWindowRequest:
+                description: |
+                  Update a maintenance window to change its title, schedule, and scope.
+                summary: Update a maintenance window
+                value:
+                  enabled: true
+                  schedule:
+                    custom:
+                      duration: 1h
+                      recurring:
+                        end: '2025-12-31T00:00:00.000Z'
+                        every: 2w
+                        onWeekDay:
+                          - FR
+                      start: '2025-04-01T10:00:00.000Z'
+                      timezone: US/Eastern
+                  scope:
+                    alerting:
+                      query:
+                        kql: 'kibana.alert.tags: "database"'
+                  title: Updated maintenance window
             schema:
               additionalProperties: false
               type: object
@@ -59252,6 +60037,34 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                updateMaintenanceWindowResponse:
+                  description: |
+                    The response returned when a maintenance window is successfully updated.
+                  summary: Update a maintenance window response
+                  value:
+                    created_at: '2025-02-25T10:00:00.000Z'
+                    created_by: elastic
+                    enabled: true
+                    id: f0cb1780-537a-4e34-8adf-3b4336862858
+                    schedule:
+                      custom:
+                        duration: 1h
+                        recurring:
+                          end: '2025-12-31T00:00:00.000Z'
+                          every: 2w
+                          onWeekDay:
+                            - FR
+                        start: '2025-04-01T10:00:00.000Z'
+                        timezone: US/Eastern
+                    scope:
+                      alerting:
+                        query:
+                          kql: 'kibana.alert.tags: "database"'
+                    status: upcoming
+                    title: Updated maintenance window
+                    updated_at: '2025-03-15T14:30:00.000Z'
+                    updated_by: elastic
               schema:
                 additionalProperties: false
                 type: object
@@ -59414,6 +60227,35 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                archiveMaintenanceWindowResponse:
+                  description: |
+                    The response returned when a maintenance window is successfully archived.
+                  summary: Archive a maintenance window response
+                  value:
+                    created_at: '2025-02-25T10:00:00.000Z'
+                    created_by: elastic
+                    enabled: true
+                    id: f0cb1780-537a-4e34-8adf-3b4336862858
+                    schedule:
+                      custom:
+                        duration: 2h
+                        recurring:
+                          every: 1w
+                          occurrences: 10
+                          onWeekDay:
+                            - MO
+                            - WE
+                        start: '2025-03-01T08:00:00.000Z'
+                        timezone: Europe/Amsterdam
+                    scope:
+                      alerting:
+                        query:
+                          kql: 'kibana.alert.tags: "infra"'
+                    status: archived
+                    title: Weekly Maintenance Window
+                    updated_at: '2025-02-25T10:00:00.000Z'
+                    updated_by: elastic
               schema:
                 additionalProperties: false
                 type: object
@@ -59574,6 +60416,35 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                unarchiveMaintenanceWindowResponse:
+                  description: |
+                    The response returned when a maintenance window is successfully unarchived.
+                  summary: Unarchive a maintenance window response
+                  value:
+                    created_at: '2025-02-25T10:00:00.000Z'
+                    created_by: elastic
+                    enabled: true
+                    id: f0cb1780-537a-4e34-8adf-3b4336862858
+                    schedule:
+                      custom:
+                        duration: 2h
+                        recurring:
+                          every: 1w
+                          occurrences: 10
+                          onWeekDay:
+                            - MO
+                            - WE
+                        start: '2025-03-01T08:00:00.000Z'
+                        timezone: Europe/Amsterdam
+                    scope:
+                      alerting:
+                        query:
+                          kql: 'kibana.alert.tags: "infra"'
+                    status: upcoming
+                    title: Weekly Maintenance Window
+                    updated_at: '2025-02-25T10:00:00.000Z'
+                    updated_by: elastic
               schema:
                 additionalProperties: false
                 type: object
@@ -64536,6 +65407,7 @@ paths:
           name: product_name
   /api/spaces/_disable_legacy_url_aliases:
     post:
+      description: Disable one or more legacy URL aliases so that they no longer resolve to their target saved objects.
       operationId: post-spaces-disable-legacy-url-aliases
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -64577,7 +65449,9 @@ paths:
             examples:
               disableLegacyURLRequestExample1:
                 $ref: '#/components/examples/disable_legacy_url_request1'
-      responses: {}
+      responses:
+        '204':
+          description: Indicates a successful call.
       summary: Disable legacy URL aliases
       tags:
         - spaces
@@ -64619,7 +65493,17 @@ paths:
                   type: array
               required:
                 - objects
-      responses: {}
+            examples:
+              getShareableReferencesRequestExample1:
+                $ref: '#/components/examples/get_shareable_references_request1'
+      responses:
+        '200':
+          description: Indicates a successful call.
+          content:
+            application/json:
+              examples:
+                getShareableReferencesResponseExample1:
+                  $ref: '#/components/examples/get_shareable_references_response1'
       summary: Get shareable references
       tags:
         - spaces
@@ -64792,6 +65676,7 @@ paths:
           name: product_name
   /api/spaces/space:
     get:
+      description: Retrieve all available Kibana spaces. The list includes only the spaces that the user is authorized to access.
       operationId: get-spaces-space
       parameters:
         - description: Specifies which authorization checks are applied to the API call. The default value is `any`.
@@ -64827,6 +65712,7 @@ paths:
         - content: Kibana
           name: product_name
     post:
+      description: Create a new Kibana space.
       operationId: post-spaces-space
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -64890,6 +65776,57 @@ paths:
                 $ref: '#/components/examples/create_space_request'
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                type: object
+                properties:
+                  _reserved:
+                    type: boolean
+                  color:
+                    description: The hexadecimal color code used in the space avatar. By default, the color is automatically generated from the space name.
+                    type: string
+                  description:
+                    description: A description for the space.
+                    type: string
+                  disabledFeatures:
+                    default: []
+                    items:
+                      description: The list of features that are turned off in the space.
+                      type: string
+                    maxItems: 100
+                    type: array
+                  id:
+                    description: The space ID that is part of the Kibana URL when inside the space. Space IDs are limited to lowercase alphanumeric, underscore, and hyphen characters (a-z, 0-9, _, and -). You are cannot change the ID with the update operation.
+                    type: string
+                  imageUrl:
+                    description: The data-URL encoded image to display in the space avatar. If specified, initials will not be displayed and the color will be visible as the background color for transparent images. For best results, your image should be 64x64. Images will not be optimized by this API call, so care should be taken when using custom images.
+                    type: string
+                  initials:
+                    description: One or two characters that are shown in the space avatar. By default, the initials are automatically generated from the space name.
+                    maxLength: 2
+                    type: string
+                  name:
+                    description: 'The display name for the space. '
+                    minLength: 1
+                    type: string
+                  projectRouting:
+                    description: Cross-project search default routing configuration for this space. Controls whether searches are scoped to a single project or span multiple projects in serverless environments.
+                    type: string
+                  solution:
+                    enum:
+                      - security
+                      - oblt
+                      - es
+                      - classic
+                    type: string
+                required:
+                  - id
+                  - name
+              examples:
+                createSpaceResponseExample:
+                  $ref: '#/components/examples/get_space_response'
           description: Indicates a successful call.
       summary: Create a space
       tags:
@@ -64927,6 +65864,7 @@ paths:
         - content: Kibana
           name: product_name
     get:
+      description: Retrieve a single Kibana space by its identifier.
       operationId: get-spaces-space-id
       parameters:
         - description: The space identifier.
@@ -64950,6 +65888,7 @@ paths:
         - content: Kibana
           name: product_name
     put:
+      description: Update an existing Kibana space.
       operationId: put-spaces-space-id
       parameters:
         - description: A required header to protect against CSRF attacks
@@ -69321,7 +70260,7 @@ paths:
             {
               "ids": ["workflow-c3d4e5f6-a7b8-9012-cdef-234567890123", "workflow-d4e5f6a7-b8c9-0123-defa-345678901234"]
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -69439,7 +70378,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows?size=20&page=1
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -69566,7 +70505,7 @@ paths:
                 { "id": "workflow-b2c3d4e5-f6a7-8901-bcde-f12345678901", "yaml": "name: Second workflow\nenabled: false\ndescription: Another workflow\ntriggers:\n  - type: manual\nsteps:\n  - name: log_step\n    type: console\n    with:\n      message: \"Hello from second workflow\"\n" }
               ]
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -69623,7 +70562,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/aggs?fields=tags&fields=createdBy
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -69688,7 +70627,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/connectors
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -69804,7 +70743,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/executions/{executionId}?includeInput=true&includeOutput=true
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -69849,7 +70788,7 @@ paths:
         - lang: Console
           source: |
             POST kbn://api/workflows/executions/{executionId}/cancel
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -69912,7 +70851,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/executions/{executionId}/children
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70019,7 +70958,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/executions/{executionId}/logs?size=100&page=1
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70106,7 +71045,7 @@ paths:
                 "comment": "Approved by analyst"
               }
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70175,7 +71114,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/executions/{executionId}/step/{stepExecutionId}
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70271,7 +71210,7 @@ paths:
             {
               "ids": ["workflow-a1b2c3d4-e5f6-7890-abcd-ef1234567890", "workflow-b2c3d4e5-f6a7-8901-bcde-f12345678901"]
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70368,7 +71307,7 @@ paths:
               "ids": ["workflow-a1b2c3d4-e5f6-7890-abcd-ef1234567890", "workflow-b2c3d4e5-f6a7-8901-bcde-f12345678901"],
               "source": ["name", "enabled"]
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70435,7 +71374,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/schema?loose=false
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70486,7 +71425,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/stats
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70597,7 +71536,7 @@ paths:
               "workflowYaml": "name: Example definition\nenabled: true\ntriggers:\n  - type: manual\ninputs:\n  - name: message\n    type: string\n    default: \"hello world\"\nsteps:\n  - name: hello_world_step\n    type: console\n    with:\n      message: \"{{ inputs.message }}\"",
               "contextOverride": { "inputs": { "message": "override message" } }
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70698,7 +71637,7 @@ paths:
               "workflowId": "workflow-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
               "inputs": { "message": "test message" }
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70843,7 +71782,7 @@ paths:
             {
               "yaml": "name: Example definition\nenabled: true\ndescription: This is a workflow example\ntriggers:\n  - type: manual\ninputs:\n  - name: message\n    type: string\n    default: \"hello world\"\nsteps:\n  - name: hello_world_step\n    type: console\n    with:\n      message: \"{{ inputs.message }}\"\n"
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70903,7 +71842,7 @@ paths:
         - lang: Console
           source: |
             DELETE kbn://api/workflows/workflow/{id}
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -70984,7 +71923,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/workflow/{id}
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -71099,7 +72038,7 @@ paths:
               "enabled": true,
               "tags": ["production"]
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -71189,7 +72128,7 @@ paths:
         - lang: Console
           source: |
             POST kbn://api/workflows/workflow/{id}/clone
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -71275,7 +72214,7 @@ paths:
                 "message": "hello from the API"
               }
             }
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -71406,7 +72345,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/workflow/{workflowId}/executions?page=1&size=20
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -71451,7 +72390,7 @@ paths:
         - lang: Console
           source: |
             POST kbn://api/workflows/workflow/{workflowId}/executions/cancel
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -71546,7 +72485,7 @@ paths:
         - lang: Console
           source: |
             GET kbn://api/workflows/workflow/{workflowId}/executions/steps?includeInput=true
-      x-state: Added in 9.4.0
+      x-state: Generally available; added in 9.4.0
       x-metaTags:
         - content: Kibana
           name: product_name
@@ -77671,6 +78610,26 @@ components:
           - targetSpace: bills-space
             targetType: dashboard
             sourceId: 123
+    get_shareable_references_request1:
+      summary: Get shareable references
+      description: |
+        Collect references and space contexts for a dashboard saved object.
+      value:
+        objects:
+          - type: dashboard
+            id: my-dashboard-id
+    get_shareable_references_response1:
+      summary: Get shareable references response
+      description: |
+        A response that includes the collected references and the spaces where the objects exist.
+      value:
+        objects:
+          - type: dashboard
+            id: my-dashboard-id
+            spaces:
+              - default
+              - marketing
+            inboundReferences: []
     resolve_copy_saved_objects_request1:
       summary: Resolve conflict errors
       description: |
@@ -89393,6 +90352,9 @@ components:
           type: boolean
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -89534,6 +90496,9 @@ components:
           type: string
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -89677,6 +90642,9 @@ components:
           type: boolean
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -89765,6 +90733,9 @@ components:
           type: string
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -90570,6 +91541,9 @@ components:
           type: boolean
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -90711,6 +91685,9 @@ components:
           type: string
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -90854,6 +91831,9 @@ components:
           type: boolean
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -90942,6 +91922,9 @@ components:
           type: string
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -92813,6 +93796,9 @@ components:
           type: boolean
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -92950,6 +93936,9 @@ components:
           type: string
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -93088,6 +94077,9 @@ components:
           type: boolean
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -93170,6 +94162,9 @@ components:
           type: string
         name:
           type: string
+        otel_disable_beatsauth:
+          nullable: true
+          type: boolean
         otel_exporter_config_yaml:
           nullable: true
           type: string
@@ -110131,34 +111126,87 @@ components:
       type: object
       properties:
         data:
-          description: The live query action data.
           type: object
           properties:
-            action_id:
-              description: The ID of the live query action.
+            '@timestamp':
+              description: The timestamp when the action was created.
+              format: date-time
               type: string
+            action_id:
+              description: The ID of the action.
+              type: string
+            agent_all:
+              description: Whether the query targets all agents.
+              type: boolean
+            agent_ids:
+              description: The agent IDs targeted by the action.
+              items:
+                type: string
+              type: array
+            agent_platforms:
+              description: The agent platforms targeted.
+              items:
+                type: string
+              type: array
+            agent_policy_ids:
+              description: The agent policy IDs targeted.
+              items:
+                type: string
+              type: array
             agents:
-              description: A list of agent IDs targeted by the live query.
+              description: The resolved list of agent IDs.
               items:
                 type: string
               type: array
             expiration:
-              description: The expiration date and time of the live query.
+              description: The expiration date of the action.
+              format: date-time
               type: string
             input_type:
-              description: The input type for the action.
+              description: The input type.
+              type: string
+            metadata:
+              description: Custom metadata associated with the action.
+              type: object
+            pack_id:
+              description: The pack ID if the query was run from a pack.
               type: string
             queries:
-              description: The list of queries in the live query action.
+              description: The queries in this action.
               items:
                 type: object
+                properties:
+                  action_id:
+                    type: string
+                  agents:
+                    items:
+                      type: string
+                    type: array
+                  ecs_mapping:
+                    $ref: '#/components/schemas/Security_Osquery_API_ECSMapping'
+                  id:
+                    type: string
+                  platform:
+                    type: string
+                  query:
+                    type: string
+                  saved_query_id:
+                    type: string
+                  timeout:
+                    type: integer
+                  version:
+                    type: string
               type: array
             type:
               description: The action type.
               type: string
             user_id:
-              description: The ID of the user who created the live query.
+              description: The user who created the action.
               type: string
+          required:
+            - action_id
+      required:
+        - data
     Security_Osquery_API_CreatePacksRequestBody:
       example:
         description: My pack
@@ -110227,47 +111275,61 @@ components:
       type: object
       properties:
         data:
-          description: The created pack.
           type: object
           properties:
             created_at:
-              description: The creation timestamp.
+              description: The date and time the pack was created.
+              format: date-time
               type: string
             created_by:
               description: The user who created the pack.
+              nullable: true
+              type: string
+            created_by_profile_uid:
+              description: The profile UID of the user who created the pack.
               type: string
             description:
-              description: The pack description.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
             enabled:
-              description: Whether the pack is enabled.
-              type: boolean
+              $ref: '#/components/schemas/Security_Osquery_API_Enabled'
             name:
-              description: The pack name.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_PackName'
             policy_ids:
-              description: A list of agent policy IDs associated with the pack.
-              items:
-                type: string
-              type: array
+              $ref: '#/components/schemas/Security_Osquery_API_PolicyIds'
             queries:
-              description: The queries in the pack.
-              type: object
+              $ref: '#/components/schemas/Security_Osquery_API_ObjectQueries'
             saved_object_id:
               description: The saved object ID of the pack.
               type: string
             shards:
-              description: Shard configuration for the pack.
-              type: object
+              description: Shard configuration as an array of key-value pairs.
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  value:
+                    type: number
+              type: array
             updated_at:
-              description: The last update timestamp.
+              description: The date and time the pack was last updated.
+              format: date-time
               type: string
             updated_by:
               description: The user who last updated the pack.
+              nullable: true
+              type: string
+            updated_by_profile_uid:
+              description: The profile UID of the user who last updated the pack.
               type: string
             version:
-              description: The pack version.
+              description: The pack version number.
               type: integer
+          required:
+            - saved_object_id
+            - name
+      required:
+        - data
     Security_Osquery_API_CreateSavedQueryRequestBody:
       example:
         description: Saved query description
@@ -110304,7 +111366,7 @@ components:
       description: The response for creating a saved query.
       example:
         data:
-          created_at: '2022-07-26T09:28:08.597Z'
+          created_at: '2025-02-26T13:37:30.452Z'
           created_by: elastic
           description: Saved query description
           ecs_mapping:
@@ -110313,65 +111375,72 @@ components:
           id: saved_query_id
           interval: '60'
           platform: linux,darwin
+          prebuilt: false
           query: select * from uptime;
-          removed: false
-          saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
-          snapshot: true
+          saved_object_id: 42ba1280-2172-11ee-8523-5765fca79a3c
           timeout: 120
-          updated_at: '2022-07-26T09:28:08.597Z'
+          updated_at: '2025-02-26T13:37:30.452Z'
           updated_by: elastic
           version: 2.8.0
       type: object
       properties:
         data:
-          description: The created saved query.
           type: object
           properties:
             created_at:
-              description: The creation timestamp.
+              format: date-time
               type: string
             created_by:
-              description: The user who created the saved query.
+              nullable: true
+              type: string
+            created_by_profile_uid:
               type: string
             description:
-              description: The saved query description.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_SavedQueryDescription'
             ecs_mapping:
-              description: The ECS mapping configuration.
-              type: object
+              $ref: '#/components/schemas/Security_Osquery_API_ECSMapping'
             id:
-              description: The saved query ID.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_SavedQueryId'
             interval:
-              description: The query interval in seconds.
-              type: string
+              description: An interval, in seconds, on which to run the query. May be returned as number or string.
+              oneOf:
+                - type: integer
+                - type: string
             platform:
-              description: The target platform(s).
-              type: string
-            query:
-              description: The SQL query.
-              type: string
-            removed:
-              description: Whether to include results for removed processes.
+              $ref: '#/components/schemas/Security_Osquery_API_Platform'
+            prebuilt:
+              description: Whether the saved query is prebuilt.
               type: boolean
+            query:
+              $ref: '#/components/schemas/Security_Osquery_API_Query'
+            removed:
+              $ref: '#/components/schemas/Security_Osquery_API_Removed'
             saved_object_id:
               description: The saved object ID of the saved query.
               type: string
             snapshot:
-              description: Whether the query is a snapshot query.
-              type: boolean
+              $ref: '#/components/schemas/Security_Osquery_API_Snapshot'
             timeout:
               description: The query timeout in seconds.
               type: integer
             updated_at:
-              description: The last update timestamp.
+              format: date-time
               type: string
             updated_by:
-              description: The user who last updated the saved query.
+              nullable: true
+              type: string
+            updated_by_profile_uid:
               type: string
             version:
-              description: The minimum osquery version.
-              type: string
+              description: The saved query version.
+              oneOf:
+                - type: integer
+                - type: string
+          required:
+            - saved_object_id
+            - id
+      required:
+        - data
     Security_Osquery_API_DefaultSuccessResponse:
       example: {}
       type: object
@@ -110384,6 +111453,23 @@ components:
         host.uptime:
           field: total_seconds
       type: object
+    Security_Osquery_API_ECSMappingArray:
+      description: ECS mapping in saved-object storage format (array of key-value pairs). The find and copy pack endpoints return this format. The read endpoint returns object format (ECSMapping).
+      items:
+        $ref: '#/components/schemas/Security_Osquery_API_ECSMappingArrayItem'
+      type: array
+    Security_Osquery_API_ECSMappingArrayItem:
+      description: ECS mapping item in saved-object storage format (key-value pair).
+      type: object
+      properties:
+        key:
+          description: The ECS field name.
+          type: string
+        value:
+          $ref: '#/components/schemas/Security_Osquery_API_ECSMappingItem'
+    Security_Osquery_API_ECSMappingArrayOrUndefined:
+      $ref: '#/components/schemas/Security_Osquery_API_ECSMappingArray'
+      nullable: true
     Security_Osquery_API_ECSMappingItem:
       type: object
       properties:
@@ -110410,7 +111496,6 @@ components:
       $ref: '#/components/schemas/Security_Osquery_API_Enabled'
       nullable: true
     Security_Osquery_API_FindLiveQueryDetailsResponse:
-      description: The details of a live query.
       example:
         data:
           '@timestamp': '2022-07-26T09:59:32.220Z'
@@ -110439,52 +111524,86 @@ components:
       type: object
       properties:
         data:
-          description: The live query details.
           type: object
           properties:
             '@timestamp':
-              description: The timestamp when the live query was created.
+              format: date-time
               type: string
             action_id:
-              description: The ID of the live query action.
               type: string
-            agent_selection:
-              description: The original agent selection criteria.
-              type: object
             agents:
-              description: A list of agent IDs targeted by the live query.
               items:
                 type: string
               type: array
             expiration:
-              description: The expiration date and time of the live query.
+              format: date-time
               type: string
             pack_id:
-              description: The pack ID, if the live query was run from a pack.
               type: string
             pack_name:
-              description: The pack name, if the live query was run from a pack.
               type: string
+            prebuilt_pack:
+              type: boolean
             queries:
-              description: The list of queries in the live query action, each with aggregated result counts.
+              description: The queries with their execution status.
               items:
                 type: object
+                properties:
+                  action_id:
+                    type: string
+                  agents:
+                    items:
+                      type: string
+                    type: array
+                  docs:
+                    description: Number of result documents.
+                    type: integer
+                  ecs_mapping:
+                    $ref: '#/components/schemas/Security_Osquery_API_ECSMapping'
+                  failed:
+                    description: Number of failed queries.
+                    type: integer
+                  id:
+                    type: string
+                  pending:
+                    description: Number of pending agents.
+                    type: integer
+                  query:
+                    type: string
+                  responded:
+                    description: Total responded agents.
+                    type: integer
+                  saved_query_id:
+                    type: string
+                  status:
+                    description: Status of this individual query.
+                    enum:
+                      - completed
+                      - running
+                    type: string
+                  successful:
+                    description: Number of successful agents.
+                    type: integer
               type: array
             status:
-              description: The overall status of the live query.
+              description: Global status of the live query (completed, running).
               enum:
                 - completed
                 - running
               type: string
+            tags:
+              items:
+                type: string
+              type: array
             user_id:
-              description: The ID of the user who ran the live query.
+              type: string
+            user_profile_uid:
               type: string
     Security_Osquery_API_FindLiveQueryResponse:
-      description: A list of live queries.
       example:
         data:
           items:
-            - fields:
+            - _source:
                 '@timestamp': '2023-10-31T00:00:00Z'
                 action_id: 3c42c847-eb30-4452-80e0-728584042334
                 agents:
@@ -110506,17 +111625,71 @@ components:
                   successful_agents: 1
                   total_rows: 42
                 user_id: elastic
+          total: 1
       type: object
       properties:
         data:
-          description: The response data wrapper.
           type: object
           properties:
             items:
-              description: The list of live queries.
+              description: An array of live query action items.
               items:
                 type: object
+                properties:
+                  _source:
+                    type: object
+                    properties:
+                      '@timestamp':
+                        format: date-time
+                        type: string
+                      action_id:
+                        type: string
+                      agents:
+                        items:
+                          type: string
+                        type: array
+                      expiration:
+                        format: date-time
+                        type: string
+                      pack_id:
+                        type: string
+                      queries:
+                        items:
+                          type: object
+                          properties:
+                            action_id:
+                              type: string
+                            agents:
+                              items:
+                                type: string
+                              type: array
+                            ecs_mapping:
+                              $ref: '#/components/schemas/Security_Osquery_API_ECSMapping'
+                            id:
+                              type: string
+                            query:
+                              type: string
+                            saved_query_id:
+                              type: string
+                        type: array
+                      result_counts:
+                        description: Result count statistics (present when withResultCounts is true).
+                        type: object
+                        properties:
+                          error_agents:
+                            type: integer
+                          responded_agents:
+                            type: integer
+                          successful_agents:
+                            type: integer
+                          total_rows:
+                            type: integer
+                      user_id:
+                        type: string
               type: array
+            total:
+              description: The total number of live queries.
+              type: integer
     Security_Osquery_API_FindPackResponse:
       description: The details of a single query pack.
       example:
@@ -110526,6 +111699,8 @@ components:
           description: ''
           enabled: true
           name: test_pack
+          namespaces:
+            - default
           policy_ids: []
           queries:
             uptime:
@@ -110537,6 +111712,7 @@ components:
           read_only: false
           saved_object_id: 3c42c847-eb30-4452-80e0-728584042334
           shards: {}
+          type: osquery-pack
           updated_at: '2022-07-25T20:12:01.455Z'
           updated_by: elastic
           version: 1
@@ -110547,28 +111723,28 @@ components:
           type: object
           properties:
             created_at:
-              description: The creation timestamp.
+              format: date-time
               type: string
             created_by:
-              description: The user who created the pack.
+              nullable: true
+              type: string
+            created_by_profile_uid:
               type: string
             description:
-              description: The pack description.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
             enabled:
-              description: Whether the pack is enabled.
-              type: boolean
+              $ref: '#/components/schemas/Security_Osquery_API_Enabled'
             name:
-              description: The pack name.
-              type: string
-            policy_ids:
-              description: A list of agent policy IDs associated with the pack.
+              $ref: '#/components/schemas/Security_Osquery_API_PackName'
+            namespaces:
+              description: The namespaces the pack belongs to.
               items:
                 type: string
               type: array
+            policy_ids:
+              $ref: '#/components/schemas/Security_Osquery_API_PolicyIds'
             queries:
-              description: The queries in the pack, keyed by query name.
-              type: object
+              $ref: '#/components/schemas/Security_Osquery_API_ObjectQueries'
             read_only:
               description: Whether the pack is read-only (true for prebuilt packs).
               type: boolean
@@ -110576,32 +111752,42 @@ components:
               description: The saved object ID of the pack.
               type: string
             shards:
-              description: Shard configuration for policies, as a map of policy ID to percentage.
-              type: object
+              $ref: '#/components/schemas/Security_Osquery_API_Shards'
+            type:
+              description: The saved object type.
+              type: string
             updated_at:
-              description: The last update timestamp.
+              format: date-time
               type: string
             updated_by:
-              description: The user who last updated the pack.
+              nullable: true
+              type: string
+            updated_by_profile_uid:
               type: string
             version:
-              description: The pack version.
+              description: The pack version number.
               type: integer
+          required:
+            - saved_object_id
+            - name
+      required:
+        - data
     Security_Osquery_API_FindPacksResponse:
       description: A paginated list of query packs.
       example:
         data:
           - created_at: '2023-10-31T00:00:00Z'
             created_by: elastic
+            created_by_profile_uid: u_mGBROF_q5bmFCATbLXAcCwKa0k8JvONAwSruelyKA5E_0
             description: My pack description
             enabled: true
             name: My Pack
-            policy_ids:
-              - policy-id-1
+            policy_ids: []
             queries:
               - ecs_mapping:
-                  host.uptime:
-                    field: total_seconds
+                  - key: host.uptime
+                    value:
+                      field: total_seconds
                 id: uptime
                 interval: 3600
                 query: select * from uptime;
@@ -110609,16 +111795,77 @@ components:
             saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
             updated_at: '2023-10-31T00:00:00Z'
             updated_by: elastic
-            version: 1
+            updated_by_profile_uid: u_mGBROF_q5bmFCATbLXAcCwKa0k8JvONAwSruelyKA5E_0
         page: 1
         per_page: 10
         total: 1
       type: object
       properties:
         data:
-          description: The list of packs.
+          description: An array of pack objects.
           items:
             type: object
+            properties:
+              created_at:
+                format: date-time
+                type: string
+              created_by:
+                nullable: true
+                type: string
+              created_by_profile_uid:
+                type: string
+              description:
+                $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
+              enabled:
+                $ref: '#/components/schemas/Security_Osquery_API_Enabled'
+              name:
+                $ref: '#/components/schemas/Security_Osquery_API_PackName'
+              policy_ids:
+                $ref: '#/components/schemas/Security_Osquery_API_PolicyIds'
+              queries:
+                description: 'Pack queries in saved-object storage format (array). Note: the read endpoint returns object format.'
+                items:
+                  type: object
+                  properties:
+                    ecs_mapping:
+                      $ref: '#/components/schemas/Security_Osquery_API_ECSMappingArray'
+                    id:
+                      type: string
+                    interval:
+                      type: integer
+                    platform:
+                      type: string
+                    query:
+                      type: string
+                    removed:
+                      type: boolean
+                    snapshot:
+                      type: boolean
+                    timeout:
+                      type: integer
+                    version:
+                      type: string
+                type: array
+              read_only:
+                description: Whether the pack is read-only (true for prebuilt packs).
+                type: boolean
+              saved_object_id:
+                description: The saved object ID of the pack.
+                type: string
+              updated_at:
+                format: date-time
+                type: string
+              updated_by:
+                nullable: true
+                type: string
+              updated_by_profile_uid:
+                type: string
+              version:
+                description: The pack version number.
+                type: integer
+            required:
+              - saved_object_id
+              - name
           type: array
         page:
           description: The current page number.
@@ -110629,6 +111876,11 @@ components:
         total:
           description: The total number of packs.
           type: integer
+      required:
+        - page
+        - per_page
+        - total
+        - data
     Security_Osquery_API_FindSavedQueryDetailResponse:
       description: The details of a single saved query.
       example:
@@ -110644,73 +111896,71 @@ components:
           platform: linux,darwin
           prebuilt: false
           query: select * from uptime;
-          removed: false
-          saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
-          snapshot: true
-          timeout: 120
+          saved_object_id: 3c42c847-eb30-4452-80e0-728584042334
           updated_at: '2022-07-26T09:28:08.597Z'
           updated_by: elastic
           version: 2.8.0
       type: object
       properties:
         data:
-          description: The saved query details.
           type: object
           properties:
             created_at:
-              description: The creation timestamp.
+              format: date-time
               type: string
             created_by:
-              description: The user who created the saved query.
+              nullable: true
+              type: string
+            created_by_profile_uid:
               type: string
             description:
-              description: The saved query description.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_SavedQueryDescription'
             ecs_mapping:
-              description: The ECS mapping configuration.
-              type: object
+              $ref: '#/components/schemas/Security_Osquery_API_ECSMapping'
             id:
-              description: The saved query ID.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_SavedQueryId'
             interval:
-              description: The query interval in seconds.
-              type: string
+              oneOf:
+                - type: integer
+                - type: string
             platform:
-              description: The target platform(s).
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_Platform'
             prebuilt:
-              description: Whether this is a prebuilt saved query.
               type: boolean
             query:
-              description: The SQL query.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_Query'
             removed:
-              description: Whether to include results for removed processes.
-              type: boolean
+              $ref: '#/components/schemas/Security_Osquery_API_Removed'
             saved_object_id:
-              description: The saved object ID.
               type: string
             snapshot:
-              description: Whether the query is a snapshot query.
-              type: boolean
+              $ref: '#/components/schemas/Security_Osquery_API_Snapshot'
             timeout:
-              description: The query timeout in seconds.
               type: integer
             updated_at:
-              description: The last update timestamp.
+              format: date-time
               type: string
             updated_by:
-              description: The user who last updated the saved query.
+              nullable: true
+              type: string
+            updated_by_profile_uid:
               type: string
             version:
-              description: The minimum osquery version.
-              type: string
+              oneOf:
+                - type: integer
+                - type: string
+          required:
+            - saved_object_id
+            - id
+      required:
+        - data
     Security_Osquery_API_FindSavedQueryResponse:
       description: A paginated list of saved queries.
       example:
         data:
           - created_at: '2022-07-26T09:28:08.597Z'
             created_by: elastic
+            created_by_profile_uid: u_mGBROF_q5bmFCATbLXAcCwKa0k8JvONAwSruelyKA5E_0
             description: Saved query description
             ecs_mapping:
               host.uptime:
@@ -110720,12 +111970,10 @@ components:
             platform: linux,darwin
             prebuilt: false
             query: select * from uptime;
-            removed: false
             saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
-            snapshot: true
-            timeout: 120
             updated_at: '2022-07-26T09:28:08.597Z'
             updated_by: elastic
+            updated_by_profile_uid: u_mGBROF_q5bmFCATbLXAcCwKa0k8JvONAwSruelyKA5E_0
             version: 2.8.0
         page: 1
         per_page: 100
@@ -110733,9 +111981,57 @@ components:
       type: object
       properties:
         data:
-          description: The list of saved queries.
+          description: An array of saved query objects.
           items:
             type: object
+            properties:
+              created_at:
+                format: date-time
+                type: string
+              created_by:
+                nullable: true
+                type: string
+              created_by_profile_uid:
+                type: string
+              description:
+                $ref: '#/components/schemas/Security_Osquery_API_SavedQueryDescription'
+              ecs_mapping:
+                $ref: '#/components/schemas/Security_Osquery_API_ECSMapping'
+              id:
+                $ref: '#/components/schemas/Security_Osquery_API_SavedQueryId'
+              interval:
+                oneOf:
+                  - type: integer
+                  - type: string
+              platform:
+                $ref: '#/components/schemas/Security_Osquery_API_Platform'
+              prebuilt:
+                type: boolean
+              query:
+                $ref: '#/components/schemas/Security_Osquery_API_Query'
+              removed:
+                $ref: '#/components/schemas/Security_Osquery_API_Removed'
+              saved_object_id:
+                type: string
+              snapshot:
+                $ref: '#/components/schemas/Security_Osquery_API_Snapshot'
+              timeout:
+                type: integer
+              updated_at:
+                format: date-time
+                type: string
+              updated_by:
+                nullable: true
+                type: string
+              updated_by_profile_uid:
+                type: string
+              version:
+                oneOf:
+                  - type: integer
+                  - type: string
+            required:
+              - saved_object_id
+              - id
           type: array
         page:
           description: The current page number.
@@ -110746,30 +112042,36 @@ components:
         total:
           description: The total number of saved queries.
           type: integer
+      required:
+        - page
+        - per_page
+        - total
+        - data
     Security_Osquery_API_GetLiveQueryResultsResponse:
       description: The response for getting live query results.
       example:
         data:
           edges:
-            - _id: result-1
-              fields:
-                host.uptime:
-                  - '12345'
-            - _id: result-2
-              fields:
-                host.uptime:
-                  - '67890'
+            - _id: doc1
+              _source: {}
+            - _id: doc2
+              _source: {}
           total: 2
       type: object
       properties:
         data:
-          description: The query results data wrapper.
           type: object
           properties:
             edges:
-              description: The paginated list of query result rows.
+              description: The result rows from the query execution.
               items:
                 type: object
+                properties:
+                  _id:
+                    type: string
+                  _source:
+                    description: The Elasticsearch document source containing query results.
+                    type: object
               type: array
             total:
               description: The total number of result rows.
@@ -110963,46 +112265,41 @@ components:
       type: object
       properties:
         data:
-          description: The updated pack.
           type: object
           properties:
             created_at:
-              description: The creation timestamp.
+              format: date-time
               type: string
             created_by:
-              description: The user who created the pack.
+              nullable: true
+              type: string
+            created_by_profile_uid:
               type: string
             description:
-              description: The pack description.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
             enabled:
-              description: Whether the pack is enabled.
-              type: boolean
+              $ref: '#/components/schemas/Security_Osquery_API_Enabled'
             name:
-              description: The pack name.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_PackName'
             policy_ids:
-              description: A list of agent policy IDs associated with the pack.
-              items:
-                type: string
-              type: array
+              $ref: '#/components/schemas/Security_Osquery_API_PolicyIds'
             queries:
-              description: The queries in the pack.
-              type: object
+              $ref: '#/components/schemas/Security_Osquery_API_ObjectQueries'
             saved_object_id:
               description: The saved object ID of the pack.
               type: string
             shards:
-              description: Shard configuration for the pack.
-              type: object
+              $ref: '#/components/schemas/Security_Osquery_API_Shards'
             updated_at:
-              description: The last update timestamp.
+              format: date-time
               type: string
             updated_by:
-              description: The user who last updated the pack.
+              nullable: true
+              type: string
+            updated_by_profile_uid:
               type: string
             version:
-              description: The pack version.
+              description: The pack version number.
               type: integer
     Security_Osquery_API_UpdateSavedQueryRequestBody:
       example:
@@ -111031,66 +112328,69 @@ components:
       description: The response for updating a saved query.
       example:
         data:
+          created_at: '2025-02-26T13:37:30.452Z'
+          created_by: elastic
           description: Saved query description
-          ecs_mapping:
-            host.uptime:
-              field: total_seconds
           id: updated_my_saved_query_name
           interval: '60'
-          platform: linux,darwin
           query: select * from uptime;
-          removed: false
-          saved_object_id: 42ba9c50-0cc5-11ed-aa1d-2b27890bc90d
-          snapshot: true
-          timeout: 120
-          updated_at: '2022-07-26T10:15:00.000Z'
+          saved_object_id: 42ba1280-2172-11ee-8523-5765fca79a3c
+          updated_at: '2025-02-26T13:40:16.297Z'
           updated_by: elastic
-          version: 2.8.0
+          version: WzQzMTcsMV0=
       type: object
       properties:
         data:
-          description: The updated saved query.
           type: object
           properties:
+            created_at:
+              format: date-time
+              type: string
+            created_by:
+              nullable: true
+              type: string
+            created_by_profile_uid:
+              type: string
             description:
-              description: The saved query description.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_SavedQueryDescription'
             ecs_mapping:
-              description: The ECS mapping configuration.
-              type: object
+              $ref: '#/components/schemas/Security_Osquery_API_ECSMapping'
             id:
-              description: The saved query ID.
-              type: string
+              $ref: '#/components/schemas/Security_Osquery_API_SavedQueryId'
             interval:
-              description: The query interval in seconds.
-              type: string
+              oneOf:
+                - type: integer
+                - type: string
             platform:
-              description: The target platform(s).
-              type: string
-            query:
-              description: The SQL query.
-              type: string
-            removed:
-              description: Whether to include results for removed processes.
+              $ref: '#/components/schemas/Security_Osquery_API_Platform'
+            prebuilt:
               type: boolean
+            query:
+              $ref: '#/components/schemas/Security_Osquery_API_Query'
+            removed:
+              $ref: '#/components/schemas/Security_Osquery_API_Removed'
             saved_object_id:
-              description: The saved object ID of the saved query.
               type: string
             snapshot:
-              description: Whether the query is a snapshot query.
-              type: boolean
+              $ref: '#/components/schemas/Security_Osquery_API_Snapshot'
             timeout:
-              description: The query timeout in seconds.
               type: integer
             updated_at:
-              description: The last update timestamp.
+              format: date-time
               type: string
             updated_by:
-              description: The user who last updated the saved query.
+              nullable: true
+              type: string
+            updated_by_profile_uid:
               type: string
             version:
-              description: The minimum osquery version.
+              description: The saved query version.
               type: string
+          required:
+            - saved_object_id
+            - id
+      required:
+        - data
     Security_Osquery_API_Version:
       description: Uses the Osquery versions greater than or equal to the specified version string.
       example: 1.0.0

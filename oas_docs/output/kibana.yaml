@@ -12403,14 +12403,17 @@ paths:
       requestBody:
         content:
           application/json:
-            example:
-              update:
-                enable_field_rendering: false
-                ids:
-                  - c0c8a8bbb4a6561856a974ee9e461f0c82e673a1f0d83f86c5a8d80fc8de4c4f
-                  - 5aa8f2900c0b03854b3b1a52a19558c5ea9893865c78235d4ad3dcc46196f4c7
-                kibana_alert_workflow_status: acknowledged
-                with_replacements: true
+            examples:
+              PostAttackDiscoveryBulkRequestBodyExample:
+                summary: Acknowledge two Attack discoveries in bulk.
+                value:
+                  update:
+                    enable_field_rendering: false
+                    ids:
+                      - c0c8a8bbb4a6561856a974ee9e461f0c82e673a1f0d83f86c5a8d80fc8de4c4f
+                      - 5aa8f2900c0b03854b3b1a52a19558c5ea9893865c78235d4ad3dcc46196f4c7
+                    kibana_alert_workflow_status: acknowledged
+                    with_replacements: true
             schema:
               type: object
               properties:
@@ -12491,10 +12494,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                PostAttackDiscoveryBulkResponse400Example:
+                  summary: Bad Request error returned when the bulk update payload is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 type: object
                 properties:
@@ -12683,17 +12689,20 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                connector_names:
-                  - GPT-5 Chat
-                data:
-                  - connector_name: GPT-5 Chat
-                    id: c0c8a8bbb4a6561856a974ee9e461f0c82e673a1f0d83f86c5a8d80fc8de4c4f
-                    title: Suspicious process execution on host-01
-                page: 1
-                per_page: 10
-                total: 1
-                unique_alert_ids_count: 0
+              examples:
+                AttackDiscoveryFindResponse200Example:
+                  summary: Paginated list of Attack discoveries matching the search criteria.
+                  value:
+                    connector_names:
+                      - GPT-5 Chat
+                    data:
+                      - connector_name: GPT-5 Chat
+                        id: c0c8a8bbb4a6561856a974ee9e461f0c82e673a1f0d83f86c5a8d80fc8de4c4f
+                        title: Suspicious process execution on host-01
+                    page: 1
+                    per_page: 10
+                    total: 1
+                    unique_alert_ids_count: 0
               schema:
                 type: object
                 properties:
@@ -12735,10 +12744,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request payload.
-                status_code: 400
+              examples:
+                AttackDiscoveryFindResponse400Example:
+                  summary: Bad Request error returned when find query parameters are invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request payload.
+                    status_code: 400
               schema:
                 type: object
                 properties:
@@ -12783,27 +12795,30 @@ paths:
       requestBody:
         content:
           application/json:
-            example:
-              alertsIndexPattern: .alerts-security.alerts-default
-              anonymizationFields:
-                - allowed: true
-                  anonymized: true
-                  field: host.name
-                - allowed: true
-                  anonymized: true
-                  field: user.name
-                - allowed: true
-                  anonymized: false
-                  field: process.name
-              apiConfig:
-                actionTypeId: .gen-ai
-                connectorId: 12345678-1234-1234-1234-123456789012
-              connectorName: GPT-5 Chat
-              end: now
-              replacements: {}
-              size: 100
-              start: now-24h
-              subAction: invokeAI
+            examples:
+              PostAttackDiscoveryGenerateRequestBodyExample:
+                summary: Generate Attack discoveries from alerts in the last 24 hours.
+                value:
+                  alertsIndexPattern: .alerts-security.alerts-default
+                  anonymizationFields:
+                    - allowed: true
+                      anonymized: true
+                      field: host.name
+                    - allowed: true
+                      anonymized: true
+                      field: user.name
+                    - allowed: true
+                      anonymized: false
+                      field: process.name
+                  apiConfig:
+                    actionTypeId: .gen-ai
+                    connectorId: 12345678-1234-1234-1234-123456789012
+                  connectorName: GPT-5 Chat
+                  end: now
+                  replacements: {}
+                  size: 100
+                  start: now-24h
+                  subAction: invokeAI
             schema:
               $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryGenerationConfig'
         required: true
@@ -12811,8 +12826,11 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                execution_uuid: edd26039-0990-4d9f-9829-2a1fcacb77b5
+              examples:
+                PostAttackDiscoveryGenerateResponse200Example:
+                  summary: Generation started; use the returned execution UUID to track progress.
+                  value:
+                    execution_uuid: edd26039-0990-4d9f-9829-2a1fcacb77b5
               schema:
                 type: object
                 properties:
@@ -12826,10 +12844,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                PostAttackDiscoveryGenerateResponse400Example:
+                  summary: Bad Request error returned when the generate payload is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 type: object
                 properties:
@@ -13836,16 +13857,19 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                generations:
-                  - alerts_context_count: 75
-                    connector_id: chatGpt5_0ChatAzure
-                    discoveries: 3
-                    end: '2025-09-29T06:42:44.810Z'
-                    execution_uuid: 46b218d5-535d-4329-be56-d0f6af6986b7
-                    loading_message: AI is analyzing up to 100 alerts in the last 24 hours to generate discoveries.
-                    start: '2025-09-29T06:42:08.962Z'
-                    status: succeeded
+              examples:
+                GetAttackDiscoveryGenerationsResponse200Example:
+                  summary: Latest Attack Discovery generation metadata for the current user.
+                  value:
+                    generations:
+                      - alerts_context_count: 75
+                        connector_id: chatGpt5_0ChatAzure
+                        discoveries: 3
+                        end: '2025-09-29T06:42:44.810Z'
+                        execution_uuid: 46b218d5-535d-4329-be56-d0f6af6986b7
+                        loading_message: AI is analyzing up to 100 alerts in the last 24 hours to generate discoveries.
+                        start: '2025-09-29T06:42:08.962Z'
+                        status: succeeded
               schema:
                 type: object
                 properties:
@@ -13860,10 +13884,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid size parameter. Must be a positive number.
-                status_code: 400
+              examples:
+                GetAttackDiscoveryGenerationsResponse400Example:
+                  summary: Bad Request error returned when the size parameter is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid size parameter. Must be a positive number.
+                    status_code: 400
               schema:
                 type: object
                 properties:
@@ -13933,17 +13960,20 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                data:
-                  - id: c0c8a8bbb4a6561856a974ee9e461f0c82e673a1f0d83f86c5a8d80fc8de4c4f
-                    title: Suspicious process execution on host-01
-                generation:
-                  alerts_context_count: 50
-                  discoveries: 1
-                  end: '2025-09-29T06:42:44.810Z'
-                  execution_uuid: 2e13f386-46cf-4d65-9e2b-68609e132ba5
-                  start: '2025-09-29T06:42:08.962Z'
-                  status: succeeded
+              examples:
+                GetAttackDiscoveryGenerationResponse200Example:
+                  summary: Single Attack Discovery generation with its discoveries and metadata.
+                  value:
+                    data:
+                      - id: c0c8a8bbb4a6561856a974ee9e461f0c82e673a1f0d83f86c5a8d80fc8de4c4f
+                        title: Suspicious process execution on host-01
+                    generation:
+                      alerts_context_count: 50
+                      discoveries: 1
+                      end: '2025-09-29T06:42:44.810Z'
+                      execution_uuid: 2e13f386-46cf-4d65-9e2b-68609e132ba5
+                      start: '2025-09-29T06:42:08.962Z'
+                      status: succeeded
               schema:
                 type: object
                 properties:
@@ -13961,10 +13991,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                GetAttackDiscoveryGenerationResponse400Example:
+                  summary: Bad Request error returned when the get-generation request is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 type: object
                 properties:
@@ -14022,15 +14055,18 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                alerts_context_count: 75
-                connector_id: chatGpt5_0ChatAzure
-                discoveries: 3
-                end: '2025-09-29T06:42:44.810Z'
-                execution_uuid: 46b218d5-535d-4329-be56-d0f6af6986b7
-                loading_message: AI is analyzing up to 100 alerts in the last 24 hours to generate discoveries.
-                start: '2025-09-29T06:42:08.962Z'
-                status: dismissed
+              examples:
+                PostAttackDiscoveryGenerationsDismissResponse200Example:
+                  summary: Successfully dismissed an Attack Discovery generation.
+                  value:
+                    alerts_context_count: 75
+                    connector_id: chatGpt5_0ChatAzure
+                    discoveries: 3
+                    end: '2025-09-29T06:42:44.810Z'
+                    execution_uuid: 46b218d5-535d-4329-be56-d0f6af6986b7
+                    loading_message: AI is analyzing up to 100 alerts in the last 24 hours to generate discoveries.
+                    start: '2025-09-29T06:42:08.962Z'
+                    status: dismissed
               schema:
                 type: object
                 properties:
@@ -14099,10 +14135,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                PostAttackDiscoveryGenerationsDismissResponse400Example:
+                  summary: Bad Request error returned when the dismiss request is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 type: object
                 properties:
@@ -14151,21 +14190,24 @@ paths:
       requestBody:
         content:
           application/json:
-            example:
-              actions: []
-              enabled: true
-              name: Daily Security Analysis
-              params:
-                alerts_index_pattern: .alerts-security.alerts-default
-                api_config:
-                  actionTypeId: bedrock
-                  connectorId: my-bedrock-connector
-                  name: Claude 3.5 Sonnet
-                end: now
-                size: 100
-                start: now-24h
-              schedule:
-                interval: 24h
+            examples:
+              CreateAttackDiscoverySchedulesRequestBodyExample:
+                summary: Create a daily Attack Discovery schedule that runs every 24 hours.
+                value:
+                  actions: []
+                  enabled: true
+                  name: Daily Security Analysis
+                  params:
+                    alerts_index_pattern: .alerts-security.alerts-default
+                    api_config:
+                      actionTypeId: bedrock
+                      connectorId: my-bedrock-connector
+                      name: Claude 3.5 Sonnet
+                    end: now
+                    size: 100
+                    start: now-24h
+                  schedule:
+                    interval: 24h
             schema:
               $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryApiScheduleCreateProps'
         description: Attack Discovery schedule configuration including name, parameters, schedule interval, and actions
@@ -14174,36 +14216,42 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                actions: []
-                created_at: '2023-10-31T10:00:00.000Z'
-                created_by: elastic
-                enabled: true
-                id: 12345678-1234-1234-1234-123456789012
-                name: Daily Security Analysis
-                params:
-                  alerts_index_pattern: .alerts-security.alerts-default
-                  api_config:
-                    actionTypeId: bedrock
-                    connectorId: my-bedrock-connector
-                    name: Claude 3.5 Sonnet
-                  end: now
-                  size: 100
-                  start: now-24h
-                schedule:
-                  interval: 24h
-                updated_at: '2023-10-31T10:00:00.000Z'
-                updated_by: elastic
+              examples:
+                CreateAttackDiscoverySchedulesResponse200Example:
+                  summary: A newly created Attack Discovery schedule.
+                  value:
+                    actions: []
+                    created_at: '2023-10-31T10:00:00.000Z'
+                    created_by: elastic
+                    enabled: true
+                    id: 12345678-1234-1234-1234-123456789012
+                    name: Daily Security Analysis
+                    params:
+                      alerts_index_pattern: .alerts-security.alerts-default
+                      api_config:
+                        actionTypeId: bedrock
+                        connectorId: my-bedrock-connector
+                        name: Claude 3.5 Sonnet
+                      end: now
+                      size: 100
+                      start: now-24h
+                    schedule:
+                      interval: 24h
+                    updated_at: '2023-10-31T10:00:00.000Z'
+                    updated_by: elastic
               schema:
                 $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryApiSchedule'
           description: The Attack Discovery schedule was successfully created.
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                CreateAttackDiscoverySchedulesResponse400Example:
+                  summary: Bad Request error returned when the create schedule payload is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryGenericError'
           description: Bad Request response.
@@ -14302,30 +14350,33 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                data:
-                  - actions: []
-                    created_at: '2023-10-31T10:00:00.000Z'
-                    created_by: elastic
-                    enabled: true
-                    id: 12345678-1234-1234-1234-123456789012
-                    name: Daily Security Analysis
-                    params:
-                      alerts_index_pattern: .alerts-security.alerts-default
-                      api_config:
-                        actionTypeId: bedrock
-                        connectorId: my-bedrock-connector
-                        name: Claude 3.5 Sonnet
-                      end: now
-                      size: 100
-                      start: now-24h
-                    schedule:
-                      interval: 24h
-                    updated_at: '2023-10-31T10:00:00.000Z'
-                    updated_by: elastic
-                page: 1
-                per_page: 10
-                total: 1
+              examples:
+                FindAttackDiscoverySchedulesResponse200Example:
+                  summary: Paginated list of Attack Discovery schedules matching the search criteria.
+                  value:
+                    data:
+                      - actions: []
+                        created_at: '2023-10-31T10:00:00.000Z'
+                        created_by: elastic
+                        enabled: true
+                        id: 12345678-1234-1234-1234-123456789012
+                        name: Daily Security Analysis
+                        params:
+                          alerts_index_pattern: .alerts-security.alerts-default
+                          api_config:
+                            actionTypeId: bedrock
+                            connectorId: my-bedrock-connector
+                            name: Claude 3.5 Sonnet
+                          end: now
+                          size: 100
+                          start: now-24h
+                        schedule:
+                          interval: 24h
+                        updated_at: '2023-10-31T10:00:00.000Z'
+                        updated_by: elastic
+                    page: 1
+                    per_page: 10
+                    total: 1
               schema:
                 type: object
                 properties:
@@ -14352,10 +14403,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request payload.
-                status_code: 400
+              examples:
+                FindAttackDiscoverySchedulesResponse400Example:
+                  summary: Bad Request error returned when find-schedules query parameters are invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request payload.
+                    status_code: 400
               schema:
                 type: object
                 properties:
@@ -14409,8 +14463,11 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                id: 12345678-1234-1234-1234-123456789012
+              examples:
+                DeleteAttackDiscoverySchedulesResponse200Example:
+                  summary: Confirmation returned after deleting an Attack Discovery schedule.
+                  value:
+                    id: 12345678-1234-1234-1234-123456789012
               schema:
                 type: object
                 properties:
@@ -14423,10 +14480,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                DeleteAttackDiscoverySchedulesResponse400Example:
+                  summary: Bad Request error returned when the delete schedule request is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryGenericError'
           description: Bad Request response.
@@ -14466,40 +14526,46 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                actions: []
-                created_at: '2023-10-31T10:00:00.000Z'
-                created_by: elastic
-                enabled: true
-                id: 12345678-1234-1234-1234-123456789012
-                last_execution:
-                  date: '2023-10-31T10:00:00.000Z'
-                  last_duration: 45.2
-                  status: ok
-                name: Daily Security Analysis
-                params:
-                  alerts_index_pattern: .alerts-security.alerts-default
-                  api_config:
-                    actionTypeId: bedrock
-                    connectorId: my-bedrock-connector
-                    name: Claude 3.5 Sonnet
-                  end: now
-                  size: 100
-                  start: now-24h
-                schedule:
-                  interval: 24h
-                updated_at: '2023-10-31T10:00:00.000Z'
-                updated_by: elastic
+              examples:
+                GetAttackDiscoverySchedulesResponse200Example:
+                  summary: An Attack Discovery schedule retrieved by ID, including last execution metadata.
+                  value:
+                    actions: []
+                    created_at: '2023-10-31T10:00:00.000Z'
+                    created_by: elastic
+                    enabled: true
+                    id: 12345678-1234-1234-1234-123456789012
+                    last_execution:
+                      date: '2023-10-31T10:00:00.000Z'
+                      last_duration: 45.2
+                      status: ok
+                    name: Daily Security Analysis
+                    params:
+                      alerts_index_pattern: .alerts-security.alerts-default
+                      api_config:
+                        actionTypeId: bedrock
+                        connectorId: my-bedrock-connector
+                        name: Claude 3.5 Sonnet
+                      end: now
+                      size: 100
+                      start: now-24h
+                    schedule:
+                      interval: 24h
+                    updated_at: '2023-10-31T10:00:00.000Z'
+                    updated_by: elastic
               schema:
                 $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryApiSchedule'
           description: Successfully retrieved Attack Discovery schedule with complete configuration and metadata
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                GetAttackDiscoverySchedulesResponse400Example:
+                  summary: Bad Request error returned when the get-schedule request is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryGenericError'
           description: Bad Request response.
@@ -14538,20 +14604,23 @@ paths:
       requestBody:
         content:
           application/json:
-            example:
-              actions: []
-              name: Updated Daily Security Analysis
-              params:
-                alerts_index_pattern: .alerts-security.alerts-default
-                api_config:
-                  actionTypeId: bedrock
-                  connectorId: my-bedrock-connector
-                  name: Claude 3.5 Sonnet
-                end: now
-                size: 200
-                start: now-48h
-              schedule:
-                interval: 12h
+            examples:
+              UpdateAttackDiscoverySchedulesRequestBodyExample:
+                summary: Update an Attack Discovery schedule to run every 12 hours over a 48-hour window.
+                value:
+                  actions: []
+                  name: Updated Daily Security Analysis
+                  params:
+                    alerts_index_pattern: .alerts-security.alerts-default
+                    api_config:
+                      actionTypeId: bedrock
+                      connectorId: my-bedrock-connector
+                      name: Claude 3.5 Sonnet
+                    end: now
+                    size: 200
+                    start: now-48h
+                  schedule:
+                    interval: 12h
             schema:
               $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryApiScheduleUpdateProps'
         description: Updated Attack Discovery schedule configuration. All fields are required as this replaces the entire schedule configuration.
@@ -14560,36 +14629,42 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                actions: []
-                created_at: '2023-10-31T10:00:00.000Z'
-                created_by: elastic
-                enabled: true
-                id: 12345678-1234-1234-1234-123456789012
-                name: Updated Daily Security Analysis
-                params:
-                  alerts_index_pattern: .alerts-security.alerts-default
-                  api_config:
-                    actionTypeId: bedrock
-                    connectorId: my-bedrock-connector
-                    name: Claude 3.5 Sonnet
-                  end: now
-                  size: 200
-                  start: now-48h
-                schedule:
-                  interval: 12h
-                updated_at: '2023-10-31T12:00:00.000Z'
-                updated_by: elastic
+              examples:
+                UpdateAttackDiscoverySchedulesResponse200Example:
+                  summary: An Attack Discovery schedule after being updated.
+                  value:
+                    actions: []
+                    created_at: '2023-10-31T10:00:00.000Z'
+                    created_by: elastic
+                    enabled: true
+                    id: 12345678-1234-1234-1234-123456789012
+                    name: Updated Daily Security Analysis
+                    params:
+                      alerts_index_pattern: .alerts-security.alerts-default
+                      api_config:
+                        actionTypeId: bedrock
+                        connectorId: my-bedrock-connector
+                        name: Claude 3.5 Sonnet
+                      end: now
+                      size: 200
+                      start: now-48h
+                    schedule:
+                      interval: 12h
+                    updated_at: '2023-10-31T12:00:00.000Z'
+                    updated_by: elastic
               schema:
                 $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryApiSchedule'
           description: Successfully updated Attack Discovery schedule with the new configuration and metadata
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                UpdateAttackDiscoverySchedulesResponse400Example:
+                  summary: Bad Request error returned when the update schedule payload is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryGenericError'
           description: Bad Request response.
@@ -14648,8 +14723,11 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                id: 12345678-1234-1234-1234-123456789012
+              examples:
+                DisableAttackDiscoverySchedulesResponse200Example:
+                  summary: Confirmation returned after disabling an Attack Discovery schedule.
+                  value:
+                    id: 12345678-1234-1234-1234-123456789012
               schema:
                 type: object
                 properties:
@@ -14662,10 +14740,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                DisableAttackDiscoverySchedulesResponse400Example:
+                  summary: Bad Request error returned when the disable schedule request is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryGenericError'
           description: Bad Request response.
@@ -14706,8 +14787,11 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                id: 12345678-1234-1234-1234-123456789012
+              examples:
+                EnableAttackDiscoverySchedulesResponse200Example:
+                  summary: Confirmation returned after enabling an Attack Discovery schedule.
+                  value:
+                    id: 12345678-1234-1234-1234-123456789012
               schema:
                 type: object
                 properties:
@@ -14720,10 +14804,13 @@ paths:
         '400':
           content:
             application/json:
-              example:
-                error: Bad Request
-                message: Invalid request parameters.
-                status_code: 400
+              examples:
+                EnableAttackDiscoverySchedulesResponse400Example:
+                  summary: Bad Request error returned when the enable schedule request is invalid.
+                  value:
+                    error: Bad Request
+                    message: Invalid request parameters.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Attack_discovery_API_AttackDiscoveryGenericError'
           description: Bad Request response.
@@ -17099,11 +17186,25 @@ paths:
           name: product_name
   /api/detection_engine/index:
     delete:
+      description: |
+        **Spaces method and path for this operation:**
+
+        <div><span class="operation-verb delete">delete</span>&nbsp;<span class="operation-path">/s/{space_id}/api/detection_engine/index</span></div>
+
+        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
+
+        Permanently deletes the Elastic Security alerts backing index in the current space, including the alerts
+        stored in it. Use with caution; prefer lifecycle policies or the UI when available.
+        Call `GET /api/detection_engine/index` first to confirm the index that will be removed.
       operationId: DeleteAlertsIndex
       responses:
         '200':
           content:
             application/json:
+              examples:
+                acknowledged:
+                  value:
+                    acknowledged: true
               schema:
                 type: object
                 properties:
@@ -17115,24 +17216,45 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '403':
           content:
             application/json:
+              examples:
+                forbidden:
+                  value:
+                    message: API [DELETE /api/detection_engine/index] is unauthorized for the current user. The user needs alerts management permissions for the space.
+                    status_code: 403
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Not enough permissions response
         '404':
           content:
             application/json:
+              examples:
+                notFound:
+                  value:
+                    message: The Elastic Security alerts index to delete was not found.
+                    status_code: 404
               schema:
-                type: string
+                $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Index does not exist response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -17142,13 +17264,17 @@ paths:
       x-metaTags:
         - content: Kibana
           name: product_name
-      description: |-
+    get:
+      description: |
         **Spaces method and path for this operation:**
 
-        <div><span class="operation-verb delete">delete</span>&nbsp;<span class="operation-path">/s/{space_id}/api/detection_engine/index</span></div>
+        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/detection_engine/index</span></div>
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
-    get:
+
+        Returns the backing Elasticsearch index for Elastic Security detection alerts in the current space, and
+        whether its mapping is outdated. Use this to verify that an alert index is provisioned before creating
+        or running rules that write alerts to it.
       operationId: ReadAlertsIndex
       responses:
         '200':
@@ -17174,24 +17300,45 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '403':
           content:
             application/json:
+              examples:
+                forbidden:
+                  value:
+                    message: API [GET /api/detection_engine/index] is unauthorized for the current user. Check Security and Kibana feature privileges (detection engine / alerts) for the space.
+                    status_code: 403
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Not enough permissions response
         '404':
           content:
             application/json:
+              examples:
+                notFound:
+                  value:
+                    message: Elastic Security alert index is not found for the current space.
+                    status_code: 404
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Not found
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -17201,12 +17348,6 @@ paths:
       x-metaTags:
         - content: Kibana
           name: product_name
-      description: |-
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/detection_engine/index</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
     post:
       description: |
         **Spaces method and path for this operation:**
@@ -17223,6 +17364,10 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                acknowledged:
+                  value:
+                    acknowledged: true
               schema:
                 type: object
                 properties:
@@ -17234,24 +17379,45 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '403':
           content:
             application/json:
+              examples:
+                forbidden:
+                  value:
+                    message: API [POST /api/detection_engine/index] is unauthorized for the current user. The user must be able to create indices for the Elastic Security solution.
+                    status_code: 403
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Not enough permissions response
         '404':
           content:
             application/json:
+              examples:
+                notFound:
+                  value:
+                    message: A prerequisite resource required to create the alerts index was not found.
+                    status_code: 404
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Not found
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -17329,12 +17495,23 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -17379,6 +17556,36 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                deletedRule:
+                  summary: Response shape after a rule is deleted
+                  value:
+                    actions: []
+                    created_at: '2020-02-03T11:19:04.259Z'
+                    created_by: elastic
+                    description: Process started by MS Office program in user folder
+                    enabled: false
+                    false_positives: []
+                    from: now-4200s
+                    id: c41d170b-8ba6-4de6-b8ec-76440a35ace3
+                    immutable: false
+                    interval: 1h
+                    language: kuery
+                    max_signals: 100
+                    name: MS Office child process
+                    query: event.action:Process*
+                    references: []
+                    risk_score: 50
+                    rule_id: process_started_by_ms_office_user_folder
+                    severity: low
+                    tags:
+                      - tag
+                    throttle: null
+                    to: now
+                    type: query
+                    updated_at: '2020-02-03T11:19:04.462Z'
+                    updated_by: elastic
+                    version: 3
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_RuleResponse'
           description: Indicates a successful call.
@@ -19619,6 +19826,13 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              exportByRuleIds:
+                summary: Request body to export a subset of rules
+                value:
+                  objects:
+                    - rule_id: 343580b5-c811-447c-8d2d-2ccf052c6900
+                    - rule_id: 2938c9fa-53eb-4c04-b79c-33cbf041b18d
             schema:
               nullable: true
               type: object
@@ -19640,6 +19854,12 @@ paths:
         '200':
           content:
             application/ndjson:
+              examples:
+                sampleNdjson:
+                  value: |
+                    {"rule_id":"343580b5-c811-447c-8d2d-2ccf052c6900","name":"Example rule","type":"query","enabled":true}
+                    {"exception_list":true}
+                    {"export_summary":{"total_rules":1,"exceptions_count":0}}
               schema:
                 description: |
                   An `.ndjson` file containing the returned rules.
@@ -19680,7 +19900,11 @@ paths:
         Retrieve a paginated list of detection rules. By default, the first page is returned, with 20 results per page.
       operationId: FindRules
       parameters:
-        - in: query
+        - description: |
+            List of `alert.attributes` field names to return for each rule (for example `name`, `enabled`).
+            If omitted, the default field set is returned. Repeat the parameter to pass multiple field names, or
+            use comma-separated values when supported by your client.
+          in: query
           name: fields
           required: false
           schema:
@@ -19923,6 +20147,11 @@ paths:
       requestBody:
         content:
           multipart/form-data:
+            examples:
+              rulesFile:
+                summary: Multipart part containing a rule export
+                value:
+                  file: rules_import.ndjson
             schema:
               type: object
               properties:
@@ -20034,6 +20263,30 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              addItems:
+                value:
+                  items:
+                    - description: This is a sample detection type exception item.
+                      entries:
+                        - field: actingProcess.file.signer
+                          operator: excluded
+                          type: exists
+                        - field: host.name
+                          operator: included
+                          type: match_any
+                          value:
+                            - saturn
+                            - jupiter
+                      item_id: simple_list_item
+                      list_id: simple_list
+                      name: Sample Exception List Item
+                      namespace_type: single
+                      os_types:
+                        - linux
+                      tags:
+                        - malware
+                      type: simple
             schema:
               example:
                 items:
@@ -20306,6 +20559,16 @@ paths:
           name: product_name
   /api/detection_engine/rules/preview:
     post:
+      description: |
+        **Spaces method and path for this operation:**
+
+        <div><span class="operation-verb post">post</span>&nbsp;<span class="operation-path">/s/{space_id}/api/detection_engine/rules/preview</span></div>
+
+        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
+
+        Simulates a detection rule using the same rule type and query logic as a persisted rule, over a short
+        time window, without persisting a rule or writing alerts. Use the response to validate queries, see sample
+        matching documents, and inspect execution logs. Pair `invocationCount` and `timeframeEnd` to cap run time.
       operationId: RulePreview
       parameters:
         - description: Enables logging and returning in response ES queries, performed during rule execution
@@ -20317,6 +20580,23 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              queryRule:
+                value:
+                  description: Find matching events
+                  from: now-24h
+                  index:
+                    - logs-*
+                  invocationCount: 1
+                  language: kuery
+                  max_signals: 20
+                  name: Rule preview
+                  query: 'process.name : *'
+                  risk_score: 25
+                  severity: low
+                  timeframeEnd: '2025-01-20T12:00:00.000Z'
+                  to: now
+                  type: query
             schema:
               anyOf:
                 - allOf:
@@ -20345,12 +20625,26 @@ paths:
                     - $ref: '#/components/schemas/Security_Detections_API_RulePreviewParams'
               discriminator:
                 propertyName: type
-        description: An object containing tags to add or remove and alert ids the changes will be applied
+        description: |
+          Rule create payload (same shape as `POST /api/detection_engine/rules` for a given `type`) plus
+          `invocationCount` and `timeframeEnd` to control how the preview is executed. Optional
+          `enable_logged_requests` surfaces Elasticsearch request logging for debugging.
         required: true
       responses:
         '200':
           content:
             application/json:
+              examples:
+                success:
+                  value:
+                    isAborted: false
+                    logs:
+                      - duration: 45
+                        errors: []
+                        requests: []
+                        startedAt: '2025-01-20T10:00:00.000Z'
+                        warnings: []
+                    previewId: 7f1c9d1e-4c8a-4a3e-9a5d-0d4f6e1b2a90
               schema:
                 type: object
                 properties:
@@ -20368,6 +20662,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: '[request body].timeframeEnd: expected string, received null'
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
@@ -20376,12 +20676,23 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -20391,12 +20702,6 @@ paths:
       x-metaTags:
         - content: Kibana
           name: product_name
-      description: |-
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb post">post</span>&nbsp;<span class="operation-path">/s/{space_id}/api/detection_engine/rules/preview</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
   /api/detection_engine/signals/assignees:
     post:
       description: |
@@ -20420,32 +20725,81 @@ paths:
                 $ref: '#/components/examples/Security_Detections_API_SetAlertAssigneesBodyRemove'
             schema:
               $ref: '#/components/schemas/Security_Detections_API_SetAlertAssigneesBody'
+        description: User profile IDs to add or remove on each listed alert document ID.
         required: true
       responses:
         '200':
           content:
-            application/ndjson:
+            application/json:
+              description: Elasticsearch update by query or update by IDs response
               examples:
                 add:
                   value:
-                    batches: 1,
-                    deleted: 0,
+                    batches: 1
+                    deleted: 0
                     failures: []
-                    noops: 0,
-                    requests_per_second: '-1,'
+                    noops: 0
+                    requests_per_second: -1
                     retries:
-                      - bulk: 0,
-                      - search: 0
-                    throttled_millis: 0,
-                    throttled_until_millis: 0,
-                    timed_out: false,
-                    took: 76,
-                    total: 1,
-                    updated: 1,
-                    version_conflicts: 0,
+                      bulk: 0
+                      search: 0
+                    throttled_millis: 0
+                    throttled_until_millis: 0
+                    timed_out: false
+                    took: 76
+                    total: 1
+                    updated: 1
+                    version_conflicts: 0
           description: Indicates a successful call.
         '400':
-          description: Invalid request.
+          content:
+            application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: '[request body].ids: at least one alert id is required to update assignees'
+                    statusCode: 400
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
+                  - $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
+          description: Invalid input data response
+        '401':
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
+              schema:
+                $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
+          description: Unsuccessful authentication response
+        '403':
+          content:
+            application/json:
+              examples:
+                forbidden:
+                  value:
+                    error: Forbidden
+                    message: API [POST /api/detection_engine/signals/assignees] is unauthorized for the current user, this action is granted by the Kibana Security Solution privileges for cases and detections
+                    statusCode: 403
+              schema:
+                $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
+          description: Not enough privileges response
+        '500':
+          content:
+            application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
+              schema:
+                $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
+          description: Internal server error response
       summary: Assign and unassign users from detection alerts
       tags:
         - Security Detections API
@@ -20462,13 +20816,21 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        Finalize successful migrations of detection alerts. This replaces the original index's alias with the successfully migrated index's alias.
-        The endpoint is idempotent; therefore, it can safely be used to poll a given migration and, upon completion,
-        finalize it.
+        **DEPRECATED.** Completes a legacy alert index migration. Do not automate against this in new code.
+        **WARNING:** Finalizing swaps read aliases; confirm the migration has finished successfully before calling.
+
+        Finalize successful migrations of detection alerts. This replaces the original index's alias with the
+        successfully migrated index's alias. The endpoint is idempotent, so you can poll until a migration
+        finishes and then call this operation once.
       operationId: FinalizeAlertsMigration
       requestBody:
         content:
           application/json:
+            examples:
+              oneMigration:
+                value:
+                  migration_ids:
+                    - 924f7c50-505f-11eb-ae0a-3fa2e626a51d
             schema:
               example:
                 migration_ids:
@@ -20508,6 +20870,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: '[request body].migration_ids: at least one migration id is required to finalize'
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
@@ -20516,12 +20884,23 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -20541,17 +20920,22 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        Migrations favor data integrity over shard size. Consequently, unused or orphaned indices are artifacts of
-        the migration process. A successful migration will result in both the old and new indices being present.
-        As such, the old, orphaned index can (and likely should) be deleted.
+        **DEPRECATED.** Cleanup API for old migration artifacts. Do not add new call sites.
+        **WARNING:** This schedules deletions; ensure no production reads still point at the source index.
 
-        While you can delete these indices manually,
-        the endpoint accomplishes this task by applying a deletion policy to the relevant index, causing it to be deleted
-        after 30 days. It also deletes other artifacts specific to the migration implementation.
+        Migrations favor data integrity over shard size. Consequently, unused or orphaned indices are artifacts of
+        the migration process. A successful migration can leave both the old and new indices present, so the old
+        index may be deleted. While you can delete these indices manually, the endpoint applies a deletion policy
+        to the relevant index, causing it to be deleted after 30 days, and removes other migration-specific artifacts.
       operationId: AlertsMigrationCleanup
       requestBody:
         content:
           application/json:
+            examples:
+              cleanupMigrations:
+                value:
+                  migration_ids:
+                    - 924f7c50-505f-11eb-ae0a-3fa2e626a51d
             schema:
               example:
                 migration_ids:
@@ -20590,6 +20974,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: '[request body].migration_ids: at least one migration id is required to run cleanup'
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
@@ -20598,12 +20988,23 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -20622,8 +21023,12 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        Initiate a migration of detection alerts.
-        Migrations are initiated per index. While the process is neither destructive nor interferes with existing data, it may be resource-intensive. As such, it is recommended that you plan your migrations accordingly.
+        **DEPRECATED.** Legacy API for on-demand reindexing of old `.siem-signals-*` alert indices. Do not build new
+        integrations; upgrade the Elastic Stack and rely on product-managed data lifecycle instead.
+        **WARNING:** Migrations can be resource intensive and should be planned during a maintenance window.
+
+        Initiate a migration of detection alerts. Migrations are initiated per index. The process is not destructive
+        and should not remove existing data, but it can consume significant cluster resources. Plan capacity accordingly.
       operationId: CreateAlertsMigration
       requestBody:
         content:
@@ -20677,6 +21082,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: '[request body].index: at least one index name is required to start a migration'
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
@@ -20685,12 +21096,23 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -20703,14 +21125,19 @@ paths:
   /api/detection_engine/signals/migration_status:
     get:
       deprecated: true
-      description: |-
+      description: |
         **Spaces method and path for this operation:**
 
         <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/detection_engine/signals/migration_status</span></div>
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        Retrieve indices that contain detection alerts of a particular age, along with migration information for each of those indices.
+        **DEPRECATED.** This endpoint was used for historical `.siem-signals-*` index migration workflows. Do not use
+        for new automations; there is no supported replacement in this public API.
+        **WARNING:** Prefer upgrading through supported Elastic stack upgrades rather than ad-hoc index migrations.
+
+        Retrieves indices that contain detection alerts of a particular age, along with migration information for
+        each of those indices.
       operationId: ReadAlertsMigrationStatus
       parameters:
         - description: Maximum age of qualifying detection alerts
@@ -20765,6 +21192,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: '[request query].from: expected date-math, received null'
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
@@ -20773,12 +21206,23 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -20873,6 +21317,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: 'Failed to parse search request: unknown query clause in bool filter'
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
@@ -20881,12 +21331,23 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -21000,6 +21461,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: '[request body].signal_ids: at least one alert id is required to update status'
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
@@ -21008,12 +21475,23 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -21032,7 +21510,7 @@ paths:
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        And tags to detection alerts, and remove them from alerts.
+        Add tags to detection alerts, and remove them from alerts, by alert IDs or a query, in a single request.
         > info
         > You cannot add and remove the same alert tag in the same request.
       operationId: SetAlertTags
@@ -21078,6 +21556,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: '[request body].tags: cannot add and remove the same tag in a single request'
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
@@ -21086,12 +21570,23 @@ paths:
         '401':
           content:
             application/json:
+              examples:
+                unauthorized:
+                  value:
+                    error: Unauthorized
+                    message: "[security_exception\n\tRoot causes:\n\t\tsecurity_exception: unable to authenticate user [elastic] for REST request [/_security/_authenticate]]: unable to authenticate user [elastic] for REST request [/_security/_authenticate]"
+                    statusCode: 401
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_PlatformErrorResponse'
           description: Unsuccessful authentication response
         '500':
           content:
             application/json:
+              examples:
+                serverError:
+                  value:
+                    message: Internal Server Error
+                    status_code: 500
               schema:
                 $ref: '#/components/schemas/Security_Detections_API_SiemErrorResponse'
           description: Internal server error response
@@ -23361,6 +23856,13 @@ paths:
         '500':
           content:
             application/json:
+              examples:
+                InitMonitoringEngineError:
+                  summary: Internal server error during engine initialization
+                  value:
+                    error:
+                      message: Failed to initialize monitoring engine
+                    status: error
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_MonitoringEngineDescriptor'
           description: Internal Server Error
@@ -23400,6 +23902,11 @@ paths:
         '409':
           content:
             application/json:
+              examples:
+                ScheduleMonitoringEngineConflict:
+                  summary: Engine is already running
+                  value:
+                    message: Monitoring engine is already running
               schema:
                 type: object
                 properties:
@@ -23485,13 +23992,16 @@ paths:
         '200':
           content:
             application/json:
-              example:
-                has_all_required: true
-                privileges:
-                  elasticsearch:
-                    index:
-                      .entity_analytics.monitoring.user-default:
-                        read: true
+              examples:
+                PrivMonPrivilegesResponse:
+                  summary: Privileges check response
+                  value:
+                    has_all_required: true
+                    privileges:
+                      elasticsearch:
+                        index:
+                          .entity_analytics.monitoring.user-default:
+                            read: true
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_EntityAnalyticsPrivileges'
           description: Successful response
@@ -23572,6 +24082,14 @@ paths:
       requestBody:
         content:
           multipart/form-data:
+            examples:
+              PrivmonBulkUploadUsersCSVRequest:
+                summary: CSV file with privileged users
+                value:
+                  file: |
+                    username,is_privileged
+                    john.doe,true
+                    jane.smith,true
             schema:
               type: object
               properties:
@@ -23585,17 +24103,20 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                PrivmonBulkUploadUsersCSVResponse:
+                  summary: Bulk upload response with mixed results
+                  value:
+                    errors:
+                      - index: 1
+                        message: Invalid monitored field
+                        username: john.doe
+                    stats:
+                      failedOperations: 1
+                      successfulOperations: 1
+                      totalOperations: 2
+                      uploaded: 2
               schema:
-                example:
-                  errors:
-                    - index: 1
-                      message: Invalid monitored field
-                      username: john.doe
-                  stats:
-                    failedOperations: 1
-                    successfulOperations: 1
-                    totalOperations: 2
-                    uploaded: 1
                 type: object
                 properties:
                   errors:
@@ -23628,7 +24149,8 @@ paths:
         Removes a privileged user from monitoring by their document ID.
       operationId: DeletePrivMonUser
       parameters:
-        - in: path
+        - description: The document ID of the monitored user to delete
+          in: path
           name: id
           required: true
           schema:
@@ -23672,7 +24194,8 @@ paths:
         Updates the details of an existing monitored privileged user by their document ID.
       operationId: UpdatePrivMonUser
       parameters:
-        - in: path
+        - description: The document ID of the monitored user to update
+          in: path
           name: id
           required: true
           schema:
@@ -25459,7 +25982,10 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/Security_Exceptions_API_ExceptionListHumanId'
-        - examples:
+        - description: |
+            `single` deletes the list in the current Kibana space; `agnostic` deletes a global list. Must match the
+            list you are removing when using `list_id` or `id`.
+          examples:
             agnostic:
               value: agnostic
             single:
@@ -25587,7 +26113,10 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/Security_Exceptions_API_ExceptionListHumanId'
-        - examples:
+        - description: |
+            When `single`, the list is resolved in the current Kibana space. When `agnostic`, the list is a global
+            (space-agnostic) container. Required for looking up the correct list when `list_id` is not unique.
+          examples:
             agnostic:
               value: agnostic
             single:
@@ -25707,6 +26236,18 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              createDetection:
+                value:
+                  description: This is a sample detection type exception list.
+                  list_id: simple_list
+                  name: Sample Detection Exception List
+                  namespace_type: single
+                  os_types:
+                    - linux
+                  tags:
+                    - malware
+                  type: detection
             schema:
               example:
                 description: This is a sample detection type exception list.
@@ -25913,6 +26454,18 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              fullReplace:
+                value:
+                  description: Different description
+                  list_id: simple_list
+                  name: Updated exception list name
+                  os_types:
+                    - linux
+                  tags:
+                    - draft
+                    - malware
+                  type: detection
             schema:
               example:
                 description: Different description
@@ -26061,12 +26614,14 @@ paths:
         Duplicate an existing exception list.
       operationId: DuplicateExceptionList
       parameters:
-        - in: query
+        - description: The `list_id` of the existing exception list to copy (source list).
+          in: query
           name: list_id
           required: true
           schema:
             $ref: '#/components/schemas/Security_Exceptions_API_ExceptionListHumanId'
-        - examples:
+        - description: Scope in which the source list is defined (`single` = current space, `agnostic` = all spaces).
+          examples:
             agnostic:
               value: agnostic
             single:
@@ -26158,14 +26713,19 @@ paths:
               examples:
                 notFound:
                   value:
-                    message": 'exception list id: "foo" does not exist'
-                    status_code": 404
+                    message: 'exception list id: "foo" does not exist'
+                    status_code: 404
               schema:
                 $ref: '#/components/schemas/Security_Exceptions_API_PlatformErrorResponse'
           description: Exception list not found
         '405':
           content:
             application/json:
+              examples:
+                notAllowed:
+                  value:
+                    message: 'Cannot duplicate: list is immutable or the operation is not allowed in this state'
+                    status_code: 405
               schema:
                 $ref: '#/components/schemas/Security_Exceptions_API_SiemErrorResponse'
           description: Exception list to duplicate not found response
@@ -26198,17 +26758,21 @@ paths:
         Export an exception list and its associated items to an NDJSON file.
       operationId: ExportExceptionList
       parameters:
-        - in: query
+        - description: Exception list's internal `id` (UUID) returned on create; use with `list_id` and `namespace_type` for an unambiguous target.
+          in: query
           name: id
           required: true
           schema:
             $ref: '#/components/schemas/Security_Exceptions_API_ExceptionListId'
-        - in: query
+        - description: Human-readable `list_id` of the exception list to export, as shown in the UI and API responses.
+          in: query
           name: list_id
           required: true
           schema:
             $ref: '#/components/schemas/Security_Exceptions_API_ExceptionListHumanId'
-        - examples:
+        - description: |
+            `single` exports a list in the current Kibana space; `agnostic` exports a global (space-agnostic) list.
+          examples:
             agnostic:
               value: agnostic
             single:
@@ -26525,6 +27089,10 @@ paths:
       requestBody:
         content:
           multipart/form-data:
+            examples:
+              ndjsonUpload:
+                value:
+                  file: exception_lists.ndjson
             schema:
               type: object
               properties:
@@ -26600,6 +27168,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: Multipart part `file` is required and must contain a valid .ndjson exception list export
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Exceptions_API_PlatformErrorResponse'
@@ -26670,7 +27244,9 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/Security_Exceptions_API_ExceptionListItemHumanId'
-        - examples:
+        - description: |
+            `single` deletes the item in the current Kibana space; `agnostic` deletes an item in a space-agnostic list. Must match the list that owns the item.
+          examples:
             agnostic:
               value: agnostic
             single:
@@ -26722,11 +27298,13 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: '[request query]: namespace_type.0: Invalid enum value. Expected ''agnostic'' | ''single'', received ''blob'''
+                    statusCode: 400
               schema:
-                example:
-                  error: Bad Request
-                  message: '[request query]: namespace_type.0: Invalid enum value. Expected ''agnostic'' | ''single'', received ''blob'''
-                  statusCode: 400
                 oneOf:
                   - $ref: '#/components/schemas/Security_Exceptions_API_PlatformErrorResponse'
                   - $ref: '#/components/schemas/Security_Exceptions_API_SiemErrorResponse'
@@ -26806,7 +27384,10 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/Security_Exceptions_API_ExceptionListItemHumanId'
-        - examples:
+        - description: |
+            `single` fetches the item in the current space; `agnostic` fetches a global (space-agnostic) item. Must
+            match how the list was created.
+          examples:
             agnostic:
               value: agnostic
             single:
@@ -26936,6 +27517,23 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              simpleItem:
+                value:
+                  description: This is a sample detection type exception item.
+                  entries:
+                    - field: actingProcess.file.signer
+                      operator: excluded
+                      type: exists
+                  item_id: simple_list_item
+                  list_id: simple_list
+                  name: Sample Exception List Item
+                  namespace_type: single
+                  os_types:
+                    - linux
+                  tags:
+                    - malware
+                  type: simple
             schema:
               oneOf:
                 - $ref: '#/components/schemas/Security_Exceptions_API_CreateExceptionListItemGeneric'
@@ -27221,6 +27819,14 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              updateItem:
+                value:
+                  description: Updated description
+                  id: 71a9f4b2-c85c-49b4-866f-c71eb9e67da2
+                  name: Updated name
+                  namespace_type: single
+                  type: simple
             schema:
               oneOf:
                 - $ref: '#/components/schemas/Security_Exceptions_API_UpdateExceptionListItemGeneric'
@@ -27386,7 +27992,9 @@ paths:
             items:
               $ref: '#/components/schemas/Security_Exceptions_API_ExceptionNamespaceType'
             type: array
-        - in: query
+        - description: |
+            Free-text search term applied to exception list item fields (for example a hostname or file path fragment).
+          in: query
           name: search
           required: false
           schema:
@@ -27578,7 +28186,10 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/Security_Exceptions_API_ExceptionListHumanId'
-        - examples:
+        - description: |
+            `single` returns summary for a list in the current space; `agnostic` for a space-agnostic list. Must
+            line up with `id` / `list_id` used to look up the list.
+          examples:
             agnostic:
               value: agnostic
             single:
@@ -60482,7 +61093,8 @@ paths:
         > When you delete a list, all of its list items are also deleted.
       operationId: DeleteList
       parameters:
-        - in: query
+        - description: Value list identifier to delete, including all of its list items.
+          in: query
           name: id
           required: true
           schema:
@@ -60603,7 +61215,8 @@ paths:
         Get the details of a value list using the list ID.
       operationId: ReadList
       parameters:
-        - in: query
+        - description: Value list identifier (`id`) returned when the list was created.
+          in: query
           name: id
           required: true
           schema:
@@ -60710,6 +61323,11 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              patchName:
+                value:
+                  id: ip_list
+                  name: Bad ips list - UPDATED
             schema:
               example:
                 id: ip_list
@@ -61030,6 +61648,12 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              replaceList:
+                value:
+                  description: Latest list of bad ips
+                  id: ip_list
+                  name: Bad ips - updated
             schema:
               example:
                 description: Latest list of bad ips
@@ -61326,6 +61950,10 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                acknowledged:
+                  value:
+                    acknowledged: true
               schema:
                 type: object
                 properties:
@@ -61337,6 +61965,11 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    message: 'Unable to delete value list data streams: invalid or missing index metadata'
+                    status_code: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Lists_API_PlatformErrorResponse'
@@ -61357,12 +61990,23 @@ paths:
         '403':
           content:
             application/json:
+              examples:
+                forbidden:
+                  value:
+                    error: Forbidden
+                    message: API [DELETE /api/lists/index] is not authorized; lists-all (or equivalent) is required to delete data streams
+                    statusCode: 403
               schema:
                 $ref: '#/components/schemas/Security_Lists_API_PlatformErrorResponse'
           description: Not enough privileges response
         '404':
           content:
             application/json:
+              examples:
+                notFound:
+                  value:
+                    message: The value list data stream was not found in this space
+                    status_code: 404
               schema:
                 $ref: '#/components/schemas/Security_Lists_API_SiemErrorResponse'
           description: List data stream not found response
@@ -61397,6 +62041,11 @@ paths:
         '200':
           content:
             application/json:
+              examples:
+                bothExist:
+                  value:
+                    list_index: true
+                    list_item_index: true
               schema:
                 type: object
                 properties:
@@ -61411,6 +62060,11 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    message: Unable to read value list data stream status for this space
+                    status_code: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Lists_API_PlatformErrorResponse'
@@ -61431,12 +62085,23 @@ paths:
         '403':
           content:
             application/json:
+              examples:
+                forbidden:
+                  value:
+                    error: Forbidden
+                    message: API [GET /api/lists/index] is not authorized; list read permissions are required
+                    statusCode: 403
               schema:
                 $ref: '#/components/schemas/Security_Lists_API_PlatformErrorResponse'
           description: Not enough privileges response
         '404':
           content:
             application/json:
+              examples:
+                notFound:
+                  value:
+                    message: Value list backing indices were not found for this space
+                    status_code: 404
               schema:
                 $ref: '#/components/schemas/Security_Lists_API_SiemErrorResponse'
           description: List data stream(s) not found response
@@ -61459,19 +62124,28 @@ paths:
           name: product_name
     post:
       deprecated: true
-      description: |-
+      description: |
         **Spaces method and path for this operation:**
 
         <div><span class="operation-verb post">post</span>&nbsp;<span class="operation-path">/s/{space_id}/api/lists/index</span></div>
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
-        Create `.lists` and `.items` data streams in the relevant space.
+        **DEPRECATED.** `deprecated: true` is set on this operation. Value list backing data streams for the space
+        are now created as part of supported workflows; calling this explicitly is rarely required.
+        **WARNING:** Do not use for new integrations. Prefer the UI or the list and list-item APIs after confirming
+        indices exist with `GET /api/lists/index`.
+
+        Creates the `.lists` and `.items` data streams in the current Kibana space.
       operationId: CreateListIndex
       responses:
         '200':
           content:
             application/json:
+              examples:
+                acknowledged:
+                  value:
+                    acknowledged: true
               schema:
                 type: object
                 properties:
@@ -61483,6 +62157,11 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    message: Indices exist but the request could not be completed for the current space. Check that Elasticsearch and Kibana privileges allow index creation for lists.
+                    status_code: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Lists_API_PlatformErrorResponse'
@@ -61504,6 +62183,12 @@ paths:
         '403':
           content:
             application/json:
+              examples:
+                forbidden:
+                  value:
+                    error: Forbidden
+                    message: API [POST /api/lists/index] is unauthorized for user, this action is granted by the Kibana privileges [lists-all]
+                    statusCode: 403
               schema:
                 $ref: '#/components/schemas/Security_Lists_API_PlatformErrorResponse'
           description: Not enough privileges response
@@ -61801,10 +62486,12 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              changeValue:
+                value:
+                  id: pd1WRJQBs4HAK3VQeHFI
+                  value: 255.255.255.255
             schema:
-              example:
-                id: pd1WRJQBs4HAK3VQeHFI
-                value: 255.255.255.255
               type: object
               properties:
                 _version:
@@ -62105,10 +62792,15 @@ paths:
       requestBody:
         content:
           application/json:
-            example:
-              id: ip_item
-              value: 255.255.255.255
+            examples:
+              fullReplace:
+                value:
+                  id: ip_item
+                  value: 255.255.255.255
             schema:
+              example:
+                id: ip_item
+                value: 255.255.255.255
               type: object
               properties:
                 _version:
@@ -62233,6 +62925,12 @@ paths:
         '200':
           content:
             application/ndjson:
+              examples:
+                ipLines:
+                  value: |
+                    127.0.0.1
+                    127.0.0.2
+                    127.0.0.3
               schema:
                 description: A `.txt` file containing list items from the specified list
                 example: |
@@ -62288,6 +62986,11 @@ paths:
         '404':
           content:
             application/json:
+              examples:
+                notFound:
+                  value:
+                    message: 'list id: "unknown_list" not found'
+                    status_code: 404
               schema:
                 $ref: '#/components/schemas/Security_Lists_API_SiemErrorResponse'
           description: List not found response
@@ -62320,7 +63023,8 @@ paths:
         Get all value list items in the specified list.
       operationId: FindListItems
       parameters:
-        - in: query
+        - description: Parent value list's `id` to page through items for.
+          in: query
           name: list_id
           required: true
           schema:
@@ -62358,7 +63062,9 @@ paths:
               - asc
             example: asc
             type: string
-        - in: query
+        - description: |
+            Opaque cursor returned in a previous response; pass it to continue listing from the next page. Omit on the first request.
+          in: query
           name: cursor
           required: false
           schema:
@@ -62523,6 +63229,10 @@ paths:
       requestBody:
         content:
           multipart/form-data:
+            examples:
+              ipLinesFile:
+                value:
+                  file: list_values.txt
             schema:
               type: object
               properties:
@@ -62604,6 +63314,11 @@ paths:
         '409':
           content:
             application/json:
+              examples:
+                conflict:
+                  value:
+                    message: List with the specified list_id does not exist, create the list or fix list_id to import to an existing one
+                    status_code: 409
               schema:
                 $ref: '#/components/schemas/Security_Lists_API_SiemErrorResponse'
           description: List with specified list_id does not exist response
@@ -62626,6 +63341,16 @@ paths:
           name: product_name
   /api/lists/privileges:
     get:
+      description: |
+        **Spaces method and path for this operation:**
+
+        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/lists/privileges</span></div>
+
+        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
+
+        Returns the caller's authentication state and the Elasticsearch `cluster`, `index`, and `application`
+        privileges for `.lists` and `.items` data streams in the current Kibana space. Use this to decide which list
+        APIs (`read` vs `all` operations) are available before you create or import lists.
       operationId: ReadListPrivileges
       responses:
         '200':
@@ -62716,6 +63441,12 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                badRequest:
+                  value:
+                    error: Bad Request
+                    message: 'Unable to resolve list privileges: invalid or missing space context for this request'
+                    statusCode: 400
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/Security_Lists_API_PlatformErrorResponse'
@@ -62762,12 +63493,6 @@ paths:
       x-metaTags:
         - content: Kibana
           name: product_name
-      description: |-
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/lists/privileges</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
   /api/logstash/pipeline/{id}:
     delete:
       description: |
@@ -65972,12 +66697,26 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                taskManagerUnavailable:
+                  summary: Task manager is unavailable
+                  value:
+                    message: Task Manager is unavailable, but is required by the risk engine. Please enable the taskManager plugin and try again.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_TaskManagerUnavailableResponse'
           description: Task manager is unavailable
         default:
           content:
             application/json:
+              examples:
+                cleanupFailed:
+                  summary: Cleanup failed
+                  value:
+                    cleanup_successful: false
+                    errors:
+                      - error: Risk engine is disabled or deleted already.
+                        seq: 1
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_CleanUpRiskEngineErrorResponse'
           description: Unexpected error
@@ -66082,12 +66821,26 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                taskManagerUnavailable:
+                  summary: Task manager is unavailable
+                  value:
+                    message: Task Manager is unavailable, but is required by the risk engine. Please enable the taskManager plugin and try again.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_TaskManagerUnavailableResponse'
           description: Task manager is unavailable
         default:
           content:
             application/json:
+              examples:
+                configureError:
+                  summary: Configure saved object failed
+                  value:
+                    errors:
+                      - error: Internal server error
+                        seq: 1
+                    risk_engine_saved_object_configured: false
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_ConfigureRiskEngineSavedObjectErrorResponse'
           description: Unexpected error
@@ -66110,7 +66863,13 @@ paths:
       operationId: ScheduleRiskEngineNow
       requestBody:
         content:
-          application/json: {}
+          application/json:
+            examples:
+              emptyRequest:
+                summary: No request body
+                value: {}
+            schema:
+              type: object
       responses:
         '200':
           content:
@@ -66126,12 +66885,24 @@ paths:
         '400':
           content:
             application/json:
+              examples:
+                taskManagerUnavailable:
+                  summary: Task manager is unavailable
+                  value:
+                    message: Task Manager is unavailable, but is required by the risk engine. Please enable the taskManager plugin and try again.
+                    status_code: 400
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_TaskManagerUnavailableResponse'
           description: Task manager is unavailable
         default:
           content:
             application/json:
+              examples:
+                scheduleNowError:
+                  summary: Schedule now failed
+                  value:
+                    full_error: '{}'
+                    message: Internal server error
               schema:
                 $ref: '#/components/schemas/Security_Entity_Analytics_API_RiskEngineScheduleNowErrorResponse'
           description: Unexpected error

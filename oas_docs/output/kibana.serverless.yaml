@@ -70,10 +70,6 @@ tags:
     name: APM annotations
   - description: Create APM fleet server schema.
     name: APM server schema
-  - description: |
-      Configure APM source maps. A source map allows minified files to be mapped back to original source code--allowing you to maintain the speed advantage of minified code, without losing the ability to quickly and easily debug your application.
-      For best results, uploading source maps should become a part of your deployment procedure, and not something you only do when you see unhelpful errors. That's because uploading source maps after errors happen won't make old errors magically readable--errors must occur again for source mapping to occur.
-    name: APM sourcemaps
   - name: connectors
     description: |
       Connectors provide a central place to store connection information for services and integrations with Elastic or third party systems. Alerting rules can use connectors to run actions when rule conditions are met.
@@ -6005,6 +6001,42 @@ paths:
             schema:
               anyOf:
                 - discriminator:
+                    mapping:
+                      .es-query: '#/components/schemas/Kibana_HTTP_APIs_es-query-create-rule-body-alerting'
+                      .geo-containment: '#/components/schemas/Kibana_HTTP_APIs_geo-containment-create-rule-body-alerting'
+                      .index-threshold: '#/components/schemas/Kibana_HTTP_APIs_index-threshold-create-rule-body-alerting'
+                      apm.anomaly: '#/components/schemas/Kibana_HTTP_APIs_apm-anomaly-create-rule-body-alerting'
+                      apm.error_rate: '#/components/schemas/Kibana_HTTP_APIs_apm-error-rate-create-rule-body-alerting'
+                      apm.transaction_duration: '#/components/schemas/Kibana_HTTP_APIs_apm-transaction-duration-create-rule-body-alerting'
+                      apm.transaction_error_rate: '#/components/schemas/Kibana_HTTP_APIs_apm-transaction-error-rate-create-rule-body-alerting'
+                      datasetQuality.degradedDocs: '#/components/schemas/Kibana_HTTP_APIs_datasetquality-degradeddocs-create-rule-body-alerting'
+                      logs.alert.document.count: '#/components/schemas/Kibana_HTTP_APIs_logs-alert-document-count-create-rule-body-alerting'
+                      metrics.alert.inventory.threshold: '#/components/schemas/Kibana_HTTP_APIs_metrics-alert-inventory-threshold-create-rule-body-alerting'
+                      metrics.alert.threshold: '#/components/schemas/Kibana_HTTP_APIs_metrics-alert-threshold-create-rule-body-alerting'
+                      monitoring_alert_cluster_health: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-cluster-health-create-rule-body-alerting'
+                      monitoring_alert_cpu_usage: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-cpu-usage-create-rule-body-alerting'
+                      monitoring_alert_disk_usage: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-disk-usage-create-rule-body-alerting'
+                      monitoring_alert_elasticsearch_version_mismatch: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-elasticsearch-version-mismatch-create-rule-body-alerting'
+                      monitoring_alert_jvm_memory_usage: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-jvm-memory-usage-create-rule-body-alerting'
+                      monitoring_alert_kibana_version_mismatch: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-kibana-version-mismatch-create-rule-body-alerting'
+                      monitoring_alert_license_expiration: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-license-expiration-create-rule-body-alerting'
+                      monitoring_alert_logstash_version_mismatch: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-logstash-version-mismatch-create-rule-body-alerting'
+                      monitoring_alert_missing_monitoring_data: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-missing-monitoring-data-create-rule-body-alerting'
+                      monitoring_alert_nodes_changed: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-nodes-changed-create-rule-body-alerting'
+                      monitoring_alert_thread_pool_search_rejections: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-thread-pool-search-rejections-create-rule-body-alerting'
+                      monitoring_alert_thread_pool_write_rejections: '#/components/schemas/Kibana_HTTP_APIs_monitoring-alert-thread-pool-write-rejections-create-rule-body-alerting'
+                      monitoring_ccr_read_exceptions: '#/components/schemas/Kibana_HTTP_APIs_monitoring-ccr-read-exceptions-create-rule-body-alerting'
+                      monitoring_shard_size: '#/components/schemas/Kibana_HTTP_APIs_monitoring-shard-size-create-rule-body-alerting'
+                      observability.rules.custom_threshold: '#/components/schemas/Kibana_HTTP_APIs_observability-rules-custom-threshold-create-rule-body-alerting'
+                      slo.rules.burnRate: '#/components/schemas/Kibana_HTTP_APIs_slo-rules-burnrate-create-rule-body-alerting'
+                      transform_health: '#/components/schemas/Kibana_HTTP_APIs_transform-health-create-rule-body-alerting'
+                      xpack.ml.anomaly_detection_alert: '#/components/schemas/Kibana_HTTP_APIs_xpack-ml-anomaly-detection-alert-create-rule-body-alerting'
+                      xpack.ml.anomaly_detection_jobs_health: '#/components/schemas/Kibana_HTTP_APIs_xpack-ml-anomaly-detection-jobs-health-create-rule-body-alerting'
+                      xpack.synthetics.alerts.monitorStatus: '#/components/schemas/Kibana_HTTP_APIs_xpack-synthetics-alerts-monitorstatus-create-rule-body-alerting'
+                      xpack.synthetics.alerts.tls: '#/components/schemas/Kibana_HTTP_APIs_xpack-synthetics-alerts-tls-create-rule-body-alerting'
+                      xpack.uptime.alerts.durationAnomaly: '#/components/schemas/Kibana_HTTP_APIs_xpack-uptime-alerts-durationanomaly-create-rule-body-alerting'
+                      xpack.uptime.alerts.monitorStatus: '#/components/schemas/Kibana_HTTP_APIs_xpack-uptime-alerts-monitorstatus-create-rule-body-alerting'
+                      xpack.uptime.alerts.tlsCertificate: '#/components/schemas/Kibana_HTTP_APIs_xpack-uptime-alerts-tlscertificate-create-rule-body-alerting'
                     propertyName: rule_type_id
                   oneOf:
                     - $ref: '#/components/schemas/Kibana_HTTP_APIs_monitoring-ccr-read-exceptions-create-rule-body-alerting'
@@ -11401,228 +11433,6 @@ paths:
       summary: Get single agent configuration
       tags:
         - APM agent configuration
-      x-metaTags:
-        - content: Kibana, Elastic Cloud Serverless
-          name: product_name
-  /api/apm/sourcemaps:
-    get:
-      description: |
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb get">get</span>&nbsp;<span class="operation-path">/s/{space_id}/api/apm/sourcemaps</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
-
-        Get an array of Fleet artifacts, including source map uploads. You must have `read` or `all` Kibana privileges for the APM and User Experience feature.
-      operationId: getSourceMaps
-      parameters:
-        - $ref: '#/components/parameters/APM_UI_elastic_api_version'
-        - description: Page number
-          in: query
-          name: page
-          schema:
-            type: number
-        - description: Number of records per page
-          in: query
-          name: perPage
-          schema:
-            type: number
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                getSourceMapsResponse1:
-                  $ref: '#/components/examples/APM_UI_source_maps_get_200_response1'
-              schema:
-                $ref: '#/components/schemas/APM_UI_source_maps_response'
-          description: Successful response
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_400_response'
-          description: Bad Request response
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_401_response'
-          description: Unauthorized response
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_500_response'
-          description: Internal Server Error response
-        '501':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_501_response'
-          description: Not Implemented response
-      summary: Get source maps
-      tags:
-        - APM sourcemaps
-      x-codeSamples:
-        - lang: Curl
-          source: |
-            curl -X GET "http://localhost:5601/api/apm/sourcemaps" \
-            -H 'Content-Type: application/json' \
-            -H 'kbn-xsrf: true' \
-            -H 'Authorization: ApiKey ${YOUR_API_KEY}'
-      x-metaTags:
-        - content: Kibana, Elastic Cloud Serverless
-          name: product_name
-    post:
-      description: |
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb post">post</span>&nbsp;<span class="operation-path">/s/{space_id}/api/apm/sourcemaps</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
-
-        Upload a source map for a specific service and version. You must have `all` Kibana privileges for the APM and User Experience feature.
-        The maximum payload size is `1mb`. If you attempt to upload a source map that exceeds the maximum payload size, you will get a 413 error. Before uploading source maps that exceed this default, change the maximum payload size allowed by Kibana with the `server.maxPayload` variable.
-      operationId: uploadSourceMap
-      parameters:
-        - $ref: '#/components/parameters/APM_UI_elastic_api_version'
-        - $ref: '#/components/parameters/APM_UI_kbn_xsrf'
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/APM_UI_upload_source_map_object'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                uploadSourceMapResponse1:
-                  $ref: '#/components/examples/APM_UI_source_maps_upload_200_response1'
-              schema:
-                $ref: '#/components/schemas/APM_UI_upload_source_maps_response'
-          description: Successful response
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_400_response'
-          description: Bad Request response
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_401_response'
-          description: Unauthorized response
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_403_response'
-          description: Forbidden response
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_500_response'
-          description: Internal Server Error response
-        '501':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_501_response'
-          description: Not Implemented response
-      summary: Upload a source map
-      tags:
-        - APM sourcemaps
-      x-codeSamples:
-        - lang: Curl
-          source: |
-            curl -X POST "http://localhost:5601/api/apm/sourcemaps" \
-            -H 'Content-Type: multipart/form-data' \
-            -H 'kbn-xsrf: true' \
-            -H 'Authorization: ApiKey ${YOUR_API_KEY}' \
-            -F 'service_name="foo"' \
-            -F 'service_version="1.0.0"' \
-            -F 'bundle_filepath="/test/e2e/general-usecase/bundle.js"' \
-            -F 'sourcemap="{\"version\":3,\"file\":\"static/js/main.chunk.js\",\"sources\":[\"fleet-source-map-client/src/index.css\",\"fleet-source-map-client/src/App.js\",\"webpack:///./src/index.css?bb0a\",\"fleet-source-map-client/src/index.js\",\"fleet-source-map-client/src/reportWebVitals.js\"],\"sourcesContent\":[\"content\"],\"mappings\":\"mapping\",\"sourceRoot\":\"\"}"' 
-      x-metaTags:
-        - content: Kibana, Elastic Cloud Serverless
-          name: product_name
-  /api/apm/sourcemaps/{id}:
-    delete:
-      description: |
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb delete">delete</span>&nbsp;<span class="operation-path">/s/{space_id}/api/apm/sourcemaps/{id}</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
-
-        Delete a previously uploaded source map. You must have `all` Kibana privileges for the APM and User Experience feature.
-      operationId: deleteSourceMap
-      parameters:
-        - $ref: '#/components/parameters/APM_UI_elastic_api_version'
-        - $ref: '#/components/parameters/APM_UI_kbn_xsrf'
-        - description: Source map identifier
-          in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                deleteSourceMapResponseExample1:
-                  $ref: '#/components/examples/APM_UI_source_maps_delete_200_response1'
-              schema:
-                additionalProperties: false
-                description: The response body is intentionally empty for this endpoint.
-                type: object
-          description: Successful response
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_400_response'
-          description: Bad Request response
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_401_response'
-          description: Unauthorized response
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_403_response'
-          description: Forbidden response
-        '500':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_500_response'
-          description: Internal Server Error response
-        '501':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APM_UI_501_response'
-          description: Not Implemented response
-      summary: Delete source map
-      tags:
-        - APM sourcemaps
-      x-codeSamples:
-        - lang: Curl
-          source: |
-            curl -X DELETE "http://localhost:5601/api/apm/sourcemaps/apm:foo-1.0.0-644fd5a9" \
-            -H 'Content-Type: application/json' \
-            -H 'kbn-xsrf: true' \
-            -H 'Authorization: ApiKey ${YOUR_API_KEY}'
       x-metaTags:
         - content: Kibana, Elastic Cloud Serverless
           name: product_name
@@ -27048,6 +26858,25 @@ paths:
                                             type: array
                                   enabled:
                                     type: boolean
+                                  global_data_tags:
+                                    items:
+                                      additionalProperties: false
+                                      type: object
+                                      properties:
+                                        name:
+                                          description: The name of the custom field. Cannot contain spaces.
+                                          type: string
+                                        value:
+                                          anyOf:
+                                            - type: string
+                                            - type: number
+                                          description: The value of the custom field.
+                                      required:
+                                        - name
+                                        - value
+                                    maxItems: 100
+                                    nullable: true
+                                    type: array
                                   id:
                                     description: Package policy unique identifier.
                                     type: string
@@ -28208,6 +28037,25 @@ paths:
                                           type: array
                                 enabled:
                                   type: boolean
+                                global_data_tags:
+                                  items:
+                                    additionalProperties: false
+                                    type: object
+                                    properties:
+                                      name:
+                                        description: The name of the custom field. Cannot contain spaces.
+                                        type: string
+                                      value:
+                                        anyOf:
+                                          - type: string
+                                          - type: number
+                                        description: The value of the custom field.
+                                    required:
+                                      - name
+                                      - value
+                                  maxItems: 100
+                                  nullable: true
+                                  type: array
                                 id:
                                   description: Package policy unique identifier.
                                   type: string
@@ -29140,6 +28988,25 @@ paths:
                                             type: array
                                   enabled:
                                     type: boolean
+                                  global_data_tags:
+                                    items:
+                                      additionalProperties: false
+                                      type: object
+                                      properties:
+                                        name:
+                                          description: The name of the custom field. Cannot contain spaces.
+                                          type: string
+                                        value:
+                                          anyOf:
+                                            - type: string
+                                            - type: number
+                                          description: The value of the custom field.
+                                      required:
+                                        - name
+                                        - value
+                                    maxItems: 100
+                                    nullable: true
+                                    type: array
                                   id:
                                     description: Package policy unique identifier.
                                     type: string
@@ -30056,6 +29923,25 @@ paths:
                                           type: array
                                 enabled:
                                   type: boolean
+                                global_data_tags:
+                                  items:
+                                    additionalProperties: false
+                                    type: object
+                                    properties:
+                                      name:
+                                        description: The name of the custom field. Cannot contain spaces.
+                                        type: string
+                                      value:
+                                        anyOf:
+                                          - type: string
+                                          - type: number
+                                        description: The value of the custom field.
+                                    required:
+                                      - name
+                                      - value
+                                  maxItems: 100
+                                  nullable: true
+                                  type: array
                                 id:
                                   description: Package policy unique identifier.
                                   type: string
@@ -31225,6 +31111,25 @@ paths:
                                           type: array
                                 enabled:
                                   type: boolean
+                                global_data_tags:
+                                  items:
+                                    additionalProperties: false
+                                    type: object
+                                    properties:
+                                      name:
+                                        description: The name of the custom field. Cannot contain spaces.
+                                        type: string
+                                      value:
+                                        anyOf:
+                                          - type: string
+                                          - type: number
+                                        description: The value of the custom field.
+                                    required:
+                                      - name
+                                      - value
+                                  maxItems: 100
+                                  nullable: true
+                                  type: array
                                 id:
                                   description: Package policy unique identifier.
                                   type: string
@@ -32266,6 +32171,25 @@ paths:
                                           type: array
                                 enabled:
                                   type: boolean
+                                global_data_tags:
+                                  items:
+                                    additionalProperties: false
+                                    type: object
+                                    properties:
+                                      name:
+                                        description: The name of the custom field. Cannot contain spaces.
+                                        type: string
+                                      value:
+                                        anyOf:
+                                          - type: string
+                                          - type: number
+                                        description: The value of the custom field.
+                                    required:
+                                      - name
+                                      - value
+                                  maxItems: 100
+                                  nullable: true
+                                  type: array
                                 id:
                                   description: Package policy unique identifier.
                                   type: string
@@ -34412,6 +34336,24 @@ paths:
                 force:
                   description: Force package policy creation even if the package is not verified, or if the agent policy is managed.
                   type: boolean
+                global_data_tags:
+                  items:
+                    additionalProperties: false
+                    type: object
+                    properties:
+                      name:
+                        description: The name of the custom field. Cannot contain spaces.
+                        type: string
+                      value:
+                        anyOf:
+                          - type: string
+                          - type: number
+                        description: The value of the custom field.
+                    required:
+                      - name
+                      - value
+                  maxItems: 100
+                  type: array
                 id:
                   description: Policy unique identifier.
                   type: string
@@ -34802,6 +34744,25 @@ paths:
                                 type: array
                       enabled:
                         type: boolean
+                      global_data_tags:
+                        items:
+                          additionalProperties: false
+                          type: object
+                          properties:
+                            name:
+                              description: The name of the custom field. Cannot contain spaces.
+                              type: string
+                            value:
+                              anyOf:
+                                - type: string
+                                - type: number
+                              description: The value of the custom field.
+                          required:
+                            - name
+                            - value
+                        maxItems: 100
+                        nullable: true
+                        type: array
                       id:
                         description: Package policy unique identifier.
                         type: string
@@ -50590,6 +50551,25 @@ paths:
                                   type: array
                         enabled:
                           type: boolean
+                        global_data_tags:
+                          items:
+                            additionalProperties: false
+                            type: object
+                            properties:
+                              name:
+                                description: The name of the custom field. Cannot contain spaces.
+                                type: string
+                              value:
+                                anyOf:
+                                  - type: string
+                                  - type: number
+                                description: The value of the custom field.
+                            required:
+                              - name
+                              - value
+                          maxItems: 100
+                          nullable: true
+                          type: array
                         id:
                           description: Package policy unique identifier.
                           type: string
@@ -51174,6 +51154,25 @@ paths:
                     force:
                       description: Force package policy creation even if the package is not verified, or if the agent policy is managed.
                       type: boolean
+                    global_data_tags:
+                      items:
+                        additionalProperties: false
+                        type: object
+                        properties:
+                          name:
+                            description: The name of the custom field. Cannot contain spaces.
+                            type: string
+                          value:
+                            anyOf:
+                              - type: string
+                              - type: number
+                            description: The value of the custom field.
+                        required:
+                          - name
+                          - value
+                      maxItems: 100
+                      nullable: true
+                      type: array
                     id:
                       description: Package policy unique identifier
                       type: string
@@ -51771,6 +51770,25 @@ paths:
                                 type: array
                       enabled:
                         type: boolean
+                      global_data_tags:
+                        items:
+                          additionalProperties: false
+                          type: object
+                          properties:
+                            name:
+                              description: The name of the custom field. Cannot contain spaces.
+                              type: string
+                            value:
+                              anyOf:
+                                - type: string
+                                - type: number
+                              description: The value of the custom field.
+                          required:
+                            - name
+                            - value
+                        maxItems: 100
+                        nullable: true
+                        type: array
                       id:
                         description: Package policy unique identifier.
                         type: string
@@ -52425,6 +52443,25 @@ paths:
                                   type: array
                         enabled:
                           type: boolean
+                        global_data_tags:
+                          items:
+                            additionalProperties: false
+                            type: object
+                            properties:
+                              name:
+                                description: The name of the custom field. Cannot contain spaces.
+                                type: string
+                              value:
+                                anyOf:
+                                  - type: string
+                                  - type: number
+                                description: The value of the custom field.
+                            required:
+                              - name
+                              - value
+                          maxItems: 100
+                          nullable: true
+                          type: array
                         id:
                           description: Package policy unique identifier.
                           type: string
@@ -53125,6 +53162,25 @@ paths:
                                 type: array
                       enabled:
                         type: boolean
+                      global_data_tags:
+                        items:
+                          additionalProperties: false
+                          type: object
+                          properties:
+                            name:
+                              description: The name of the custom field. Cannot contain spaces.
+                              type: string
+                            value:
+                              anyOf:
+                                - type: string
+                                - type: number
+                              description: The value of the custom field.
+                          required:
+                            - name
+                            - value
+                        maxItems: 100
+                        nullable: true
+                        type: array
                       id:
                         description: Package policy unique identifier.
                         type: string
@@ -53722,6 +53778,25 @@ paths:
                       type: boolean
                     force:
                       type: boolean
+                    global_data_tags:
+                      items:
+                        additionalProperties: false
+                        type: object
+                        properties:
+                          name:
+                            description: The name of the custom field. Cannot contain spaces.
+                            type: string
+                          value:
+                            anyOf:
+                              - type: string
+                              - type: number
+                            description: The value of the custom field.
+                        required:
+                          - name
+                          - value
+                      maxItems: 100
+                      nullable: true
+                      type: array
                     inputs:
                       items:
                         additionalProperties: false
@@ -54312,6 +54387,25 @@ paths:
                                 type: array
                       enabled:
                         type: boolean
+                      global_data_tags:
+                        items:
+                          additionalProperties: false
+                          type: object
+                          properties:
+                            name:
+                              description: The name of the custom field. Cannot contain spaces.
+                              type: string
+                            value:
+                              anyOf:
+                                - type: string
+                                - type: number
+                              description: The value of the custom field.
+                          required:
+                            - name
+                            - value
+                        maxItems: 100
+                        nullable: true
+                        type: array
                       id:
                         description: Package policy unique identifier.
                         type: string
@@ -55350,6 +55444,25 @@ paths:
                                         type: array
                               enabled:
                                 type: boolean
+                              global_data_tags:
+                                items:
+                                  additionalProperties: false
+                                  type: object
+                                  properties:
+                                    name:
+                                      description: The name of the custom field. Cannot contain spaces.
+                                      type: string
+                                    value:
+                                      anyOf:
+                                        - type: string
+                                        - type: number
+                                      description: The value of the custom field.
+                                  required:
+                                    - name
+                                    - value
+                                maxItems: 100
+                                nullable: true
+                                type: array
                               id:
                                 type: string
                               inputs:
@@ -55869,6 +55982,25 @@ paths:
                                 type: array
                               force:
                                 type: boolean
+                              global_data_tags:
+                                items:
+                                  additionalProperties: false
+                                  type: object
+                                  properties:
+                                    name:
+                                      description: The name of the custom field. Cannot contain spaces.
+                                      type: string
+                                    value:
+                                      anyOf:
+                                        - type: string
+                                        - type: number
+                                      description: The value of the custom field.
+                                  required:
+                                    - name
+                                    - value
+                                maxItems: 100
+                                nullable: true
+                                type: array
                               id:
                                 type: string
                               inputs:
@@ -75302,12 +75434,61 @@ paths:
             type: string
       responses:
         '200':
-          description: Indicates a successful call.
           content:
             application/json:
               examples:
-                getSpaceResponseExample:
-                  $ref: '#/components/examples/get_space_response'
+                getSpaceResponse:
+                  description: A response that contains the full configuration for a single Kibana space.
+                  summary: Get details about a marketing space
+                  value:
+                    color: '#aabbcc'
+                    description: This is the Marketing Space
+                    disabledFeatures: []
+                    id: marketing
+                    imageUrl: ''
+                    initials: MK
+                    name: Marketing
+                    solution: es
+              schema:
+                additionalProperties: false
+                type: object
+                properties:
+                  _reserved:
+                    type: boolean
+                  color:
+                    description: The hexadecimal color code used in the space avatar. By default, the color is automatically generated from the space name.
+                    type: string
+                  description:
+                    description: A description for the space.
+                    type: string
+                  disabledFeatures:
+                    default: []
+                    items:
+                      description: The list of features that are turned off in the space.
+                      type: string
+                    maxItems: 100
+                    type: array
+                  id:
+                    description: The space ID that is part of the Kibana URL when inside the space. Space IDs are limited to lowercase alphanumeric, underscore, and hyphen characters (a-z, 0-9, _, and -). You are cannot change the ID with the update operation.
+                    type: string
+                  imageUrl:
+                    description: The data-URL encoded image to display in the space avatar. If specified, initials will not be displayed and the color will be visible as the background color for transparent images. For best results, your image should be 64x64. Images will not be optimized by this API call, so care should be taken when using custom images.
+                    type: string
+                  initials:
+                    description: One or two characters that are shown in the space avatar. By default, the initials are automatically generated from the space name.
+                    maxLength: 2
+                    type: string
+                  name:
+                    description: 'The display name for the space. '
+                    minLength: 1
+                    type: string
+                  projectRouting:
+                    description: Cross-project search default routing configuration for this space. Controls whether searches are scoped to a single project or span multiple projects in serverless environments.
+                    type: string
+                required:
+                  - id
+                  - name
+          description: Indicates a successful call.
       summary: Get a space
       tags:
         - spaces
@@ -75378,6 +75559,60 @@ paths:
                 $ref: '#/components/examples/update_space_request'
       responses:
         '200':
+          content:
+            application/json:
+              examples:
+                updateSpaceResponse:
+                  description: A response that contains the updated configuration of the Kibana space.
+                  summary: Update the marketing space
+                  value:
+                    color: '#aabbcc'
+                    description: An updated description for the Marketing Space
+                    disabledFeatures: []
+                    id: marketing
+                    imageUrl: ''
+                    initials: MK
+                    name: Marketing
+                    solution: es
+              schema:
+                additionalProperties: false
+                type: object
+                properties:
+                  _reserved:
+                    type: boolean
+                  color:
+                    description: The hexadecimal color code used in the space avatar. By default, the color is automatically generated from the space name.
+                    type: string
+                  description:
+                    description: A description for the space.
+                    type: string
+                  disabledFeatures:
+                    default: []
+                    items:
+                      description: The list of features that are turned off in the space.
+                      type: string
+                    maxItems: 100
+                    type: array
+                  id:
+                    description: The space ID that is part of the Kibana URL when inside the space. Space IDs are limited to lowercase alphanumeric, underscore, and hyphen characters (a-z, 0-9, _, and -). You are cannot change the ID with the update operation.
+                    type: string
+                  imageUrl:
+                    description: The data-URL encoded image to display in the space avatar. If specified, initials will not be displayed and the color will be visible as the background color for transparent images. For best results, your image should be 64x64. Images will not be optimized by this API call, so care should be taken when using custom images.
+                    type: string
+                  initials:
+                    description: One or two characters that are shown in the space avatar. By default, the initials are automatically generated from the space name.
+                    maxLength: 2
+                    type: string
+                  name:
+                    description: 'The display name for the space. '
+                    minLength: 1
+                    type: string
+                  projectRouting:
+                    description: Cross-project search default routing configuration for this space. Controls whether searches are scoped to a single project or span multiple projects in serverless environments.
+                    type: string
+                required:
+                  - id
+                  - name
           description: Indicates a successful call.
       summary: Update a space
       tags:

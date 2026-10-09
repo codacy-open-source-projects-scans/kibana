@@ -21,7 +21,7 @@ import type {
   TaskManagerSetupContract,
   TaskManagerStartContract,
 } from '@kbn/task-manager-plugin/server';
-import { DEFAULT_SPACE_ID } from '@kbn/spaces-plugin/common';
+import { DEFAULT_SPACE_ID, type SpaceId } from '@kbn/core-spaces-common';
 import type { SpacesPluginStart } from '@kbn/spaces-plugin/server';
 import type {
   KibanaRequest,
@@ -36,6 +36,7 @@ import type {
   CoreStatus,
 } from '@kbn/core/server';
 import { ServiceStatusLevels } from '@kbn/core/server';
+import { LockManagerService } from '@kbn/lock-manager';
 import type { LicensingPluginSetup, LicensingPluginStart } from '@kbn/licensing-plugin/server';
 import { LICENSE_TYPE } from '@kbn/licensing-types';
 import type {
@@ -57,6 +58,8 @@ import { ApiKeyType } from './task_runner/types';
 import { RuleTypeRegistry } from './rule_type_registry';
 import { TaskRunnerFactory } from './task_runner';
 import { RulesClientFactory } from './rules_client_factory';
+import { ruleQueryInspectorRoute } from './routes/rule/apis/rule_query_inspector/rule_query_inspector_route';
+import type { RulesClientCreateOptions } from './rules_client_factory';
 import {
   RulesSettingsClientFactory,
   RulesSettingsService,
@@ -115,8 +118,7 @@ import { MaintenanceWindowsService } from './task_runner/maintenance_windows';
 import { AlertDeletionClient } from './alert_deletion';
 import { registerGapAutoFillSchedulerTask } from './lib/rule_gaps/task/gap_auto_fill_scheduler_task';
 import { ChangeTrackingService } from './rules_client/lib/change_tracking';
-import { UiamApiKeyProvisioningTask } from './provisioning';
-import { uiamProvisioningEvents } from './provisioning/event_based_telemetry';
+import { ruleCreateTelemetryEvents } from './application/rule/methods/common_utils/event_based_telemetry';
 
 export const EVENT_LOG_PROVIDER = 'alerting';
 export const EVENT_LOG_ACTIONS = {
@@ -177,14 +179,18 @@ export interface AlertingServerStart {
   getAllTypes: RuleTypeRegistry['getAllTypes'];
   getType: RuleTypeRegistry['get'];
   getAlertIndicesAlias: GetAlertIndicesAlias;
-  getRulesClientWithRequest(request: KibanaRequest): Promise<RulesClientApi>;
+  getRulesClientWithRequest(
+    request: KibanaRequest,
+    options?: RulesClientCreateOptions
+  ): Promise<RulesClientApi>;
   /**
    * Creates a RulesClient that is bound to the provided spaceId (namespace) while preserving
    * the original request (and its auth context).
    */
   getRulesClientWithRequestInSpace(
     request: KibanaRequest,
-    spaceId: string
+    spaceId: SpaceId,
+    options?: RulesClientCreateOptions
   ): Promise<RulesClientApi>;
   getAlertingAuthorizationWithRequest(
     request: KibanaRequest
@@ -235,6 +241,7 @@ export class AlertingPlugin {
   private readonly rulesSettingsClientFactory: RulesSettingsClientFactory;
   private readonly telemetryLogger: Logger;
   private readonly kibanaVersion: PluginInitializerContext['env']['packageInfo']['version'];
+  private readonly serverUuid: string;
   private eventLogService?: IEventLogService;
   private eventLogger?: IEventLogger;
   private kibanaBaseUrl: string | undefined;
@@ -252,7 +259,6 @@ export class AlertingPlugin {
   private readonly enabledRuleTypes: Set<string> | null = null;
   private getRulesClientWithRequest?: (request: KibanaRequest) => Promise<RulesClientApi>;
   private changeTrackingService?: ChangeTrackingService;
-  private uiamApiKeyProvisioningTask?: UiamApiKeyProvisioningTask;
 
   constructor(initializerContext: PluginInitializerContext) {
     this.config = initializerContext.config.get();
@@ -265,6 +271,7 @@ export class AlertingPlugin {
     this.rulesSettingsClientFactory = new RulesSettingsClientFactory();
     this.telemetryLogger = initializerContext.logger.get('usage');
     this.kibanaVersion = initializerContext.env.packageInfo.version;
+    this.serverUuid = initializerContext.env.instanceUuid;
     this.inMemoryMetrics = new InMemoryMetrics(initializerContext.logger.get('in_memory_metrics'));
     this.pluginStop$ = new ReplaySubject(1);
     this.isServerless = initializerContext.env.packageInfo.buildFlavor === 'serverless';
@@ -354,12 +361,19 @@ export class AlertingPlugin {
           logger: this.logger,
           pluginStop$: this.pluginStop$,
           kibanaVersion: this.kibanaVersion,
+          serverUuid: this.serverUuid,
           dataStreamAdapter: this.dataStreamAdapter!,
           elasticsearchClientPromise: core
             .getStartServices()
             .then(([{ elasticsearch }]) => elasticsearch.client.asInternalUser),
           elasticsearchAndSOAvailability$,
           isServerless: this.isServerless,
+          totalFieldsLimit: this.config.alertsService.totalFieldsLimit,
+          // Coordinate resource installation across nodes with a cluster-wide lock
+          // unless disabled via config.
+          lockManager: this.config.alertsService.coordinateInstallation
+            ? new LockManagerService(core, this.logger)
+            : undefined,
         });
       }
     }
@@ -421,14 +435,9 @@ export class AlertingPlugin {
       this.config
     );
 
-    uiamProvisioningEvents.forEach((eventConfig) => core.analytics.registerEventType(eventConfig));
-
-    this.uiamApiKeyProvisioningTask = new UiamApiKeyProvisioningTask({
-      logger: this.logger,
-      isServerless: this.isServerless,
-      analytics: core.analytics,
-    });
-    this.uiamApiKeyProvisioningTask.register({ core, taskManager: plugins.taskManager });
+    ruleCreateTelemetryEvents.forEach((eventConfig) =>
+      core.analytics.registerEventType(eventConfig)
+    );
 
     const serviceStatus$ = new BehaviorSubject<ServiceStatus>({
       level: ServiceStatusLevels.available,
@@ -477,6 +486,14 @@ export class AlertingPlugin {
       alertingConfig: this.config,
       core,
     });
+
+    ruleQueryInspectorRoute(
+      router,
+      this.licenseState,
+      this.ruleTypeRegistry!,
+      createGetAlertIndicesAliasFn(this.ruleTypeRegistry!),
+      core
+    );
 
     return {
       registerConnectorAdapter: <
@@ -573,6 +590,7 @@ export class AlertingPlugin {
           if (this.changeTrackingService) {
             const { scope } = this.config.ruleChangeTracking;
             if (scope.includes('all') || scope.includes(ruleType.solution)) {
+              ruleType.trackChanges = true;
               this.changeTrackingService.register(ruleType.solution);
             }
           }
@@ -592,12 +610,18 @@ export class AlertingPlugin {
       },
       getConfig: () => {
         return {
-          ...pick(this.config.rules, ['minimumScheduleInterval', 'maxScheduledPerMinute', 'run']),
+          ...pick(this.config.rules, [
+            'minimumScheduleInterval',
+            'maxScheduledPerMinute',
+            'run',
+            'apiKeyType',
+          ]),
           isUsingSecurity: this.licenseState ? !!this.licenseState.getIsSecurityEnabled() : false,
         };
       },
       frameworkAlerts: {
         enabled: () => this.config.enableFrameworkAlerts,
+        getTotalFieldsLimit: () => this.config.alertsService.totalFieldsLimit,
         getContextInitializationPromise: (
           context: string,
           namespace: string
@@ -654,7 +678,10 @@ export class AlertingPlugin {
       features: plugins.features,
     });
 
-    changeTrackingService?.initialize(core.elasticsearch.client.asInternalUser);
+    changeTrackingService?.initialize({
+      elasticsearchClient: core.elasticsearch.client.asInternalUser,
+      authService: core.security.authc,
+    });
 
     rulesClientFactory.initialize({
       ruleTypeRegistry: ruleTypeRegistry!,
@@ -687,8 +714,9 @@ export class AlertingPlugin {
       uiSettings: core.uiSettings,
       securityService: core.security,
       shouldGrantUiam,
+      apiKeyType: (this.config.rules.apiKeyType as ApiKeyType) ?? ApiKeyType.ES,
       isServerless: this.isServerless,
-      featureFlags: core.featureFlags,
+      analytics: core.analytics,
     });
 
     rulesSettingsClientFactory.initialize({
@@ -698,22 +726,29 @@ export class AlertingPlugin {
       isServerless: this.isServerless,
     });
 
-    const getRulesClientWithRequest = async (request: KibanaRequest) => {
+    const getRulesClientWithRequest = async (
+      request: KibanaRequest,
+      options?: RulesClientCreateOptions
+    ) => {
       if (isESOCanEncrypt !== true) {
         throw new Error(
           `Unable to create alerts client because the Encrypted Saved Objects plugin is missing encryption key. Please set xpack.encryptedSavedObjects.encryptionKey in the kibana.yml or use the bin/kibana-encryption-keys command.`
         );
       }
-      return rulesClientFactory!.create(request, core.savedObjects);
+      return rulesClientFactory!.create(request, core.savedObjects, options);
     };
 
-    const getRulesClientWithRequestInSpace = async (request: KibanaRequest, spaceId: string) => {
+    const getRulesClientWithRequestInSpace = async (
+      request: KibanaRequest,
+      spaceId: SpaceId,
+      options?: RulesClientCreateOptions
+    ) => {
       if (isESOCanEncrypt !== true) {
         throw new Error(
           `Unable to create alerts client because the Encrypted Saved Objects plugin is missing encryption key. Please set xpack.encryptedSavedObjects.encryptionKey in the kibana.yml or use the bin/kibana-encryption-keys command.`
         );
       }
-      return rulesClientFactory!.createWithSpaceId(request, core.savedObjects, spaceId);
+      return rulesClientFactory!.createWithSpaceId(request, core.savedObjects, spaceId, options);
     };
 
     this.getRulesClientWithRequest = getRulesClientWithRequest;
@@ -737,8 +772,8 @@ export class AlertingPlugin {
       actionsConfigMap: getActionsConfigMap(this.config.rules.run.actions),
       actionsPlugin: plugins.actions,
       alertsService: this.alertsService,
+      auditService: core.security.audit,
       backfillClient: this.backfillClient!,
-      basePathService: core.http.basePath,
       cancelAlertsOnRuleTimeout: this.config.cancelAlertsOnRuleTimeout,
       connectorAdapterRegistry: this.connectorAdapterRegistry,
       data: plugins.data,
@@ -801,10 +836,6 @@ export class AlertingPlugin {
       () => {}
     ); // it shouldn't reject, but just in case
 
-    this.uiamApiKeyProvisioningTask
-      ?.start({ core, taskManager: plugins.taskManager })
-      .catch(() => {});
-
     return {
       listTypes: ruleTypeRegistry!.list.bind(this.ruleTypeRegistry!),
       getType: ruleTypeRegistry!.get.bind(this.ruleTypeRegistry),
@@ -861,7 +892,6 @@ export class AlertingPlugin {
     if (this.licenseState) {
       this.licenseState.clean();
     }
-    this.uiamApiKeyProvisioningTask?.stop();
     this.pluginStop$.next();
     this.pluginStop$.complete();
   }

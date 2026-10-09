@@ -16,13 +16,16 @@ export interface BreakingChange {
     | 'request_property_removed'
     | 'response_property_removed'
     | 'parameter_removed'
-    | 'operation_breaking';
+    | 'operation_breaking'
+    | 'request_body_tightened';
   path: string;
   method?: string;
   reason: string;
   oasdiffId?: string;
   source?: string;
   details?: unknown;
+  reportOnly?: boolean;
+  policyReason?: string;
 }
 
 export interface FilterResult {

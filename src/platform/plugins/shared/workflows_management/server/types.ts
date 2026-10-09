@@ -12,18 +12,15 @@ import type {
   PluginSetupContract as ActionsPluginSetupContract,
   PluginStartContract as ActionsPluginStartContract,
 } from '@kbn/actions-plugin/server';
-import type { HooksServiceSetup } from '@kbn/agent-builder-server';
-import type { BuiltInAgentDefinition } from '@kbn/agent-builder-server/agents';
-import type { AttachmentTypeDefinition } from '@kbn/agent-builder-server/attachments';
-import type { SkillDefinition } from '@kbn/agent-builder-server/skills';
-import type { StaticToolRegistration } from '@kbn/agent-builder-server/tools';
 import type {
   AlertingApiRequestHandlerContext,
   AlertingServerSetup,
 } from '@kbn/alerting-plugin/server';
 import type { CustomRequestHandlerContext, IRouter } from '@kbn/core/server';
+import type { DataViewsServerPluginStart } from '@kbn/data-views-plugin/server';
 import type { FeaturesPluginSetup } from '@kbn/features-plugin/server';
 
+import type { InboxPluginSetup } from '@kbn/inbox-plugin/server';
 import type {
   LicensingApiRequestHandlerContext,
   LicensingPluginStart,
@@ -41,41 +38,14 @@ import type {
   WorkflowsExtensionsServerPluginSetup,
   WorkflowsExtensionsServerPluginStart,
 } from '@kbn/workflows-extensions/server';
-import type { ZodObject } from '@kbn/zod/v4';
-import type { SmlTypeDefinition } from './agent_builder/sml_types/types';
 import type { WorkflowsManagementApi } from './api/workflows_management_api';
+
 export interface WorkflowsServerPluginSetup {
   management: WorkflowsManagementApi;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface WorkflowsServerPluginStart {}
-
-/**
- * AgentBuilder plugin setup contract interface.
- * Uses types from @kbn/agent-builder-server (shared package) instead of
- * importing from the plugin directly, to avoid a circular dependency.
- */
-export interface AgentBuilderPluginSetupContract {
-  agents: {
-    register: (definition: BuiltInAgentDefinition) => void;
-  };
-  tools: {
-    // x-pack/platform/plugins/shared/agent_builder/server/services/tools/types.ts
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any is used by the original type
-    register: <RunInput extends ZodObject<any>>(tool: StaticToolRegistration<RunInput>) => void;
-  };
-  attachments: {
-    registerType: (definition: AttachmentTypeDefinition) => void;
-  };
-  hooks: HooksServiceSetup;
-  skills: {
-    register: (definition: SkillDefinition) => void;
-  };
-  sml: {
-    registerType: (definition: SmlTypeDefinition) => void;
-  };
-}
 
 export interface WorkflowsServerPluginSetupDeps {
   features?: FeaturesPluginSetup;
@@ -85,6 +55,12 @@ export interface WorkflowsServerPluginSetupDeps {
   spaces: SpacesPluginSetup;
   serverless?: ServerlessServerSetup;
   workflowsExtensions: WorkflowsExtensionsServerPluginSetup;
+  /**
+   * Optional Inbox plugin. When present, Workflows registers itself as the
+   * `workflows` source so paused `waitForInput` steps surface in the
+   * cross-cutting Inbox UI / MCP / API.
+   */
+  inbox?: InboxPluginSetup;
 }
 
 export interface WorkflowsServerPluginStartDeps {
@@ -95,13 +71,17 @@ export interface WorkflowsServerPluginStartDeps {
   spaces: SpacesPluginStart;
   workflowsExtensions: WorkflowsExtensionsServerPluginStart;
   licensing: LicensingPluginStart;
+  dataViews: DataViewsServerPluginStart;
 }
+
+export type WorkflowsManagementRequestHandlerContext = Promise<void>;
 
 export type WorkflowsRequestHandlerContext = CustomRequestHandlerContext<{
   workflows: WorkflowsApiRequestHandlerContext;
   actions: ActionsApiRequestHandlerContext;
   alerting: AlertingApiRequestHandlerContext;
   licensing: LicensingApiRequestHandlerContext;
+  workflowsManagement: WorkflowsManagementRequestHandlerContext;
 }>;
 
 export type WorkflowsRouter = IRouter<WorkflowsRequestHandlerContext>;

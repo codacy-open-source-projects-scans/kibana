@@ -82,6 +82,14 @@ describe('maybeAddCloudLinks', () => {
         order: 300,
       },
       expect.any(Object),
+      expect.any(Object),
+      {
+        content: expect.any(Function),
+        href: '',
+        iconType: '',
+        label: '',
+        order: 600,
+      },
     ]);
 
     expect(chrome.setHelpMenuLinks).toHaveBeenCalledTimes(1);
@@ -161,6 +169,14 @@ describe('maybeAddCloudLinks', () => {
         order: 300,
       },
       expect.any(Object),
+      expect.any(Object),
+      {
+        content: expect.any(Function),
+        href: '',
+        iconType: '',
+        label: '',
+        order: 600,
+      },
     ]);
     expect(chrome.setHelpMenuLinks).toHaveBeenCalledTimes(1);
     expect(chrome.setHelpMenuLinks.mock.calls[0]).toMatchInlineSnapshot(`

@@ -22,7 +22,17 @@ import {
   EnabledOrUndefined,
   PolicyIdsOrUndefined,
   Shards,
+  ObjectQueriesInput,
+  ScheduleTypeOrUndefined,
+  PackIntervalOrUndefined,
+  RRuleScheduleConfigOrUndefined,
+  MinOsqueryVersionInputOrUndefined,
+  ResultTypeOrUndefined,
+  PackPlatformOrUndefined,
   ObjectQueries,
+  MinOsqueryVersion,
+  ResultType,
+  PackPlatform,
 } from '../model/schema/common_attributes.gen';
 
 export const UpdatePacksRequestBody = lazySchema(() =>
@@ -32,7 +42,13 @@ export const UpdatePacksRequestBody = lazySchema(() =>
     enabled: EnabledOrUndefined.optional(),
     policy_ids: PolicyIdsOrUndefined.optional(),
     shards: Shards.optional(),
-    queries: ObjectQueries.optional(),
+    queries: ObjectQueriesInput.optional(),
+    schedule_type: ScheduleTypeOrUndefined.optional(),
+    interval: PackIntervalOrUndefined.optional(),
+    rrule_schedule: RRuleScheduleConfigOrUndefined.optional(),
+    min_osquery_version: MinOsqueryVersionInputOrUndefined.optional(),
+    result_type: ResultTypeOrUndefined.optional(),
+    platform: PackPlatformOrUndefined.optional(),
   })
 );
 export type UpdatePacksRequestBody = z.infer<typeof UpdatePacksRequestBody>;
@@ -47,14 +63,14 @@ export const UpdatePacksResponse = lazySchema(() =>
         /**
          * The saved object ID of the pack.
          */
-        saved_object_id: z.string().optional(),
+        saved_object_id: z.string().optional().describe('The saved object ID of the pack.'),
         name: PackName.optional(),
         description: PackDescriptionOrUndefined.optional(),
         queries: ObjectQueries.optional(),
         /**
          * The pack version number.
          */
-        version: z.number().int().optional(),
+        version: z.number().int().optional().describe('The pack version number.'),
         enabled: EnabledOrUndefined.optional(),
         created_at: z.string().datetime().optional(),
         created_by: z.string().nullable().optional(),
@@ -64,6 +80,12 @@ export const UpdatePacksResponse = lazySchema(() =>
         updated_by_profile_uid: z.string().optional(),
         policy_ids: PolicyIdsOrUndefined.optional(),
         shards: Shards.optional(),
+        schedule_type: ScheduleTypeOrUndefined.optional(),
+        interval: PackIntervalOrUndefined.optional(),
+        rrule_schedule: RRuleScheduleConfigOrUndefined.optional(),
+        min_osquery_version: MinOsqueryVersion.optional(),
+        result_type: ResultType.optional(),
+        platform: PackPlatform.optional(),
       })
       .optional(),
   })

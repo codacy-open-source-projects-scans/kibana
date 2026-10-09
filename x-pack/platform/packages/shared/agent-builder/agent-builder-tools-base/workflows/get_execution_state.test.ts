@@ -5,8 +5,10 @@
  * 2.0.
  */
 
+import { httpServerMock } from '@kbn/core/server/mocks';
 import { ExecutionStatus } from '@kbn/workflows';
-import { getExecutionState } from './get_execution_state';
+import type { WorkflowExecutionDto } from '@kbn/workflows';
+import { getExecutionState, toWorkflowExecutionState } from './get_execution_state';
 import { getWorkflowOutput } from './get_workflow_output';
 
 jest.mock('./get_workflow_output', () => ({
@@ -16,6 +18,7 @@ jest.mock('./get_workflow_output', () => ({
 const getWorkflowOutputMock = jest.mocked(getWorkflowOutput);
 
 describe('getExecutionState', () => {
+  const request = httpServerMock.createKibanaRequest();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -33,9 +36,14 @@ describe('getExecutionState', () => {
       executionId: 'exec-1',
       spaceId: 'default',
       workflowApi,
+      request,
     });
 
     expect(state).toBeNull();
+    expect(workflowApi.getWorkflowExecution).toHaveBeenCalledWith('exec-1', 'default', {
+      includeOutput: true,
+      request,
+    });
   });
 
   it('includes output for completed execution', async () => {
@@ -55,6 +63,7 @@ describe('getExecutionState', () => {
       executionId: 'exec-1',
       spaceId: 'default',
       workflowApi,
+      request,
     });
 
     expect(state).toEqual({
@@ -85,6 +94,7 @@ describe('getExecutionState', () => {
       executionId: 'exec-2',
       spaceId: 'default',
       workflowApi,
+      request,
     });
 
     expect(state).toEqual({
@@ -114,6 +124,7 @@ describe('getExecutionState', () => {
       executionId: 'exec-3',
       spaceId: 'default',
       workflowApi,
+      request,
     });
 
     expect(state).toEqual({
@@ -155,7 +166,12 @@ describe('getExecutionState', () => {
           ],
         },
         stepExecutions: [
-          { stepId: 'approve', status: ExecutionStatus.WAITING_FOR_INPUT, scopeStack: [] },
+          {
+            id: 'step-exec-approve',
+            stepId: 'approve',
+            status: ExecutionStatus.WAITING_FOR_INPUT,
+            scopeStack: [],
+          },
         ],
       });
 
@@ -163,10 +179,12 @@ describe('getExecutionState', () => {
         executionId: 'exec-w1',
         spaceId: 'default',
         workflowApi,
+        request,
       });
 
       expect(state?.status).toBe(ExecutionStatus.WAITING_FOR_INPUT);
       expect(state?.waiting_input).toEqual({
+        step_execution_id: 'step-exec-approve',
         message: 'Please approve this request',
         schema: {
           type: 'object',
@@ -196,7 +214,12 @@ describe('getExecutionState', () => {
           ],
         },
         stepExecutions: [
-          { stepId: 'ask', status: ExecutionStatus.WAITING_FOR_INPUT, scopeStack: [] },
+          {
+            id: 'step-exec-ask',
+            stepId: 'ask',
+            status: ExecutionStatus.WAITING_FOR_INPUT,
+            scopeStack: [],
+          },
         ],
       });
 
@@ -204,9 +227,11 @@ describe('getExecutionState', () => {
         executionId: 'exec-w2',
         spaceId: 'default',
         workflowApi,
+        request,
       });
 
       expect(state?.waiting_input).toEqual({
+        step_execution_id: 'step-exec-ask',
         message: 'Provide input',
       });
     });
@@ -235,7 +260,12 @@ describe('getExecutionState', () => {
           ],
         },
         stepExecutions: [
-          { stepId: 'nested_ask', status: ExecutionStatus.WAITING_FOR_INPUT, scopeStack: [] },
+          {
+            id: 'step-exec-nested',
+            stepId: 'nested_ask',
+            status: ExecutionStatus.WAITING_FOR_INPUT,
+            scopeStack: [],
+          },
         ],
       });
 
@@ -243,8 +273,55 @@ describe('getExecutionState', () => {
         executionId: 'exec-w3',
         spaceId: 'default',
         workflowApi,
+        request,
       });
 
+      expect(state?.waiting_input).toEqual({
+        step_execution_id: 'step-exec-nested',
+        message: 'Approve item',
+      });
+    });
+
+    it('uses the waiting step execution id when the same stepId has a prior completed instance (loop)', async () => {
+      const workflowApi = createWorkflowApi();
+      workflowApi.getWorkflowExecution = jest.fn().mockResolvedValue({
+        status: ExecutionStatus.WAITING_FOR_INPUT,
+        workflowId: 'wf-loop',
+        startedAt: '2026-01-01T00:00:00.000Z',
+        workflowDefinition: {
+          name: 'Loop ask',
+          steps: [
+            {
+              name: 'ask_for_input',
+              type: 'waitForInput',
+              with: { message: 'Approve item' },
+            },
+          ],
+        },
+        stepExecutions: [
+          {
+            id: 'step-exec-iter-0-done',
+            stepId: 'ask_for_input',
+            status: ExecutionStatus.COMPLETED,
+            scopeStack: [],
+          },
+          {
+            id: 'step-exec-iter-1-waiting',
+            stepId: 'ask_for_input',
+            status: ExecutionStatus.WAITING_FOR_INPUT,
+            scopeStack: [],
+          },
+        ],
+      });
+
+      const state = await getExecutionState({
+        executionId: 'exec-loop',
+        spaceId: 'default',
+        workflowApi,
+        request,
+      });
+
+      expect(state?.waiting_input?.step_execution_id).toBe('step-exec-iter-1-waiting');
       expect(state?.waiting_input?.message).toBe('Approve item');
     });
 
@@ -265,9 +342,49 @@ describe('getExecutionState', () => {
         executionId: 'exec-w4',
         spaceId: 'default',
         workflowApi,
+        request,
       });
 
       expect(state?.waiting_input).toBeUndefined();
+    });
+
+    it('includes waitForApproval waiting_input with approval schema', () => {
+      const state = toWorkflowExecutionState({
+        id: 'exec-approval',
+        status: ExecutionStatus.WAITING_FOR_INPUT,
+        workflowId: 'wf-approval',
+        startedAt: '2026-01-01T00:00:00.000Z',
+        workflowDefinition: {
+          name: 'Approval Flow',
+          steps: [
+            {
+              name: 'request-approval',
+              type: 'waitForApproval',
+              with: { message: 'Approve change?' },
+            },
+          ],
+        },
+        stepExecutions: [
+          {
+            id: 'step-exec-approval',
+            stepId: 'request-approval',
+            status: ExecutionStatus.WAITING_FOR_INPUT,
+            scopeStack: [],
+          },
+        ],
+      } as unknown as WorkflowExecutionDto);
+
+      expect(state.waiting_input).toEqual({
+        step_execution_id: 'step-exec-approval',
+        message: 'Approve change?',
+        schema: {
+          type: 'object',
+          properties: {
+            approved: { type: 'boolean', description: 'Whether the request was approved' },
+          },
+          required: ['approved'],
+        },
+      });
     });
   });
 });

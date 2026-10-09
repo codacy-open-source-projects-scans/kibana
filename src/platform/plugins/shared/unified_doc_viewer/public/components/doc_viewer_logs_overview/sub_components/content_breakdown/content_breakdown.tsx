@@ -17,11 +17,11 @@ import {
 } from '@elastic/eui';
 
 import {
+  formatFieldStringValueWithHighlights,
   getMessageFieldWithFallbacks,
   type DataTableRecord,
   type LogDocumentOverview,
 } from '@kbn/discover-utils';
-import { KBN_FIELD_TYPES } from '@kbn/field-types';
 import type { ObservabilityStreamsFeature } from '@kbn/discover-shared-plugin/public';
 import type { DataView } from '@kbn/data-views-plugin/common';
 import { Badges } from '../badges/badges';
@@ -33,13 +33,13 @@ export const ContentBreakdown = ({
   formattedDoc,
   hit,
   renderFlyoutStreamProcessingLink,
-  renderCpsWarning,
+  cpsHasLinkedProjects,
 }: {
   dataView: DataView;
   formattedDoc: LogDocumentOverview;
   hit: DataTableRecord;
   renderFlyoutStreamProcessingLink?: ObservabilityStreamsFeature['renderFlyoutStreamProcessingLink'];
-  renderCpsWarning?: boolean;
+  cpsHasLinkedProjects?: boolean;
 }) => {
   const { fieldFormats } = getUnifiedDocViewerServices();
   const { field, value, formattedValue } = getMessageFieldWithFallbacks(hit.flattened, {
@@ -56,16 +56,37 @@ export const ContentBreakdown = ({
             language: 'txt',
             // Pass field name for highlight lookup in hit.highlight.
             // The field may not exist in the data view (e.g., OTel body.text) but highlights should still apply.
-            children: fieldFormats
-              .getDefaultInstance(KBN_FIELD_TYPES.STRING)
-              .reactConvert(value ?? '', {
-                hit: hit.raw,
-                field: field ? dataView.fields.getByName(field) ?? { name: field } : undefined,
-              }),
+            children: formatFieldStringValueWithHighlights({
+              value: value ?? '',
+              hit: hit.raw,
+              fieldFormats,
+              dataView,
+              fieldName: field,
+            }),
           },
-    [dataView.fields, field, fieldFormats, formattedValue, hit.raw, value]
+    [dataView, field, fieldFormats, formattedValue, hit.raw, value]
   );
   const hasMessageField = field && value;
+
+  const badges = (
+    <Badges
+      dataView={dataView}
+      hasMessageField={Boolean(hasMessageField)}
+      hit={hit}
+      formattedDoc={formattedDoc}
+      renderFlyoutStreamProcessingLink={renderFlyoutStreamProcessingLink}
+      cpsHasLinkedProjects={cpsHasLinkedProjects}
+    />
+  );
+
+  if (!hasMessageField) {
+    return (
+      <>
+        {badges}
+        <EuiSpacer size="s" />
+      </>
+    );
+  }
 
   return (
     <>
@@ -84,35 +105,24 @@ export const ContentBreakdown = ({
             <EuiText color="subdued" size="xs">
               {field}
             </EuiText>
-            <EuiFlexItem grow={false}>
-              <Badges
-                dataView={dataView}
-                hasMessageField={Boolean(hasMessageField)}
-                hit={hit}
-                formattedDoc={formattedDoc}
-                renderFlyoutStreamProcessingLink={renderFlyoutStreamProcessingLink}
-                renderCpsWarning={renderCpsWarning}
-              />
-            </EuiFlexItem>
+            <EuiFlexItem grow={false}>{badges}</EuiFlexItem>
           </EuiFlexGroup>
-          {hasMessageField && (
-            <HoverActionPopover
-              value={value}
-              formattedValue={formattedValue}
-              field={field}
-              rawFieldValue={rawFieldValue}
-              anchorPosition="downCenter"
-              display="block"
-            >
-              <EuiCodeBlock
-                overflowHeight={100}
-                paddingSize="s"
-                isCopyable
-                fontSize="s"
-                {...messageCodeBlockProps}
-              />
-            </HoverActionPopover>
-          )}
+          <HoverActionPopover
+            value={value}
+            formattedValue={formattedValue}
+            field={field}
+            rawFieldValue={rawFieldValue}
+            anchorPosition="downCenter"
+            display="block"
+          >
+            <EuiCodeBlock
+              overflowHeight={100}
+              paddingSize="s"
+              isCopyable
+              fontSize="s"
+              {...messageCodeBlockProps}
+            />
+          </HoverActionPopover>
         </EuiFlexGroup>
       </EuiPanel>
       <EuiSpacer size="s" />

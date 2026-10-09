@@ -11,6 +11,7 @@
 export type {
   ContentListFeatures,
   ContentListSupports,
+  ContentEditorFeatureConfig,
   FilterFacet,
   FilterFacetParams,
   FilterFacetConfig,
@@ -18,8 +19,20 @@ export type {
 export { isSortingConfig, isPaginationConfig, isSearchConfig, isFilterFacetConfig } from './types';
 
 // Sorting feature.
-export type { SortField, SortOption, SortingConfig, UseContentListSortReturn } from './sorting';
-export { useContentListSort, DEFAULT_SORT_FIELDS, DEFAULT_INITIAL_SORT } from './sorting';
+export type {
+  SortField,
+  SortOption,
+  SortingConfig,
+  UseContentListSortReturn,
+  SortState,
+  SortDirection,
+} from './sorting';
+export {
+  useContentListSort,
+  DEFAULT_SORT_FIELDS,
+  DEFAULT_INITIAL_SORT,
+  getSortFieldDirections,
+} from './sorting';
 
 // Pagination feature.
 export type { PaginationConfig, UseContentListPaginationReturn } from './pagination';
@@ -30,8 +43,8 @@ export type { SearchConfig, UseContentListSearchReturn } from './search';
 export { useContentListSearch } from './search';
 
 // Selection feature.
-export type { UseContentListSelectionReturn } from './selection';
-export { useContentListSelection } from './selection';
+export type { UseContentListSelectionReturn, SelectionConfig } from './selection';
+export { useContentListSelection, isSelectionConfig } from './selection';
 
 // Filtering feature.
 export type { UseContentListFiltersReturn } from './filtering';
